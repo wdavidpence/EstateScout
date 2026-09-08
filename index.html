@@ -6,262 +6,242 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a1628">
-<title>EstateScout</title>
+<title>EstateScout — AI Estate Sale Assistant</title>
 <style>
 :root {
-  --bg-primary: #0a1628;
-  --bg-secondary: #132038;
-  --bg-card: #1a2d4a;
-  --accent: #c8a45a;
-  --accent-glow: rgba(200,164,90,0.3);
-  --text-primary: #f0ece2;
-  --text-secondary: #8a9bb5;
-  --success: #4ade80;
-  --warning: #fbbf24;
-  --danger: #f87171;
-  --radius: 16px;
-  --safe-top: env(safe-area-inset-top, 20px);
-  --safe-bottom: env(safe-area-inset-bottom, 20px);
+  --bg: #0a1628; --bg2: #132038; --card: #1a2d4a;
+  --gold: #c8a45a; --gold2: #e8d5a0; --gold-glow: rgba(200,164,90,0.3);
+  --text: #f0ece2; --text2: #8a9bb5;
+  --green: #4ade80; --amber: #fbbf24; --red: #f87171;
+  --bronze: #d4883a; --rose: #e88faa; --teal: #4ecdc4; --purple: #a78bfa;
+  --r: 16px; --safe-t: env(safe-area-inset-top, 20px); --safe-b: env(safe-area-inset-bottom, 20px);
 }
-
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  min-height: 100dvh;
-  overflow-x: hidden;
-  padding-top: var(--safe-top);
-  padding-bottom: calc(80px + var(--safe-bottom));
-}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden;padding-top:var(--safe-t);padding-bottom:calc(72px+var(--safe-b))}
+.page{display:none;animation:fadeUp .3s ease}.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes checkPop{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes flipIn{from{transform:rotateY(90deg)}to{transform:rotateY(0)}}
+@keyframes glow{0%,100%{box-shadow:0 0 8px var(--gold-glow)}50%{box-shadow:0 0 20px var(--gold-glow)}}
 
 /* Header */
-.header {
-  position: sticky; top:0; z-index:100;
-  background: linear-gradient(180deg, var(--bg-primary) 60%, transparent);
-  padding: 12px 20px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-
-.header h1 {
-  font-size: 28px; font-weight: 700;
-  background: linear-gradient(135deg, var(--accent), #e8d5a0);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-
-.header .subtitle { font-size: 12px; color: var(--text-secondary); }
+.header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,var(--bg) 70%,transparent);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:26px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header .sub{font-size:11px;color:var(--text2);margin-top:2px}
+.logo-icon{width:40px;height:40px;animation:float 3s ease-in-out infinite}
+.logo-icon svg{width:100%;height:100%}
 
 /* Bottom Nav */
-.bottom-nav {
-  position: fixed; bottom:0; left:0; right:0; z-index:100;
-  background: rgba(19,32,56,0.95);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(200,164,90,0.15);
-  display: flex; padding-bottom: var(--safe-bottom);
-}
-
-.nav-item {
-  flex:1; display:flex; flex-direction:column; align-items:center;
-  padding: 8px 0 calc(4px + var(--safe-bottom)/2);
-  color: var(--text-secondary); font-size:10px; gap:4px;
-  cursor:pointer; transition: color 0.2s;
-}
-
-.nav-item.active { color: var(--accent); }
-.nav-item svg { width:24px; height:24px; fill: currentColor; }
-
-/* Pages */
-.page { display:none; padding: 0 16px; animation: fadeIn 0.3s ease; }
-.page.active { display:block; }
-
-@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(19,32,56,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(200,164,90,0.15);display:flex;padding-bottom:var(--safe-b)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 0 4px;color:var(--text2);font-size:9px;gap:3px;cursor:pointer;transition:all .2s;position:relative}
+.nav-item.active{color:var(--gold)}.nav-item.active::after{content:'';position:absolute;top:-1px;left:25%;right:25%;height:2px;background:var(--gold);border-radius:2px}
+.nav-item svg{width:22px;height:22px;fill:currentColor}
+.nav-item .badge-dot{position:absolute;top:4px;right:calc(50% - 14px);width:6px;height:6px;background:var(--red);border-radius:50%;animation:pulse 2s infinite}
 
 /* Cards */
-.card {
-  background: var(--bg-card);
-  border-radius: var(--radius);
-  padding: 20px; margin-bottom: 16px;
-  border: 1px solid rgba(200,164,90,0.1);
-  transition: transform 0.2s;
-}
-
-.card:active { transform: scale(0.98); }
-
-.card h3 {
-  font-size: 17px; font-weight: 600; margin-bottom: 8px;
-  display: flex; align-items: center; gap: 10px;
-}
-
-.card p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+.card{background:var(--card);border-radius:var(--r);padding:18px;margin-bottom:14px;border:1px solid rgba(200,164,90,0.08);transition:all .2s;cursor:pointer}
+.card:active{transform:scale(0.98);border-color:rgba(200,164,90,0.2)}
+.card h3{font-size:16px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.card p{font-size:13px;color:var(--text2);line-height:1.5}
 
 /* Section Headers */
-.section-header {
-  font-size: 20px; font-weight: 700; margin: 24px 0 16px;
-  padding-left: 4px;
-}
-
-.section-header span { color: var(--accent); }
+.section{font-size:19px;font-weight:700;margin:22px 0 14px;padding-left:4px}
+.section span{color:var(--gold)}
 
 /* Badges */
-.badge {
-  display:inline-block; padding: 4px 10px; border-radius:20px;
-  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
-}
-
-.badge-solid { background: rgba(74,222,128,0.15); color: var(--success); }
-.badge-plated { background: rgba(251,191,36,0.15); color: var(--warning); }
-.badge-fake { background: rgba(248,113,113,0.15); color: var(--danger); }
-
-/* Hallmark Grid */
-.hallmark-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-
-.hallmark-card {
-  background: var(--bg-secondary); border-radius: 12px; padding: 16px;
-  text-align: center; border: 1px solid rgba(200,164,90,0.08);
-}
-
-.hallmark-card .mark { font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
-.hallmark-card .name { font-size: 13px; color: var(--text-primary); }
-.hallmark-card .purity { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
-
-/* Checklist */
-.checklist { list-style:none; padding:0; }
-.checklist li {
-  display:flex; align-items:center; gap:12px; padding: 14px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px;
-}
-
-.checklist li:last-child { border:none; }
-.check-icon { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.check-icon.green { background: rgba(74,222,128,0.15); color: var(--success); }
-.check-icon.yellow { background: rgba(251,191,36,0.15); color: var(--warning); }
-.check-icon.red { background: rgba(248,113,113,0.15); color: var(--danger); }
-
-/* Training Module */
-.module-card {
-  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
-  border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
-  border-left: 3px solid var(--accent); cursor:pointer;
-}
-
-.module-card h4 { font-size: 16px; margin-bottom: 6px; }
-.module-card .meta { font-size: 12px; color: var(--text-secondary); }
-.module-card .progress { height:4px; background:rgba(255,255,255,0.1); border-radius:4px; margin-top:12px; overflow:hidden; }
-.module-card .progress-fill { height:100%; background: var(--accent); border-radius:4px; transition: width 0.3s; }
-
-/* Photo Upload */
-.photo-zone {
-  border: 2px dashed rgba(200,164,90,0.3); border-radius: var(--radius);
-  padding: 40px; text-align:center; cursor:pointer; margin-bottom:16px;
-  transition: all 0.2s;
-}
-
-.photo-zone:active { border-color: var(--accent); background: rgba(200,164,90,0.05); }
-.photo-zone svg { width:48px; height:48px; fill: var(--accent); margin-bottom:12px; }
-.photo-zone p { color: var(--text-secondary); font-size: 14px; }
-
-/* Collection Items */
-.collection-item {
-  background: var(--bg-card); border-radius: 12px; padding: 16px;
-  margin-bottom: 12px; border: 1px solid rgba(200,164,90,0.08);
-}
-
-.collection-item .item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-.collection-item .item-type { font-size: 12px; color: var(--accent); text-transform:uppercase; letter-spacing:0.5px; }
-.collection-item .item-desc { font-size: 14px; margin-bottom:8px; }
-.collection-item .item-meta { display:flex; gap:16px; font-size: 12px; color: var(--text-secondary); }
-
-/* Tools */
-.tool-card {
-  background: var(--bg-secondary); border-radius: 12px; padding: 16px;
-  margin-bottom: 12px; display:flex; gap:14px; align-items:center;
-}
-
-.tool-icon { width:48px; height:48px; border-radius:12px; background: rgba(200,164,90,0.1); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.tool-icon svg { width:24px; height:24px; fill: var(--accent); }
-.tool-info h4 { font-size: 15px; margin-bottom:2px; }
-.tool-info p { font-size: 12px; color: var(--text-secondary); }
-.tool-price { margin-left:auto; font-size: 16px; font-weight:700; color: var(--accent); white-space:nowrap; }
-
-/* Empty State */
-.empty-state { text-align:center; padding: 60px 20px; }
-.empty-state svg { width:64px; height:64px; fill: var(--text-secondary); opacity:0.3; margin-bottom:16px; }
-.empty-state p { color: var(--text-secondary); font-size: 14px; }
-
-/* Scrollbar */
-::-webkit-scrollbar { width:0; }
-
-/* Quick Actions */
-.quick-actions { display:flex; gap:10px; overflow-x:auto; padding-bottom:8px; margin-bottom:20px; -webkit-overflow-scrolling:touch; }
-.quick-actions::-webkit-scrollbar { display:none; }
-
-.action-chip {
-  flex-shrink:0; padding: 10px 18px; border-radius:24px;
-  background: var(--bg-card); border:1px solid rgba(200,164,90,0.15);
-  font-size: 13px; color: var(--text-primary); cursor:pointer;
-  white-space:nowrap; transition: all 0.2s;
-}
-
-.action-chip:active { background: var(--accent); color: var(--bg-primary); }
-
-/* Modal */
-.modal-overlay {
-  display:none; position:fixed; inset:0; z-index:200;
-  background:rgba(0,0,0,0.7); backdrop-filter:blur(8px);
-  align-items:flex-end; justify-content:center;
-}
-
-.modal-overlay.active { display:flex; }
-
-.modal {
-  background: var(--bg-secondary); border-radius: var(--radius) var(--radius) 0 0;
-  width:100%; max-height:85vh; overflow-y:auto; padding:24px 20px calc(24px + var(--safe-bottom));
-  animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp { from{transform:translateY(100%)} to{transform:none} }
-
-.modal h2 { font-size: 20px; margin-bottom:16px; }
-.modal-close { float:right; background:none; border:none; color:var(--text-secondary); font-size:24px; cursor:pointer; }
-
-/* Form */
-.form-group { margin-bottom:16px; }
-.form-group label { display:block; font-size:13px; color:var(--text-secondary); margin-bottom:6px; }
-.form-group input, .form-group select, .form-group textarea {
-  width:100%; padding:14px; border-radius:12px; border:1px solid rgba(200,164,90,0.15);
-  background:var(--bg-card); color:var(--text-primary); font-size:15px;
-  -webkit-appearance:none;
-}
-
-.form-group textarea { min-height:80px; resize:vertical; }
-
-.btn-primary {
-  width:100%; padding:16px; border-radius:12px; border:none;
-  background: linear-gradient(135deg, var(--accent), #d4b06a);
-  color:var(--bg-primary); font-size:16px; font-weight:700; cursor:pointer;
-}
-
-.btn-primary:active { opacity:0.85; }
+.badge{display:inline-block;padding:3px 9px;border-radius:12px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.badge-solid{background:rgba(74,222,128,0.12);color:var(--green)}
+.badge-plated{background:rgba(251,191,36,0.12);color:var(--amber)}
+.badge-value{background:rgba(200,164,90,0.15);color:var(--gold)}
 
 /* Info Box */
-.info-box {
-  background: rgba(200,164,90,0.08); border-radius:12px; padding:16px;
-  margin-bottom:16px; border-left:3px solid var(--accent);
-}
+.info-box{background:rgba(200,164,90,0.06);border-radius:12px;padding:14px;margin-bottom:14px;border-left:3px solid var(--gold)}
+.info-box h4{font-size:13px;color:var(--gold);margin-bottom:5px}
+.info-box p{font-size:12px;color:var(--text2);line-height:1.5}
 
-.info-box h4 { font-size:14px; color:var(--accent); margin-bottom:6px; }
-.info-box p { font-size:13px; color:var(--text-secondary); line-height:1.5; }
+/* Quick Actions */
+.quick-actions{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;-webkit-overflow-scrolling:touch}
+.quick-actions::-webkit-scrollbar{display:none}
+.action-chip{flex-shrink:0;padding:9px 16px;border-radius:22px;background:var(--card);border:1px solid rgba(200,164,90,0.12);font-size:12px;color:var(--text);cursor:pointer;white-space:nowrap;transition:all .2s}
+.action-chip:active{background:var(--gold);color:var(--bg)}
+
+/* Checklist */
+.checklist{list-style:none;padding:0}
+.checklist li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;line-height:1.5}
+.checklist li:last-child{border:none}
+.check-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;transition:all .2s}
+.check-icon.green{background:rgba(74,222,128,0.15);color:var(--green)}
+.check-icon.amber{background:rgba(251,191,36,0.15);color:var(--amber)}
+.check-icon.red{background:rgba(248,113,113,0.15);color:var(--red)}
+
+/* Interactive Checklist (tap to check) */
+.check-item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;cursor:pointer;transition:all .2s;-webkit-user-select:none;user-select:none}
+.check-box{width:22px;height:22px;border-radius:6px;border:2px solid var(--text2);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.check-box.checked{background:var(--gold);border-color:var(--gold);animation:checkPop .3s ease}
+.check-box.checked::after{content:'✓';color:var(--bg);font-size:13px;font-weight:700}
+
+/* Hallmark Grid */
+.hallmark-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.hallmark-card{background:var(--bg2);border-radius:12px;padding:14px;text-align:center;border:1px solid rgba(200,164,90,0.06);transition:all .2s}
+.hallmark-card .mark{font-size:22px;font-weight:700;color:var(--gold);margin-bottom:3px}
+.hallmark-card .name{font-size:12px;color:var(--text)}
+.hallmark-card .purity{font-size:10px;color:var(--text2);margin-top:2px}
+
+/* Flip Cards */
+.flip-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.flip-card{perspective:600px;height:120px;cursor:pointer}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .4s;transform-style:preserve-3d}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px}
+.flip-front{background:var(--card);border:1px solid rgba(200,164,90,0.1)}
+.flip-back{background:var(--card);border:1px solid var(--gold);transform:rotateY(180deg);font-size:11px;text-align:center}
+.flip-back .detail{color:var(--text2);margin-top:4px;line-height:1.4}
+
+/* Coins Page */
+.coins-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.coin-card{background:var(--bg2);border-radius:12px;padding:14px;text-align:center;border:1px solid rgba(212,136,58,0.1)}
+.coin-card .coin-icon{font-size:28px;margin-bottom:6px}
+.coin-card .coin-name{font-size:13px;font-weight:600;color:var(--bronze)}
+.coin-card .coin-oz{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* Silver Calculator */
+.calc-container{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:14px;border:1px solid rgba(212,136,58,0.1)}
+.calc-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.calc-row:last-child{border:none}
+.calc-row label{flex:1;font-size:13px}
+.calc-row input{width:60px;padding:8px;border-radius:8px;border:1px solid rgba(212,136,58,0.2);background:var(--bg);color:var(--text);font-size:14px;text-align:center;-webkit-appearance:none}
+.calc-total{background:rgba(212,136,58,0.1);border-radius:12px;padding:14px;text-align:center;margin-top:12px;border:1px solid rgba(212,136,58,0.2)}
+.calc-total .amount{font-size:24px;font-weight:700;color:var(--bronze)}
+.calc-total .label{font-size:11px;color:var(--text2)}
+
+/* Jewelry Page */
+.jewel-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.jewel-card{background:var(--bg2);border-radius:12px;padding:14px;text-align:center;border:1px solid rgba(232,143,170,0.1)}
+.jewel-card .jewel-icon{font-size:26px;margin-bottom:6px}
+.jewel-card .jewel-name{font-size:13px;font-weight:600;color:var(--rose)}
+.jewel-card .jewel-weight{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* Gemstone Cards */
+.gem-grid{display:grid;gap:10px;margin-bottom:14px}
+.gem-card{background:var(--bg2);border-radius:12px;padding:14px;border:1px solid rgba(232,143,170,0.08);display:flex;gap:12px;align-items:center}
+.gem-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.gem-info h4{font-size:14px;font-weight:600;margin-bottom:3px}
+.gem-info p{font-size:11px;color:var(--text2);line-height:1.4}
+
+/* Collectibles Page */
+.collab-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.collab-card{background:var(--bg2);border-radius:12px;padding:14px;text-align:center;border:1px solid rgba(78,205,196,0.1)}
+.collab-card .collab-icon{font-size:26px;margin-bottom:6px}
+.collab-card .collab-name{font-size:13px;font-weight:600;color:var(--teal)}
+.collab-card .collab-desc{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* Scan Page */
+.photo-zone{border:2px dashed rgba(200,164,90,0.25);border-radius:var(--r);padding:36px;text-align:center;cursor:pointer;margin-bottom:14px;transition:all .2s}
+.photo-zone:active{border-color:var(--gold);background:rgba(200,164,90,0.04)}
+.photo-zone svg{width:44px;height:44px;fill:var(--gold);margin-bottom:10px}
+.photo-zone p{color:var(--text2);font-size:13px}
+#photoPreview{display:none;margin-bottom:14px}
+#photoPreview img{width:100%;border-radius:12px;border:1px solid rgba(200,164,90,0.15)}
+.analysis-box{display:none;background:var(--card);border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid rgba(200,164,90,0.1)}
+.analysis-box .result{font-size:13px;color:var(--text2);line-height:1.5}
+
+/* Form */
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:12px;color:var(--text2);margin-bottom:5px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(200,164,90,0.12);background:var(--bg);color:var(--text);font-size:14px;-webkit-appearance:none}
+.form-group textarea{min-height:60px;resize:vertical;font-family:inherit}
+.btn-primary{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--gold),#d4b06a);color:var(--bg);font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-primary:active{opacity:.85;transform:scale(0.98)}
+.btn-secondary{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(200,164,90,0.2);background:transparent;color:var(--gold);font-size:14px;cursor:pointer;margin-top:8px}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center}
+.modal-overlay.active{display:flex}
+.modal{background:var(--bg2);border-radius:var(--r) var(--r) 0 0;width:100%;max-height:85vh;overflow-y:auto;padding:20px 18px calc(20px+var(--safe-bottom));animation:slideUp .3s ease}
+.modal h2{font-size:18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;padding:4px}
+
+/* Collection */
+.collection-item{background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid rgba(200,164,90,0.06)}
+.coll-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.coll-type{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px}
+.coll-desc{font-size:13px;margin-bottom:6px}
+.coll-meta{display:flex;gap:12px;font-size:11px;color:var(--text2);flex-wrap:wrap}
+
+/* Search */
+.search-bar{display:flex;gap:8px;margin-bottom:14px}
+.search-bar input{flex:1;padding:10px 14px;border-radius:10px;border:1px solid rgba(200,164,90,0.12);background:var(--card);color:var(--text);font-size:14px;-webkit-appearance:none}
+
+/* Filter Chips */
+.filter-chips{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;-webkit-overflow-scrolling:touch}
+.filter-chips::-webkit-scrollbar{display:none}
+.filter-chip{flex-shrink:0;padding:6px 14px;border-radius:18px;background:var(--card);border:1px solid rgba(200,164,90,0.1);font-size:12px;color:var(--text2);cursor:pointer;transition:all .2s}
+.filter-chip.active{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+
+/* Stats */
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.stat-card{background:var(--card);border-radius:12px;padding:14px;text-align:center;border:1px solid rgba(200,164,90,0.06)}
+.stat-card .stat-num{font-size:24px;font-weight:700;color:var(--gold)}
+.stat-card .stat-label{font-size:10px;color:var(--text2);margin-top:2px}
+
+/* Tip Card */
+.tip-card{background:linear-gradient(135deg,rgba(200,164,90,0.08),rgba(200,164,90,0.03));border-radius:12px;padding:14px;margin-bottom:14px;border:1px solid rgba(200,164,90,0.1)}
+.tip-card .tip-label{font-size:11px;color:var(--gold);font-weight:600;margin-bottom:4px}
+.tip-card .tip-text{font-size:13px;color:var(--text2);line-height:1.5}
+
+/* Progress */
+.progress-bar{height:4px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;background:var(--gold);border-radius:4px;transition:width .4s ease}
+
+/* Module Cards */
+.module-card{background:linear-gradient(135deg,var(--card),var(--bg2));border-radius:var(--r);padding:16px;margin-bottom:12px;border-left:3px solid var(--gold);cursor:pointer;transition:all .2s}
+.module-card:active{transform:scale(0.98)}
+.module-card h4{font-size:15px;margin-bottom:4px}
+.module-card .meta{font-size:11px;color:var(--text2)}
+
+/* Quiz */
+.quiz-question{background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid rgba(200,164,90,0.08)}
+.quiz-question p{font-size:13px;margin-bottom:8px;font-weight:500}
+.quiz-option{padding:10px 14px;border-radius:8px;border:1px solid rgba(200,164,90,0.1);font-size:13px;margin-bottom:6px;cursor:pointer;transition:all .2s}
+.quiz-option:active{background:rgba(200,164,90,0.15);border-color:var(--gold)}
+.quiz-option.correct{background:rgba(74,222,128,0.15);border-color:var(--green)}
+.quiz-option.wrong{background:rgba(248,113,113,0.15);border-color:var(--red)}
+
+/* Empty State */
+.empty-state{text-align:center;padding:50px 20px}
+.empty-state p{color:var(--text2);font-size:13px}
 
 /* Weight Benchmarks */
-.benchmark-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:14px; }
-.benchmark-row:last-child { border:none; }
-.benchmark-label { color:var(--text-secondary); }
-.benchmark-values { font-weight:600; }
+.bench-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px}
+.bench-row:last-child{border:none}
+.bench-label{color:var(--text2)}
+.bench-val{font-weight:600}
 
 /* Tags */
-.tag-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
-.tag { padding:6px 12px; border-radius:20px; background:rgba(200,164,90,0.1); font-size:12px; color:var(--accent); }
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{padding:4px 10px;border-radius:14px;background:rgba(200,164,90,0.08);font-size:11px;color:var(--gold)}
+
+/* Category Colors */
+.cat-gold{color:var(--gold)}.cat-bronze{color:var(--bronze)}.cat-rose{color:var(--rose)}.cat-teal{color:var(--teal)}.cat-purple{color:var(--purple)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:0}
+
+/* View Toggle */
+.view-toggle{display:flex;gap:6px;margin-bottom:14px}
+.view-btn{padding:8px 14px;border-radius:8px;background:var(--card);border:1px solid rgba(200,164,90,0.1);color:var(--text2);font-size:12px;cursor:pointer}
+.view-btn.active{background:var(--gold);color:var(--bg)}
+
+/* Category Color Legend */
+.cat-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.cat-legend-item{display:flex;align-items:center;gap:6px;font-size:12px}
+.cat-dot{width:10px;height:10px;border-radius:50%}
 </style>
 </head>
 <body>
@@ -270,69 +250,106 @@ body {
 <div class="header">
   <div>
     <h1>EstateScout</h1>
-    <div class="subtitle">AI-Powered Estate Sale Assistant</div>
+    <div class="sub">AI-Powered Estate Sale Assistant</div>
   </div>
-  <div style="font-size:20px;">🏴‍☠️</div>
+  <div class="logo-icon" style="animation:float 3s ease-in-out infinite">
+    <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="var(--gold)" stroke-width="1.5" fill="none"/><path d="M14 12h12v2H14zm0 4h8v2h-8zm0 4h10v2H14zm2 4h6v2h-6z" fill="var(--gold)" opacity=".6"/><circle cx="20" cy="20" r="3" fill="var(--gold)" opacity=".3"/></svg>
+  </div>
 </div>
 
 <!-- PAGE: Home -->
 <div id="page-home" class="page active">
   <div class="quick-actions">
-    <div class="action-chip" onclick="showPage('page-silver')">🔍 Identify Silver</div>
-    <div class="action-chip" onclick="showPage('page-training')">📚 Training</div>
-    <div class="action-chip" onclick="showPage('page-photo')">📷 Scan Item</div>
+    <div class="action-chip" onclick="showPage('page-silver')">🥈 Silver</div>
+    <div class="action-chip" onclick="showPage('page-coins')">🪙 Coins</div>
+    <div class="action-chip" onclick="showPage('page-jewelry')">💎 Jewelry</div>
+    <div class="action-chip" onclick="showPage('page-collectibles')">🏺 Collectibles</div>
+    <div class="action-chip" onclick="showPage('page-scan')">📷 Scan</div>
     <div class="action-chip" onclick="showPage('page-collection')">📦 Collection</div>
-    <div class="action-chip" onclick="showPage('page-tools')">🛠️ Tools</div>
+    <div class="action-chip" onclick="showPage('page-academy')">📚 Academy</div>
   </div>
 
-  <h2 class="section-header">Quick <span>Reference</span></h2>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num" id="statItems">0</div><div class="stat-label">Items Found</div></div>
+    <div class="stat-card"><div class="stat-num" id="statSolid">0</div><div class="stat-label">Solid</div></div>
+    <div class="stat-card"><div class="stat-num" id="statValue">$0</div><div class="stat-label">Est. Value</div></div>
+  </div>
+
+  <div class="tip-card">
+    <div class="tip-label">💡 Tip of the Day</div>
+    <div class="tip-text" id="tipOfDay">Focus on HEAVY items with NO wear color showing. These are most likely solid silver.</div>
+  </div>
+
+  <h2 class="section">Quick <span>Reference</span></h2>
 
   <div class="card" onclick="showPage('page-silver')">
-    <h3>🏷️ Solid vs Plated</h3>
-    <p>Quick guide to identifying real silver from plated items. Know the marks that matter.</p>
+    <h3>🥈 Silver Identification</h3>
+    <p>Master solid vs plated, hallmarks, makers, and British marks.</p>
+  </div>
+  <div class="card" onclick="showPage('page-coins')">
+    <h3>🪙 Silver Coins</h3>
+    <p>Pre-1965 US coins, British crowns, silver content calculator.</p>
+  </div>
+  <div class="card" onclick="showPage('page-jewelry')">
+    <h3>💎 Jewelry</h3>
+    <p>Silver, gold, platinum marks. Gemstone identification. Famous makers.</p>
+  </div>
+  <div class="card" onclick="showPage('page-collectibles')">
+    <h3>🏺 Collectibles</h3>
+    <p>Stamps, rare books, antiques, decorative art, vintage items.</p>
+  </div>
+  <div class="card" onclick="showPage('page-scan')">
+    <h3>📷 Scan Item</h3>
+    <p>Photo upload, manual identification, save to collection.</p>
+  </div>
+  <div class="card" onclick="showPage('page-academy')">
+    <h3>📚 Training Academy</h3>
+    <p>4 progressive modules with interactive quizzes.</p>
   </div>
 
-  <div class="card" onclick="showPage('page-training')">
-    <h3>📖 Training Modules</h3>
-    <p>Progressive lessons from basic identification to advanced hallmark decoding.</p>
-  </div>
-
-  <div class="card" onclick="showPage('page-tools')">
-    <h3>🛠️ Estate Sale Toolkit</h3>
-    <p>Essential tools for the field: pocket scale, magnet, and more.</p>
-  </div>
-
-  <h2 class="section-header">60-Second <span>Checklist</span></h2>
-  <ul class="checklist">
-    <li><div class="check-icon green">✓</div> Look for marks: 925/Sterling = solid | EPNS/Plated = not</li>
-    <li><div class="check-icon green">✓</div> Check weight: Heavy for size = likely solid</li>
-    <li><div class="check-icon yellow">!</div> Check wear points: Yellow/copper = plated</li>
-    <li><div class="check-icon green">✓</div> Magnet test: Sticks = NOT silver</li>
-    <li><div class="check-icon green">✓</div> Make decision: Solid + good = BUY</li>
+  <h2 class="section">60-Second <span>Checklist</span></h2>
+  <ul class="checklist" id="quickChecklist">
+    <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div>Look for marks: 925/Sterling = solid | EPNS/Plated = not</li>
+    <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div>Check weight: Heavy for size = likely solid</li>
+    <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div>Check wear points: Yellow/copper = plated</li>
+    <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div>Magnet test: Sticks = NOT silver</li>
+    <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div>Make decision: Solid + good = BUY</li>
   </ul>
 
   <div class="info-box">
-    <h4>💡 Pro Tip</h4>
-    <p>Focus on HEAVY items with NO wear color showing. These are most likely solid silver.</p>
+    <h4>📱 iPhone Native</h4>
+    <p>Use your camera to scan estate sale items. Connect a USB-C pocket scale for weight testing.</p>
   </div>
 </div>
 
-<!-- PAGE: Silver Guide -->
+<!-- PAGE: Silver -->
 <div id="page-silver" class="page">
-  <h2 class="section-header">Silver <span>Guide</span></h2>
+  <h2 class="section">Silver <span>Guide</span></h2>
 
   <div class="info-box">
     <h4>Solid Silver Marks (WORTH $$$$)</h4>
     <p>If you see any of these, it's solid silver. Check weight and condition.</p>
   </div>
 
-  <div class="hallmark-grid">
-    <div class="hallmark-card"><div class="mark">925</div><div class="name">Sterling Silver</div><div class="purity">92.5% purity</div></div>
-    <div class="hallmark-card"><div class="mark">STERLING</div><div class="name">American Sterling</div><div class="purity">92.5% purity</div></div>
-    <div class="hallmark-card"><div class="mark">800</div><div class="name">Continental Silver</div><div class="purity">80% purity</div></div>
-    <div class="hallmark-card"><div class="mark">835</div><div class="name">French Silver</div><div class="purity">83.5% purity</div></div>
-    <div class="hallmark-card"><div class="mark">958</div><div class="name">Britannia Silver</div><div class="purity">95.8% purity</div></div>
-    <div class="hallmark-card"><div class="mark">🦁</div><div class="name">Lion Passant</div><div class="purity">British sterling</div></div>
+  <div class="flip-grid">
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner"><div class="flip-front"><div class="mark" style="font-size:24px;color:var(--gold)">925</div><div class="name">Sterling Silver</div><div class="purity">92.5% purity</div></div><div class="flip-back"><div style="color:var(--gold);font-weight:600">92.5% Silver</div><div class="detail">Most common sterling mark. 925 parts per thousand. US standard since 1868. Deep, crisp stamping = solid.</div></div></div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner"><div class="flip-front"><div class="mark" style="font-size:20px;color:var(--gold)">STERLING</div><div class="name">American Sterling</div><div class="purity">92.5% purity</div></div><div class="flip-back"><div style="color:var(--gold);font-weight:600">US Standard</div><div class="detail">Adopted as US standard in 1868. Often found on flatware and holloware. Capital letters stamped.</div></div></div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner"><div class="flip-front"><div class="mark" style="font-size:24px;color:var(--gold)">800</div><div class="name">Continental Silver</div><div class="purity">80% purity</div></div><div class="flip-back"><div style="color:var(--gold);font-weight:600">80% Silver</div><div class="detail">German and French standard. Common in continental European items. Still solid silver.</div></div></div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner"><div class="flip-front"><div class="mark" style="font-size:24px;color:var(--gold)">835</div><div class="name">French Silver</div><div class="purity">83.5% purity</div></div><div class="flip-back"><div style="color:var(--gold);font-weight:600">French Standard</div><div class="detail">French 2nd Standard. Accompanied by Minerva head mark. Post-1838 only.</div></div></div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner"><div class="flip-front"><div class="mark" style="font-size:24px;color:var(--gold)">958</div><div class="name">Britannia Silver</div><div class="purity">95.8% purity</div></div><div class="flip-back"><div style="color:var(--gold);font-weight:600">Highest Purity</div><div class="detail">Higher purity than sterling. Rare and collectible. Obligatory in Britain 1697-1720.</div></div></div>
+    </div>
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner"><div class="flip-front"><div class="mark" style="font-size:24px;color:var(--gold)">🦁</div><div class="name">Lion Passant</div><div class="purity">British sterling</div></div><div class="flip-back"><div style="color:var(--gold);font-weight:600">Walking Lion</div><div class="detail">Most recognizable British mark. Used since 1300s. Indicates 925 sterling silver.</div></div></div>
+    </div>
   </div>
 
   <div class="info-box">
@@ -341,197 +358,393 @@ body {
   </div>
 
   <div class="hallmark-grid">
-    <div class="hallmark-card"><div class="mark" style="color:var(--warning)">EPNS</div><div class="name">Electroplated Nickel Silver</div><div class="purity">NOT solid silver</div></div>
-    <div class="hallmark-card"><div class="mark" style="color:var(--warning)">SILVER PLATED</div><div class="name">Silver Plated</div><div class="purity">NOT solid silver</div></div>
-    <div class="hallmark-card"><div class="mark" style="color:var(--warning)">EP</div><div class="name">Electroplated</div><div class="purity">NOT solid silver</div></div>
-    <div class="hallmark-card"><div class="mark" style="color:var(--warning)">A1</div><div class="name">American Plated</div><div class="purity">NOT solid silver</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--amber)">EPNS</div><div class="name">Electroplated Nickel Silver</div><div class="purity">NOT solid silver</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--amber)">SILVER PLATED</div><div class="name">Silver Plated</div><div class="purity">NOT solid silver</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--amber)">EP</div><div class="name">Electroplated</div><div class="purity">NOT solid silver</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--amber)">A1</div><div class="name">American Plated</div><div class="purity">NOT solid silver</div></div>
   </div>
 
-  <h2 class="section-header">Weight <span>Benchmarks</span></h2>
+  <h2 class="section">British <span>Hallmarks</span></h2>
+  <div class="hallmark-grid">
+    <div class="hallmark-card"><div class="mark" style="font-size:28px">⚓</div><div class="name">London</div><div class="purity">Anchor mark</div></div>
+    <div class="hallmark-card"><div class="mark" style="font-size:28px">🌹</div><div class="name">Sheffield</div><div class="purity">Rose mark</div></div>
+    <div class="hallmark-card"><div class="mark" style="font-size:28px">🏰</div><div class="name">Edinburgh</div><div class="purity">Castle mark</div></div>
+    <div class="hallmark-card"><div class="mark" style="font-size:28px">🌳</div><div class="name">Glasgow</div><div class="purity">Tree + Fish</div></div>
+  </div>
+
+  <div class="info-box">
+    <h4>British Hallmark System</h4>
+    <p><b>Lion Passant</b> = 925 sterling. <b>Date letters</b> = year (font + shield shape = specific year). <b>Maker marks</b> = two initials in shield. <b>Duty marks</b> = monarch profile (1784-1890).</p>
+  </div>
+
+  <h2 class="section">Famous <span>Makers</span></h2>
+  <div class="card"><h3>Tiffany & Co.</h3><p>Extremely valuable. Museum quality. Mark: TIFFANY & CO. with pattern number. Art Nouveau designs most valuable.</p></div>
+  <div class="card"><h3>Gorham</h3><p>High-quality American. Art Nouveau designs very collectible. 1831-2010. Mark: GORHAM with Greek key.</p></div>
+  <div class="card"><h3>Reed & Barton</h3><p>Quality American. Sterling pieces valuable. 1824-2015. Taunton, MA. RB mark.</p></div>
+  <div class="card"><h3>International Silver Co.</h3><p>Common but collectible. Quality silver plate and sterling. 1870-1960s.</p></div>
+
+  <h2 class="section">Weight <span>Benchmarks</span></h2>
   <div class="card">
-    <div class="benchmark-row"><span class="benchmark-label">Teaspoon</span><span class="benchmark-values" style="color:var(--success)">Solid 15-20g</span><span class="benchmark-values" style="color:var(--warning)">Plated 8-12g</span></div>
-    <div class="benchmark-row"><span class="benchmark-label">Dinner Fork</span><span class="benchmark-values" style="color:var(--success)">Solid 25-35g</span><span class="benchmark-values" style="color:var(--warning)">Plated 15-20g</span></div>
-    <div class="benchmark-row"><span class="benchmark-label">Soup Spoon</span><span class="benchmark-values" style="color:var(--success)">Solid 30-40g</span><span class="benchmark-values" style="color:var(--warning)">Plated 18-25g</span></div>
+    <div class="bench-row"><span class="bench-label">Teaspoon</span><span class="bench-val cat-gold">Solid 15-20g</span><span class="bench-val" style="color:var(--amber)">Plated 8-12g</span></div>
+    <div class="bench-row"><span class="bench-label">Dinner Fork</span><span class="bench-val cat-gold">Solid 25-35g</span><span class="bench-val" style="color:var(--amber)">Plated 15-20g</span></div>
+    <div class="bench-row"><span class="bench-label">Soup Spoon</span><span class="bench-val cat-gold">Solid 30-40g</span><span class="bench-val" style="color:var(--amber)">Plated 18-25g</span></div>
+    <div class="bench-row"><span class="bench-label">Bowl</span><span class="bench-val cat-gold">Solid 300-1500g</span></div>
+    <div class="bench-row"><span class="bench-label">Tray</span><span class="bench-val cat-gold">Solid 500-2000g</span></div>
+    <div class="bench-row"><span class="bench-label">Candlesticks (pair)</span><span class="bench-val cat-gold">Solid 400-1500g</span></div>
   </div>
 
-  <h2 class="section-header">Famous <span>Makers</span></h2>
-  <div class="card"><h3>Tiffany & Co.</h3><p>Extremely valuable. Museum quality pieces command high prices.</p></div>
-  <div class="card"><h3>Gorham</h3><p>High-quality American silver. Art Nouveau designs very collectible.</p></div>
-  <div class="card"><h3>Reed & Barton</h3><p>Quality American silver. Sterling pieces valuable (1824-2015).</p></div>
-  <div class="card"><h3>International Silver Co.</h3><p>Common but collectible. Quality silver plate and sterling (1870-1960s).</p></div>
-</div>
-
-<!-- PAGE: Training -->
-<div id="page-training" class="page">
-  <h2 class="section-header">Training <span>Academy</span></h2>
-
-  <div class="module-card" onclick="openModule(1)">
-    <h4>🟢 Module 1: Basic Identification</h4>
-    <div class="meta">30 min • Learn to tell solid from plated in 60 seconds</div>
-    <div class="progress"><div class="progress-fill" style="width:100%"></div></div>
-  </div>
-
-  <div class="module-card" onclick="openModule(2)">
-    <h4>🟡 Module 2: Intermediate</h4>
-    <div class="meta">45 min • British hallmarks, maker marks, spotting fakes</div>
-    <div class="progress"><div class="progress-fill" style="width:0%"></div></div>
-  </div>
-
-  <div class="module-card" onclick="openModule(3)">
-    <h4>🟠 Module 3: Advanced</h4>
-    <div class="meta">60 min • Rare hallmarks, date letters, weighted silver</div>
-    <div class="progress"><div class="progress-fill" style="width:0%"></div></div>
-  </div>
-
-  <div class="module-card" onclick="openModule(4)">
-    <h4>🔴 Module 4: Practical</h4>
-    <div class="meta">30 min • Estate sale scenarios and decision-making</div>
-    <div class="progress"><div class="progress-fill" style="width:0%"></div></div>
-  </div>
-
-  <h2 class="section-header">Quick <span>Cheat Sheet</span></h2>
-  <div class="card">
-    <p style="font-family:monospace; font-size:13px; line-height:1.8;">
-      <span style="color:var(--success)">925 + Heavy + No wear</span> = SOLID ✓<br>
-      <span style="color:var(--warning)">EPNS + Light + Yellow wear</span> = PLATED ✗<br>
-      <span style="color:var(--text-secondary)">No marks + Heavy + Uniform</span> = CHECK<br>
-      <span style="color:var(--danger)">Magnet sticks</span> = NOT SILVER ✗
-    </p>
+  <h2 class="section">Identification <span>Flow</span></h2>
+  <div class="card" style="font-family:monospace;font-size:12px;line-height:1.8">
+    <span class="cat-gold">925 + Heavy + No wear</span> = SOLID ✓<br>
+    <span style="color:var(--amber)">EPNS + Light + Yellow wear</span> = PLATED ✗<br>
+    <span style="color:var(--text2)">No marks + Heavy + Uniform</span> = CHECK<br>
+    <span class="cat-rose">Magnet sticks</span> = NOT SILVER ✗
   </div>
 </div>
 
-<!-- PAGE: Photo Scan -->
-<div id="page-photo" class="page">
-  <h2 class="section-header">Scan <span>Item</span></h2>
+<!-- PAGE: Coins -->
+<div id="page-coins" class="page">
+  <h2 class="section">Silver <span>Coins</span></h2>
+
+  <div class="info-box">
+    <h4>📅 Pre-1965 Rule</h4>
+    <p>All US dimes, quarters, and half dollars minted before 1965 are 90% silver. Pennies are never silver (except rare 1943 silver pennies).</p>
+  </div>
+
+  <div class="coins-grid">
+    <div class="coin-card"><div class="coin-icon">🪙</div><div class="coin-name">Dime (pre-1965)</div><div class="coin-oz">0.0723 troy oz</div></div>
+    <div class="coin-card"><div class="coin-icon">🪙</div><div class="coin-name">Quarter (pre-1965)</div><div class="coin-oz">0.1600 troy oz</div></div>
+    <div class="coin-card"><div class="coin-icon">🪙</div><div class="coin-name">Half Dollar (pre-1965)</div><div class="coin-oz">0.3616 troy oz</div></div>
+    <div class="coin-card"><div class="coin-icon">🪙</div><div class="coin-name">Morgan Dollar</div><div class="coin-oz">0.7734 troy oz</div></div>
+  </div>
+
+  <h2 class="section">Silver Content <span>Calculator</span></h2>
+  <div class="calc-container">
+    <div class="calc-row"><label>Dimes (pre-1965)</label><input type="number" min="0" value="0" oninput="calcCoins()"></div>
+    <div class="calc-row"><label>Quarters (pre-1965)</label><input type="number" min="0" value="0" oninput="calcCoins()"></div>
+    <div class="calc-row"><label>Half Dollars (pre-1965)</label><input type="number" min="0" value="0" oninput="calcCoins()"></div>
+    <div class="calc-row"><label>Morgan Dollars</label><input type="number" min="0" value="0" oninput="calcCoins()"></div>
+    <div class="calc-total"><div class="label">Total Silver Content</div><div class="amount" id="totalOz">0.0000 troy oz</div></div>
+  </div>
+
+  <h2 class="section">British <span>Silver Coins</span></h2>
+  <div class="hallmark-grid">
+    <div class="hallmark-card"><div class="mark" style="font-size:24px;color:var(--bronze)">Crown</div><div class="name">5 Shillings</div><div class="purity">Pre-1920 = 92.5%</div></div>
+    <div class="hallmark-card"><div class="mark" style="font-size:24px;color:var(--bronze)">½ Crown</div><div class="name">2s 6d</div><div class="purity">Pre-1937 = 92.5%</div></div>
+    <div class="hallmark-card"><div class="mark" style="font-size:24px;color:var(--bronze)">Florin</div><div class="name">2 Shillings</div><div class="purity">Pre-1946 = 92.5%</div></div>
+    <div class="hallmark-card"><div class="mark" style="font-size:24px;color:var(--bronze)">Shilling</div><div class="name">12 Pence</div><div class="purity">Pre-1946 = 92.5%</div></div>
+  </div>
+
+  <h2 class="section">Identification <span>Checklist</span></h2>
+  <ul class="checklist">
+    <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div>Check date — pre-1965 = silver (mostly)</li>
+    <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div>Look for mint marks (D, S, O, CC, W)</li>
+    <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div>Edge should be reeded (grooved), not smooth</li>
+    <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div>Weight and size should match specifications</li>
+    <li class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div>1943 silver pennies exist (extremely rare)</li>
+  </ul>
+
+  <div class="info-box">
+    <h4>💡 Estate Sale Coin Tips</h4>
+    <p>Check any jar of mixed coins for pre-1965 dimes/quarters. Look for coin albums. Morgan dollars are the most collectible. British crowns are often overlooked.</p>
+  </div>
+</div>
+
+<!-- PAGE: Jewelry -->
+<div id="page-jewelry" class="page">
+  <h2 class="section">Jewelry <span>Guide</span></h2>
+
+  <div class="cat-legend">
+    <div class="cat-legend-item"><div class="cat-dot" style="background:var(--gold)"></div>Silver</div>
+    <div class="cat-legend-item"><div class="cat-dot" style="background:var(--bronze)"></div>Gold</div>
+    <div class="cat-legend-item"><div class="cat-dot" style="background:var(--rose)"></div>Jewelry</div>
+    <div class="cat-legend-item"><div class="cat-dot" style="background:var(--purple)"></div>Gemstones</div>
+  </div>
+
+  <div class="info-box">
+    <h4>Silver Jewelry Marks</h4>
+    <p>Look for <b>925</b>, <b>STERLING</b>, <b>925/1000</b>, <b>925 ARG</b> (Mexican), or <b>MERCURY</b> on inside bands, clasps, or backs.</p>
+  </div>
+
+  <h2 class="section">Jewelry <span>Types</span></h2>
+  <div class="jewel-grid">
+    <div class="jewel-card"><div class="jewel-icon">💍</div><div class="jewel-name">Rings</div><div class="jewel-weight">5-15g</div></div>
+    <div class="jewel-card"><div class="jewel-icon">📿</div><div class="jewel-name">Bracelets</div><div class="jewel-weight">20-60g</div></div>
+    <div class="jewel-card"><div class="jewel-icon">🌸</div><div class="jewel-name">Brooches</div><div class="jewel-weight">10-30g</div></div>
+    <div class="jewel-card"><div class="jewel-icon">✨</div><div class="jewel-name">Necklaces</div><div class="jewel-weight">20-100g</div></div>
+    <div class="jewel-card"><div class="jewel-icon">💎</div><div class="jewel-name">Earrings</div><div class="jewel-weight">3-10g/pair</div></div>
+    <div class="jewel-card"><div class="jewel-icon">📌</div><div class="jewel-name">Pins</div><div class="jewel-weight">15-40g</div></div>
+  </div>
+
+  <h2 class="section">Gold <span>Karat Marks</span></h2>
+  <div class="hallmark-grid">
+    <div class="hallmark-card"><div class="mark" style="color:var(--bronze)">24K / 999</div><div class="name">Pure Gold</div><div class="purity">99.9%</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--bronze)">22K / 917</div><div class="name">Fine Gold</div><div class="purity">91.7%</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--bronze)">18K / 750</div><div class="name">High Quality</div><div class="purity">75.0%</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--bronze)">14K / 583</div><div class="name">US Standard</div><div class="purity">58.3%</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--bronze)">10K / 417</div><div class="name">US Minimum</div><div class="purity">41.7%</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--bronze)">9K / 375</div><div class="name">UK/EU Min</div><div class="purity">37.5%</div></div>
+  </div>
+
+  <div class="info-box">
+    <h4>Platinum</h4>
+    <p>Look for <b>PT950</b>, <b>PLAT</b>, <b>PT999</b>. More valuable than gold by weight. Heavy and dense.</p>
+  </div>
+
+  <h2 class="section">Gemstone <span>Identification</span></h2>
+  <div class="gem-grid">
+    <div class="gem-card"><div class="gem-icon" style="background:rgba(255,255,255,0.1)">💎</div><div class="gem-info"><h4>Diamond</h4><p>Hardest gem (Mohs 10). Check for GIA/AGS certificates. Even small diamonds in silver settings can be valuable.</p></div></div>
+    <div class="gem-card"><div class="gem-icon" style="background:rgba(180,30,30,0.2)">🔴</div><div class="gem-info"><h4>Ruby</h4><p>Deep red (pigeon blood most valuable). Mohs 9. Old mine cuts are collectible.</p></div></div>
+    <div class="gem-card"><div class="gem-icon" style="background:rgba(30,60,180,0.2)">🔵</div><div class="gem-info"><h4>Sapphire</h4><p>Blue (also pink, yellow). Mohs 9. Old cushion and oval cuts are collectible.</p></div></div>
+    <div class="gem-card"><div class="gem-icon" style="background:rgba(30,150,60,0.2)">💚</div><div class="gem-info"><h4>Emerald</h4><p>Green with jardin inclusions. Mohs 7.5-8. Often oil-treated. Colombian most valuable.</p></div></div>
+    <div class="gem-card"><div class="gem-icon" style="background:rgba(200,100,200,0.2)">🌈</div><div class="gem-info"><h4>Opal</h4><p>Play-of-color (rainbow flash). Soft (5.5-6.5). Australian black opal most valuable.</p></div></div>
+    <div class="gem-card"><div class="gem-icon" style="background:rgba(240,220,180,0.2)">⚪</div><div class="gem-info"><h4>Pearl</h4><p>Warm to touch (not cold like glass). Akoya, South Sea, Tahitian most valuable.</p></div></div>
+    <div class="gem-card"><div class="gem-icon" style="background:rgba(160,40,40,0.2)">🟤</div><div class="gem-info"><h4>Garnet</h4><p>Deep red/burgundy. Mohs 6.5-7.5. Common in Victorian jewelry.</p></div></div>
+    <div class="gem-card"><div class="gem-icon" style="background:rgba(220,160,40,0.2)">🟠</div><div class="gem-info"><h4>Amber</h4><p>Warm golden. May contain fossils. Baltic amber most collectible.</p></div></div>
+    <div class="gem-card"><div class="gem-icon" style="background:rgba(60,180,180,0.2)">🟢</div><div class="gem-info"><h4>Turquoise</h4><p>Blue-green with matrix. Native American silver settings (Navajo, Zuni) are collectible.</p></div></div>
+  </div>
+
+  <h2 class="section">Famous <span>Jewelry Makers</span></h2>
+  <div class="hallmark-grid">
+    <div class="hallmark-card"><div class="mark" style="font-size:16px;color:var(--rose)">CARTIER</div><div class="name">Cartier</div><div class="purity">1847-present. Extremely valuable</div></div>
+    <div class="hallmark-card"><div class="mark" style="font-size:16px;color:var(--rose)">VCA</div><div class="name">Van Cleef & Arpels</div><div class="purity">1906-present. Extremely valuable</div></div>
+    <div class="hallmark-card"><div class="mark" style="font-size:16px;color:var(--rose)">BVLGARI</div><div class="name">Bulgari</div><div class="purity">1884-present. Very valuable</div></div>
+    <div class="hallmark-card"><div class="mark" style="font-size:16px;color:var(--rose)">T&Co</div><div class="name">Tiffany & Co.</div><div class="purity">1837-present. Extremely valuable</div></div>
+  </div>
+
+  <h2 class="section">Antique <span>Periods</span></h2>
+  <div class="card"><h3>Georgian (1714-1837)</h3><p>Hand-made, rose-cut diamonds, paste jewelry.</p></div>
+  <div class="card"><h3>Victorian (1837-1901)</h3><p>Closed back settings, foil backing, cameos. Very collectible.</p></div>
+  <div class="card"><h3>Edwardian (1901-1915)</h3><p>Lace-like filigree, platinum, old European cuts.</p></div>
+  <div class="card"><h3>Art Deco (1920-1935)</h3><p>Geometric designs, onyx, jade, baguette cuts. Highly collectible.</p></div>
+  <div class="card"><h3>Retro (1940-1955)</h3><p>Bold, oversized, gold, colored stones.</p></div>
+
+  <div class="info-box">
+    <h4>💎 Value Tips</h4>
+    <p>Pairs are essential for earrings. Complete sets worth more. Famous maker marks add 5-10x value. Antique periods command premiums. Check for certificates.</p>
+  </div>
+</div>
+
+<!-- PAGE: Collectibles -->
+<div id="page-collectibles" class="page">
+  <h2 class="section">Collectibles <span>Guide</span></h2>
+
+  <div class="info-box">
+    <h4>What to Look For</h4>
+    <p>Estate sales are treasure troves for collectibles. Focus on items with provenance, rarity, and condition.</p>
+  </div>
+
+  <div class="collab-grid">
+    <div class="collab-card"><div class="collab-icon">📮</div><div class="collab-name">Stamps</div><div class="collab-desc">First editions, errors, rare countries</div></div>
+    <div class="collab-card"><div class="collab-icon">📖</div><div class="collab-name">Rare Books</div><div class="collab-desc">First editions, signed, historical</div></div>
+    <div class="collab-card"><div class="collab-icon">🏺</div><div class="collab-name">Antiques</div><div class="collab-desc">Pre-1900, maker marks, condition</div></div>
+    <div class="collab-card"><div class="collab-icon">🎨</div><div class="collab-name">Decorative Art</div><div class="collab-desc">Art Nouveau, Arts & Crafts</div></div>
+    <div class="collab-card"><div class="collab-icon">🎭</div><div class="collab-name">Vintage Items</div><div class="collab-desc">Mid-century, branded, complete</div></div>
+    <div class="collab-card"><div class="collab-icon">🪙</div><div class="collab-name">Coins & Currency</div><div class="collab-desc">Old bills, rare dates, errors</div></div>
+    <div class="collab-card"><div class="collab-icon">🎸</div><div class="collab-name">Musical Instruments</div><div class="collab-desc">Branded, vintage, working</div></div>
+    <div class="collab-card"><div class="collab-icon">📷</div><div class="collab-name">Vintage Cameras</div><div class="collab-desc">Leica, Hasselblad, working</div></div>
+  </div>
+
+  <h2 class="section">Condition <span>Grading</span></h2>
+  <div class="hallmark-grid">
+    <div class="hallmark-card"><div class="mark" style="color:var(--green)">Mint/MS-70</div><div class="name">Perfect</div><div class="purity">No wear, original</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--green)">AU-50-58</div><div class="name">About Uncirculated</div><div class="purity">Minimal wear</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--amber)">VF-20-35</div><div class="name">Very Fine</div><div class="purity">Light wear</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--amber)">F-12-15</div><div class="name">Fine</div><div class="purity">Moderate wear</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--amber)">VG-8-10</div><div class="name">Very Good</div><div class="purity">Heavy wear</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--red)">G-4</div><div class="name">Good</div><div class="purity">Significant wear</div></div>
+  </div>
+
+  <h2 class="section">Category <span>Tips</span></h2>
+  <div class="card"><h3>📮 Stamps</h3><p>Look for first editions, error stamps, rare country issues. Check perforations and watermarks. Complete sets worth more than singles.</p></div>
+  <div class="card"><h3>📖 Rare Books</h3><p>First editions, signed copies, historical significance. Check dust jackets, edition statements, and bookplates. Early American imprints valuable.</p></div>
+  <div class="card"><h3>🏺 Antiques</h3><p>Pre-1900 items with maker marks. Check for period-appropriate materials and construction. Original finish adds value.</p></div>
+  <div class="card"><h3>🎨 Decorative Art</h3><p>Art Nouveau and Arts & Crafts pieces command premiums. Look for maker marks, originality, and condition. Tiffany, Liberty, Moravka.</p></div>
+  <div class="card"><h3>📷 Vintage Cameras</h3><p>Leica, Hasselblad, Contax, Rolleifex. Working condition essential. Original cases and accessories add value.</p></div>
+  <div class="card"><h3>🎸 Musical Instruments</h3><p>Branded instruments (Martin, Gibson, Fender). Check for original hardware, condition, and playability. Vintage amplifiers collectible.</p></div>
+
+  <div class="info-box">
+    <h4>💡 Estate Sale Collectible Tips</h4>
+    <p>Check basements and attics for old collections. Look for original boxes, certificates, and documentation. Complete sets always worth more. When in doubt, research before buying.</p>
+  </div>
+</div>
+
+<!-- PAGE: Scan -->
+<div id="page-scan" class="page">
+  <h2 class="section">Scan <span>Item</span></h2>
 
   <div class="photo-zone" onclick="document.getElementById('fileInput').click()">
-    <svg viewBox="0 0 24 24"><path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h2V3h2v2h3v2h-2s-.01 1.99 0 2h2v-2h3v-2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h2V3h2v2h3v2h-2s-.01 1.99 0 2h2v-2h3v-2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z" fill="var(--gold)"/></svg>
     <p>Tap to take photo or choose from library</p>
   </div>
 
   <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
 
-  <div id="photoPreview" style="display:none; margin-bottom:16px;">
-    <img id="previewImg" style="width:100%; border-radius:12px; border:1px solid rgba(200,164,90,0.2);">
+  <div id="photoPreview" style="display:none;margin-bottom:14px">
+    <img id="previewImg" style="width:100%;border-radius:12px;border:1px solid rgba(200,164,90,0.15)">
   </div>
 
-  <div id="photoAnalysis" style="display:none;">
-    <div class="card">
-      <h3>🔍 Analysis Results</h3>
-      <div id="analysisContent"></div>
+  <div id="scanForm" style="display:none">
+    <div class="form-group">
+      <label>Category</label>
+      <select id="scanCategory">
+        <option value="silver">🥈 Silver</option>
+        <option value="coins">🪙 Coins</option>
+        <option value="jewelry">💎 Jewelry</option>
+        <option value="collectibles">🏺 Collectibles</option>
+        <option value="other">📦 Other</option>
+      </select>
     </div>
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text" id="scanDesc" placeholder="e.g., Teaspoon found at Main St Estate Sale">
+    </div>
+    <div class="form-group">
+      <label>Marks Found</label>
+      <input type="text" id="scanMarks" placeholder="e.g., 925, Lion Passant, Tiffany">
+    </div>
+    <div class="form-group">
+      <label>Weight (grams)</label>
+      <input type="number" id="scanWeight" placeholder="e.g., 18">
+    </div>
+    <div class="form-group">
+      <label>Magnet Test</label>
+      <select id="scanMagnet">
+        <option value="not attracted">Not attracted (could be silver)</option>
+        <option value="attracted">Attracted (NOT silver)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Condition</label>
+      <select id="scanCondition">
+        <option value="excellent">Excellent</option>
+        <option value="good" selected>Good</option>
+        <option value="fair">Fair</option>
+        <option value="poor">Poor</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Verdict</label>
+      <select id="scanVerdict">
+        <option value="solid silver">Solid Silver</option>
+        <option value="plated">Silver Plated</option>
+        <option value="gold">Gold</option>
+        <option value="gemstone">Gemstone</option>
+        <option value="collectible">Collectible</option>
+        <option value="unknown">Unknown</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Estimated Value</label>
+      <input type="text" id="scanValue" placeholder="e.g., $10-30">
+    </div>
+    <button class="btn-primary" onclick="saveScanItem()">Save to Collection</button>
   </div>
 
-  <div class="info-box">
+  <div class="info-box" id="scanTips">
     <h4>📸 Photo Tips</h4>
     <p>Get close-up shots of marks/hallmarks. Good lighting is key. Show the whole item and any details.</p>
   </div>
-
-  <button class="btn-primary" onclick="analyzePhoto()" style="margin-top:12px;">Analyze Photo</button>
 </div>
 
 <!-- PAGE: Collection -->
 <div id="page-collection" class="page">
-  <h2 class="section-header">My <span>Collection</span></h2>
+  <h2 class="section">My <span>Collection</span></h2>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search collection..." oninput="filterCollection()">
+  </div>
+
+  <div class="filter-chips" id="filterChips">
+    <div class="filter-chip active" onclick="setFilter('all',this)">All</div>
+    <div class="filter-chip" onclick="setFilter('silver',this)">Silver</div>
+    <div class="filter-chip" onclick="setFilter('coins',this)">Coins</div>
+    <div class="filter-chip" onclick="setFilter('jewelry',this)">Jewelry</div>
+    <div class="filter-chip" onclick="setFilter('collectibles',this)">Collectibles</div>
+    <div class="filter-chip" onclick="setFilter('solid',this)">Solid</div>
+  </div>
+
   <div id="collectionList"></div>
-  <button class="btn-primary" onclick="openAddItem()" style="margin-top:16px;">+ Add Item</button>
+  <button class="btn-primary" onclick="openAddItem()" style="margin-top:12px">+ Add Item</button>
+  <button class="btn-secondary" onclick="exportCollection()" style="margin-top:8px">📤 Export Collection (JSON)</button>
 </div>
 
-<!-- PAGE: Tools -->
-<div id="page-tools" class="page">
-  <h2 class="section-header">Estate Sale <span>Toolkit</span></h2>
+<!-- PAGE: Academy -->
+<div id="page-academy" class="page">
+  <h2 class="section">Training <span>Academy</span></h2>
 
-  <div class="tool-card">
-    <div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg></div>
-    <div class="tool-info"><h4>USB-C Pocket Scale</h4><p>0.01g precision, credit-card sized</p></div>
-    <div class="tool-price">$10-20</div>
+  <div class="module-card" onclick="openModule(1)">
+    <h4>🟢 Module 1: Basic Identification</h4>
+    <div class="meta">30 min • Learn to tell solid from plated in 60 seconds</div>
+    <div class="progress"><div class="progress-fill" id="prog1" style="width:0%"></div></div>
   </div>
 
-  <div class="tool-card">
-    <div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
-    <div class="tool-info"><h4>Neodymium Magnet</h4><p>Tests for steel core (plated/fake)</p></div>
-    <div class="tool-price">$3-5</div>
+  <div class="module-card" onclick="openModule(2)">
+    <h4>🟡 Module 2: Intermediate</h4>
+    <div class="meta">45 min • British hallmarks, maker marks, spotting fakes</div>
+    <div class="progress"><div class="progress-fill" id="prog2" style="width:0%"></div></div>
   </div>
 
-  <div class="tool-card">
-    <div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.88 6.5l-2.43-.97L12 13.5 6.88 8.53l-2.43.97L12 16.08l7.88-5.58zM12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
-    <div class="tool-info"><h4>Magnifying Glass</h4><p>Read small hallmarks and maker marks</p></div>
-    <div class="tool-price">$5</div>
+  <div class="module-card" onclick="openModule(3)">
+    <h4>🟠 Module 3: Advanced</h4>
+    <div class="meta">60 min • Rare hallmarks, date letters, weighted silver</div>
+    <div class="progress"><div class="progress-fill" id="prog3" style="width:0%"></div></div>
   </div>
 
-  <div class="tool-card">
-    <div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/></svg></div>
-    <div class="tool-info"><h4>Microfiber Cloth</h4><p>Wipe items to reveal hidden marks</p></div>
-    <div class="tool-price">$2-5</div>
+  <div class="module-card" onclick="openModule(4)">
+    <h4>🔴 Module 4: Practical</h4>
+    <div class="meta">30 min • Estate sale scenarios and decision-making</div>
+    <div class="progress"><div class="progress-fill" id="prog4" style="width:0%"></div></div>
   </div>
 
-  <h2 class="section-header">Total Cost: <span style="color:var(--accent)">$20-35</span></h2>
-
-  <div class="info-box">
-    <h4>📱 iPhone Native Weighing</h4>
-    <p>iPhone has no built-in scale. You need an external USB-C pocket scale for weight testing.</p>
-  </div>
-
-  <h2 class="section-header">Weight <span>Benchmarks</span></h2>
-  <div class="card">
-    <div class="benchmark-row"><span class="benchmark-label">Teaspoon</span><span class="benchmark-values" style="color:var(--success)">Solid 15-20g</span></div>
-    <div class="benchmark-row"><span class="benchmark-label">Dinner Fork</span><span class="benchmark-values" style="color:var(--success)">Solid 25-35g</span></div>
-    <div class="benchmark-row"><span class="benchmark-label">Soup Spoon</span><span class="benchmark-values" style="color:var(--success)">Solid 30-40g</span></div>
-    <div class="benchmark-row"><span class="benchmark-label">Bowl</span><span class="benchmark-values" style="color:var(--success)">Solid 300-1500g</span></div>
-    <div class="benchmark-row"><span class="benchmark-label">Tray</span><span class="benchmark-values" style="color:var(--success)">Solid 500-2000g</span></div>
-    <div class="benchmark-row"><span class="benchmark-label">Candlestick (pair)</span><span class="benchmark-values" style="color:var(--success)">Solid 400-1500g</span></div>
-  </div>
-
-  <h2 class="section-header">Coin Silver <span>Values</span></h2>
-  <div class="card">
-    <p style="margin-bottom:8px;">Pre-1965 US coins are 90% silver:</p>
-    <div class="benchmark-row"><span class="benchmark-label">Dime</span><span class="benchmark-values">0.0723 troy oz</span></div>
-    <div class="benchmark-row"><span class="benchmark-label">Quarter</span><span class="benchmark-values">0.1600 troy oz</span></div>
-    <div class="benchmark-row"><span class="benchmark-label">Half Dollar</span><span class="benchmark-values">0.3616 troy oz</span></div>
-    <div class="benchmark-row"><span class="benchmark-label">Morgan Dollar</span><span class="benchmark-values">0.7734 troy oz</span></div>
+  <h2 class="section">Quick <span>Cheat Sheet</span></h2>
+  <div class="card" style="font-family:monospace;font-size:12px;line-height:1.8">
+    <span class="cat-gold">925 + Heavy + No wear</span> = SOLID ✓<br>
+    <span style="color:var(--amber)">EPNS + Light + Yellow wear</span> = PLATED ✗<br>
+    <span style="color:var(--text2)">No marks + Heavy + Uniform</span> = CHECK<br>
+    <span class="cat-rose">Magnet sticks</span> = NOT SILVER ✗<br>
+    <br>
+    <span class="cat-bronze">Pre-1965 coins</span> = 90% silver<br>
+    <span class="cat-rose">Pairs > Singles</span> (candlesticks, earrings)<br>
+    <span class="cat-teal">Complete services</span> > Individual pieces
   </div>
 </div>
 
 <!-- Add Item Modal -->
 <div class="modal-overlay" id="addModal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">&times;</button>
-    <h2>Add Item to Collection</h2>
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2>Add Item <span style="font-size:14px;color:var(--text2);font-weight:400">to Collection</span></h2>
 
     <div class="form-group">
-      <label>Item Type</label>
+      <label>Category</label>
       <select id="itemType">
-        <option value="flatware">Flatware (forks, spoons, knives)</option>
-        <option value="holloware">Holloware (bowls, trays, teapots)</option>
-        <option value="jewelry">Jewelry</option>
-        <option value="coin">Coin</option>
-        <option value="decorative">Decorative Object</option>
+        <option value="silver">🥈 Silver</option>
+        <option value="coins">🪙 Coins</option>
+        <option value="jewelry">💎 Jewelry</option>
+        <option value="collectibles">🏺 Collectibles</option>
+        <option value="other">📦 Other</option>
       </select>
     </div>
-
     <div class="form-group">
       <label>Description</label>
       <input type="text" id="itemDesc" placeholder="e.g., Teaspoon found at Main St Estate Sale">
     </div>
-
     <div class="form-group">
       <label>Marks Found</label>
-      <input type="text" id="itemMarks" placeholder="e.g., 925, Lion Passant">
+      <input type="text" id="itemMarks" placeholder="e.g., 925, Lion Passant, Tiffany">
     </div>
-
     <div class="form-group">
       <label>Weight (grams)</label>
       <input type="number" id="itemWeight" placeholder="e.g., 18">
     </div>
-
     <div class="form-group">
       <label>Magnet Test</label>
       <select id="itemMagnet">
         <option value="not attracted">Not attracted (could be silver)</option>
-        <option value="attracted">Attracted (NOT silver - steel core)</option>
+        <option value="attracted">Attracted (NOT silver)</option>
       </select>
     </div>
-
     <div class="form-group">
       <label>Condition</label>
       <select id="itemCondition">
@@ -541,27 +754,21 @@ body {
         <option value="poor">Poor</option>
       </select>
     </div>
-
     <div class="form-group">
-      <label>My Verdict</label>
+      <label>Verdict</label>
       <select id="itemVerdict">
         <option value="solid silver">Solid Silver</option>
         <option value="plated">Silver Plated</option>
-        <option value="fake">Fake / Reproduction</option>
-        <option value="unknown">Unknown - Need More Info</option>
+        <option value="gold">Gold</option>
+        <option value="gemstone">Gemstone</option>
+        <option value="collectible">Collectible</option>
+        <option value="unknown">Unknown</option>
       </select>
     </div>
-
     <div class="form-group">
-      <label>Estimated Value Range</label>
+      <label>Estimated Value</label>
       <input type="text" id="itemValue" placeholder="e.g., $10-30">
     </div>
-
-    <div class="form-group">
-      <label>Notes</label>
-      <textarea id="itemNotes" placeholder="Any additional notes..."></textarea>
-    </div>
-
     <button class="btn-primary" onclick="saveItem()">Save Item</button>
   </div>
 </div>
@@ -569,33 +776,20 @@ body {
 <!-- Module Modal -->
 <div class="modal-overlay" id="moduleModal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModuleModal()">&times;</button>
+    <button class="modal-close" onclick="closeModuleModal()">×</button>
     <div id="moduleContent"></div>
   </div>
 </div>
 
 <!-- Bottom Navigation -->
 <div class="bottom-nav">
-  <div class="nav-item active" onclick="showPage('page-home')">
-    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-    Home
-  </div>
-  <div class="nav-item" onclick="showPage('page-silver')">
-    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-    Silver
-  </div>
-  <div class="nav-item" onclick="showPage('page-training')">
-    <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
-    Training
-  </div>
-  <div class="nav-item" onclick="showPage('page-photo')">
-    <svg viewBox="0 0 24 24"><path d="M9.4 10.5l4.77-8.26C14.47 1.95 15.13 1.5 16 1.5c1.93 0 3.5 1.57 3.5 3.5 0 .88-.32 1.67-.85 2.27L19.5 10.5h-3l-4.5-6zM21 12c0 3.31-2.69 6-6 6-.88 0-1.67-.32-2.27-.85L9 10.5h3l4.5-6c.27-.38.5-.8.5-1.5 0-.83-.67-1.5-1.5-1.5-.42 0-.8.17-1.09.46L8.5 9H3v12h18V12h-4z"/></svg>
-    Scan
-  </div>
-  <div class="nav-item" onclick="showPage('page-collection')">
-    <svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
-    Collection
-  </div>
+  <div class="nav-item active" onclick="showPage('page-home')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</div>
+  <div class="nav-item" onclick="showPage('page-silver')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>Silver</div>
+  <div class="nav-item" onclick="showPage('page-coins')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10.5c-2.48 0-4.5-2.02-4.5-4.5S9.52 7.5 12 7.5s4.5 2.02 4.5 4.5-2.02 4.5-4.5 4.5z"/></svg>Coins</div>
+  <div class="nav-item" onclick="showPage('page-jewelry')"><svg viewBox="0 0 24 24"><path d="M19.5 12c0-.23-.01-.46-.04-.68l2.06 1.32c.16-.11.27-.27.3-.46l-2.62-1.78c-.18-.03-.36-.08-.53-.15l-.58 2.37c-.2.02-.39.05-.58.08l-1.15-2.1c-.15-.02-.3-.05-.46-.08l.01-2.71c0-.2-.03-.4-.08-.58l2.37-.58c-.05-.18-.1-.35-.15-.53l-1.78-2.62c-.18-.04-.36-.14-.56-.14s-.39.1-.56.14l-1.32 2.06c-.22-.04-.45-.07-.68-.07s-.46.03-.68.07L9.24 3.14c-.16-.16-.37-.26-.6-.26s-.44.1-.6.26L6.02 4.92c-.2.07-.39.15-.58.24l-.58-2.37c-.18-.04-.36-.14-.56-.14s-.4.1-.56.14L1.12 5.47c-.18.18-.28.42-.28.68s.1.5.28.68l2.06 1.32c-.04.22-.07.45-.07.68s.03.46.07.68L3.2 10.17c-.16.16-.27.37-.27.6s.11.44.27.6l2.62 1.78c.18.03.36.08.53.15l.58-2.37c.2-.02.39-.05.58-.08l1.15 2.1c.15.02.3.05.46.08l-.01 2.71c0 .2.03.4.08.58l-2.37.58c.05.18.1.35.15.53l1.78 2.62c.18.04.36.14.56.14s.39-.1.56-.14l1.32-2.06c.22.04.45.07.68.07s.46-.03.68-.07l1.32 2.06c.16.16.37.26.6.26s.44-.1.6-.26l1.78-2.62c.2-.07.39-.15.58-.24l.58 2.37c.18.04.36.14.56.14s.4-.1.56-.14l2.62-1.78c.18-.18.28-.42.28-.68s-.1-.5-.28-.68l-2.06-1.32c.04-.22.07-.45.07-.68z"/></svg>Jewelry</div>
+  <div class="nav-item" onclick="showPage('page-collectibles')"><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>More</div>
+  <div class="nav-item" onclick="showPage('page-scan')"><svg viewBox="0 0 24 24"><path d="M9.4 10.5l4.77-8.26C14.47 1.95 15.13 1.5 16 1.5c1.93 0 3.5 1.57 3.5 3.5 0 .88-.32 1.67-.85 2.27L19.5 10.5h-3l-4.5-6zM21 12c0 3.31-2.69 6-6 6-.88 0-1.67-.32-2.27-.85L9 10.5h3l4.5-6c.27-.38.5-.8.5-1.5 0-.83-.67-1.5-1.5-1.5-.42 0-.8.17-1.09.46L8.5 9H3v12h18V12h-4z"/></svg>Scan</div>
+  <div class="nav-item" onclick="showPage('page-collection')"><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>Saved</div>
 </div>
 
 <script>
@@ -603,149 +797,101 @@ body {
 function showPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(pageId).classList.add('active');
-  
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const navMap = {'page-home':0,'page-silver':1,'page-training':2,'page-photo':3,'page-collection':4};
-  const idx = navMap[pageId];
+  const map = {'page-home':0,'page-silver':1,'page-coins':2,'page-jewelry':3,'page-collectibles':4,'page-scan':5,'page-collection':6};
+  const idx = map[pageId];
   if(idx !== undefined) document.querySelectorAll('.nav-item')[idx].classList.add('active');
-  
   if(pageId === 'page-collection') renderCollection();
+  window.scrollTo(0, 0);
 }
 
-// Module Content Data
-const modules = {
-  1: {
-    title: 'Module 1: Basic Silver Identification',
-    time: '30 min • Beginner',
-    content: `
-      <div class="info-box"><h4>Lesson 1.1: The Two Marks That Matter Most</h4><p>SOLID SILVER (WORTH $$$$): <b>925</b>, <b>STERLING</b>, <b>800/835</b>, <b>Lion Passant</b>. NOT SOLID (WORTH $): <b>EPNS</b>, <b>SILVER PLATED</b>, <b>EP</b>, <b>A1</b>.</p></div>
-      
-      <div class="info-box"><h4>Lesson 1.2: Weight Test</h4><p>Solid silver is dense and heavy. Teaspoon: Solid = 15-20g | Plated = 8-12g. If it feels LIGHT, it's probably plated.</p></div>
-      
-      <div class="info-box"><h4>Lesson 1.3: Magnet Test</h4><p>Silver is NOT magnetic. If magnet sticks = steel core, NOT silver. No stick = could be silver OR non-magnetic base metal (brass, nickel silver).</p></div>
-      
-      <div class="info-box"><h4>Lesson 1.4: Wear Points</h4><p>Fork tines, spoon backs, handle ends. Yellow/gold color showing through = PLATED. Uniform silver everywhere = LIKELY SOLID.</p></div>
-      
-      <div class="info-box"><h4>Lesson 1.5: 60-Second Checklist</h4><p>Marks → Weight → Wear points → Magnet → Decision. Focus on HEAVY items with NO wear color showing.</p></div>
-    `
-  },
-  2: {
-    title: 'Module 2: Intermediate Silver Identification',
-    time: '45 min • Intermediate',
-    content: `
-      <div class="info-box"><h4>British Hallmarks</h4><p><b>Lion Passant</b> = 925 sterling. <b>Assay offices:</b> London (anchor), Birmingham (anchor), Sheffield (rose), Edinburgh (castle). <b>Date letters</b> = year made. <b>Maker marks</b> = two initials in shield.</p></div>
-      
-      <div class="info-box"><h4>Famous Makers</h4><p><b>Tiffany & Co.</b> - Extremely valuable. <b>Gorham</b> - Art Nouveau collectible. <b>Reed & Barton</b> - Quality American (1824-2015). <b>International Silver</b> - Common but collectible.</p></div>
-      
-      <div class="info-box"><h4>Spotting Reproductions</h4><p>Perfect condition + modern fonts = suspicious. Wrong hallmark combos = fake. 2+ red flags = walk away.</p></div>
-      
-      <div class="info-box"><h4>Old Sheffield Plate (OSP)</h4><p>Fused silver/copper sheets (1740s-1840s). Shows copper bleeding at wear points. Bluish cast vs electroplate. No EP marks.</p></div>
-    `
-  },
-  3: {
-    title: 'Module 3: Advanced Silver Identification',
-    time: '60 min • Advanced',
-    content: `
-      <div class="info-box"><h4>Date Letter System</h4><p>Each assay office has its own alphabet cycle. Font style + shield shape = specific year. Look for small letter on back/underside.</p></div>
-      
-      <div class="info-box"><h4>Rare & Valuable Marks</h4><p><b>Paul de Lamerie (PL)</b> - $5k-$100k+. <b>Paul Revere (PR)</b> - $10k-$500k+. <b>Britannia 958</b> - Higher purity, rare.</p></div>
-      
-      <div class="info-box"><h4>Weighted Silver</h4><p>Silver shell filled with lead. Hollow sound when tapped. X-ray needed to detect.</p></div>
-      
-      <div class="info-box"><h4>US Coin Silver</h4><p>Pre-1965 dimes/quarters/half dollars = 90% silver. Dime: 0.0723 oz | Quarter: 0.1600 oz | Half dollar: 0.3616 oz.</p></div>
-    `
-  },
-  4: {
-    title: 'Module 4: Practical Estate Sale Scenarios',
-    time: '30 min • Applied',
-    content: `
-      <div class="info-box"><h4>Scenario 1: Drawer of Mixed Flatware</h4><p>Sort by weight (heavy = likely solid). Check each for 925 mark. Buy lot if 50%+ solid silver.</p></div>
-      
-      <div class="info-box"><h4>Scenario 2: Service for 12</h4><p>Check if complete. Verify all pieces are solid (925 mark). Complete service worth 2-3x individual pieces.</p></div>
-      
-      <div class="info-box"><h4>Scenario 3: Candlesticks</h4><p><b>PAIRS are essential for value.</b> Single = low value ($5-20). Pair of solid silver = valuable ($100-500+).</p></div>
-      
-      <div class="info-box"><h4>Scenario 4: Coin Collection</h4><p>Check dates (pre-1965 = silver). Count total silver content. Buy if mostly pre-1965 coins.</p></div>
-      
-      <div class="info-box"><h4>Golden Rules</h4><p>Heavy + No wear color + 925 mark = SOLID. Pairs > Singles. Complete services > Individual pieces.</p></div>
-    `
-  }
-};
-
-function openModule(num) {
-  const m = modules[num];
-  document.getElementById('moduleContent').innerHTML = `<h2>${m.title}</h2><div class="meta" style="color:var(--text-secondary);margin-bottom:16px;">${m.time}</div>${m.content}`;
-  document.getElementById('moduleModal').classList.add('active');
+// Toggle checklist items
+function toggleCheck(el) {
+  const box = el.querySelector('.check-box');
+  box.classList.toggle('checked');
 }
 
-function closeModuleModal() {
-  document.getElementById('moduleModal').classList.remove('active');
+// Tips rotation
+const tips = [
+  'Focus on HEAVY items with NO wear color showing. These are most likely solid silver.',
+  'Pairs are essential for candlesticks and earrings. Singles have low value.',
+  'Pre-1965 US coins are 90% silver. Check dates first!',
+  'Famous maker marks (Tiffany, Gorham, Cartier) can multiply value 5-10x.',
+  'Complete services (12+ place settings) are worth 2-3x individual pieces.',
+  'British silver with Lion Passant and assay marks is very collectible.',
+  'Old Sheffield Plate (pre-1840) with copper bleeding is valuable.',
+  'Check inside bowls — silver top over base metal is less valuable.',
+  'Art Deco and Art Nouveau jewelry periods command premiums.',
+  'Look for certificates with gemstone jewelry — they add value.'
+];
+const tipIdx = new Date().getDate() % tips.length;
+document.getElementById('tipOfDay').textContent = tips[tipIdx];
+
+// Stats
+function updateStats() {
+  const items = getCollection();
+  const solid = items.filter(i => i.verdict === 'solid silver' || i.verdict === 'gold').length;
+  document.getElementById('statItems').textContent = items.length;
+  document.getElementById('statSolid').textContent = solid;
+  const val = items.reduce((s, i) => {
+    const m = (i.value || '').match(/[\d,]+/g);
+    return s + (m ? parseInt(m[0].replace(/,/g,'')) : 0) : 0;
+  }, 0);
+  document.getElementById('statValue').textContent = '$' + val.toLocaleString();
 }
 
-// Photo Handling
-function handlePhoto(input) {
-  if(input.files && input.files[0]) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      document.getElementById('previewImg').src = e.target.result;
-      document.getElementById('photoPreview').style.display = 'block';
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
+// Collection (localStorage)
+function getCollection() {
+  try { return JSON.parse(localStorage.getItem('estatescout_items') || '[]'); } catch { return []; }
 }
+function saveCollection(items) { localStorage.setItem('estatescout_items', JSON.stringify(items)); }
 
-function analyzePhoto() {
-  const content = `
-    <div class="info-box"><h4>📷 Photo Analysis</h4><p>This feature will analyze your photo for hallmarks, marks, and wear points. In the full version, AI would detect and annotate specific features with red circles.</p></div>
-    <ul class="checklist">
-      <li><div class="check-icon green">✓</div> Check for hallmarks (925/Sterling = solid)</li>
-      <li><div class="check-icon green">✓</div> Check weight (heavy for size = likely solid)</li>
-      <li><div class="check-icon yellow">!</div> Check wear points (yellow/copper = plated)</li>
-      <li><div class="check-icon green">✓</div> Magnet test (sticks = NOT silver)</li>
-    </ul>
-  `;
-  document.getElementById('analysisContent').innerHTML = content;
-  document.getElementById('photoAnalysis').style.display = 'block';
-}
-
-// Collection Management
 function renderCollection() {
-  const items = JSON.parse(localStorage.getItem('estatescout_items') || '[]');
+  updateStats();
+  const items = getCollection();
   const container = document.getElementById('collectionList');
-  
-  if(items.length === 0) {
-    container.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg><p>Your collection is empty.<br>Tap "Add Item" to start tracking.</p></div>`;
+  const search = (document.getElementById('searchInput')?.value || '').toLowerCase();
+  const filter = window._currentFilter || 'all';
+
+  let filtered = items;
+  if (search) filtered = filtered.filter(i =>
+    (i.desc||'').toLowerCase().includes(search) ||
+    (i.marks||'').toLowerCase().includes(search) ||
+    (i.type||'').toLowerCase().includes(search)
+  );
+  if (filter !== 'all') {
+    if (filter === 'solid') filtered = filtered.filter(i => ['solid silver','gold'].includes(i.verdict));
+    else filtered = filtered.filter(i => i.type === filter);
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty-state"><p>Your collection is empty.<br>Tap "+ Add Item" or use Scan to add items.</p></div>';
     return;
   }
-  
-  container.innerHTML = items.map((item, i) => {
-    const verdictColors = {'solid silver':'var(--success)','plated':'var(--warning)','fake':'var(--danger)','unknown':'var(--text-secondary)'};
-    const verdictEmoji = {'solid silver':'✅','plated':'⚠️','fake':'❌','unknown':'❓'};
-    return `
-      <div class="collection-item">
-        <div class="item-header">
-          <span class="item-type">${item.type}</span>
-          <span style="font-size:18px;">${verdictEmoji[item.verdict] || '🔍'}</span>
-        </div>
-        <div class="item-desc">${item.desc || 'No description'}</div>
-        ${item.marks ? `<div style="font-size:12px;color:var(--accent);margin-bottom:6px;">🏷️ ${item.marks}</div>` : ''}
-        <div class="item-meta">
-          ${item.weight ? `<span>⚖️ ${item.weight}g</span>` : ''}
-          <span style="color:${verdictColors[item.verdict] || 'var(--text-secondary)'}">${item.verdict}</span>
-          ${item.value ? `<span>💰 ${item.value}</span>` : ''}
-        </div>
+
+  const verdictColors = {'solid silver':'var(--green)','plated':'var(--amber)','gold':'var(--bronze)','gemstone':'var(--rose)','collectible':'var(--teal)','unknown':'var(--text2)'};
+  const verdictEmoji = {'solid silver':'✅','plated':'⚠️','gold':'🥇','gemstone':'💎','collectible':'🏺','unknown':'❓'};
+
+  container.innerHTML = filtered.map(item => {
+    return `<div class="collection-item">
+      <div class="coll-header">
+        <span class="coll-type">${item.type || 'other'}</span>
+        <span style="font-size:16px">${verdictEmoji[item.verdict] || '🔍'}</span>
       </div>
-    `;
+      <div class="coll-desc">${item.desc || 'No description'}</div>
+      ${item.marks ? `<div style="font-size:11px;color:var(--gold);margin-bottom:5px">🏷️ ${item.marks}</div>` : ''}
+      <div class="coll-meta">
+        ${item.weight ? `<span>⚖️ ${item.weight}g</span>` : ''}
+        <span style="color:${verdictColors[item.verdict] || 'var(--text2)'}">${item.verdict}</span>
+        ${item.value ? `<span>💰 ${item.value}</span>` : ''}
+        ${item.date ? `<span>📅 ${item.date}</span>` : ''}
+      </div>
+    </div>`;
   }).join('');
 }
 
-function openAddItem() {
-  document.getElementById('addModal').classList.add('active');
-}
-
-function closeModal() {
-  document.getElementById('addModal').classList.remove('active');
-}
+function openAddItem() { document.getElementById('addModal').classList.add('active'); }
+function closeModal() { document.getElementById('addModal').classList.remove('active'); }
 
 function saveItem() {
   const item = {
@@ -757,30 +903,168 @@ function saveItem() {
     condition: document.getElementById('itemCondition').value,
     verdict: document.getElementById('itemVerdict').value,
     value: document.getElementById('itemValue').value,
-    notes: document.getElementById('itemNotes').value,
     date: new Date().toLocaleDateString()
   };
-  
-  const items = JSON.parse(localStorage.getItem('estatescout_items') || '[]');
+  const items = getCollection();
   items.unshift(item);
-  localStorage.setItem('estatescout_items', JSON.stringify(items));
-  
+  saveCollection(items);
   closeModal();
   renderCollection();
-  
-  // Reset form
-  ['itemDesc','itemMarks','itemWeight','itemValue','itemNotes'].forEach(id => document.getElementById(id).value = '');
+  ['itemDesc','itemMarks','itemWeight','itemValue'].forEach(id => document.getElementById(id).value = '');
 }
 
-// Close modals on overlay click
+function saveScanItem() {
+  const item = {
+    type: document.getElementById('scanCategory').value,
+    desc: document.getElementById('scanDesc').value,
+    marks: document.getElementById('scanMarks').value,
+    weight: document.getElementById('scanWeight').value,
+    magnet: document.getElementById('scanMagnet').value,
+    condition: document.getElementById('scanCondition').value,
+    verdict: document.getElementById('scanVerdict').value,
+    value: document.getElementById('scanValue').value,
+    date: new Date().toLocaleDateString(),
+    hasPhoto: true
+  };
+  const items = getCollection();
+  items.unshift(item);
+  saveCollection(items);
+  document.getElementById('scanForm').style.display = 'none';
+  document.getElementById('photoPreview').style.display = 'none';
+  document.getElementById('scanTips').style.display = 'block';
+  ['scanDesc','scanMarks','scanWeight','scanValue'].forEach(id => document.getElementById(id).value = '');
+  renderCollection();
+}
+
+// Photo handling
+function handlePhoto(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('previewImg').src = e.target.result;
+      document.getElementById('photoPreview').style.display = 'block';
+      document.getElementById('scanForm').style.display = 'block';
+      document.getElementById('scanTips').style.display = 'none';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// Filter
+function setFilter(f, el) {
+  window._currentFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderCollection();
+}
+function filterCollection() { renderCollection(); }
+
+// Export
+function exportCollection() {
+  const data = JSON.stringify(getCollection(), null, 2);
+  const blob = new Blob([data], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'estatescout_collection.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Coin calculator
+function calcCoins() {
+  const inputs = document.querySelectorAll('.calc-container input');
+  const vals = Array.from(inputs).map(i => parseInt(i.value) || 0);
+  const total = vals[0]*0.0723 + vals[1]*0.1600 + vals[2]*0.3616 + vals[3]*0.7734;
+  document.getElementById('totalOz').textContent = total.toFixed(4) + ' troy oz';
+}
+
+// Module content
+const modules = {
+  1: {
+    title: 'Module 1: Basic Silver Identification',
+    time: '30 min • Beginner',
+    content: `<div class="info-box"><h4>Lesson 1.1: The Two Marks That Matter Most</h4><p><b>SOLID:</b> 925, STERLING, 800, 835, 958, Lion Passant. <b>NOT SOLID:</b> EPNS, SILVER PLATED, EP, A1.</p></div>
+      <div class="info-box"><h4>Lesson 1.2: Weight Test</h4><p>Solid silver is dense and heavy. Teaspoon: Solid = 15-20g | Plated = 8-12g. If it feels LIGHT, it's probably plated.</p></div>
+      <div class="info-box"><h4>Lesson 1.3: Magnet Test</h4><p>Silver is NOT magnetic. If magnet sticks = steel core, NOT silver. No stick = could be silver OR non-magnetic base metal.</p></div>
+      <div class="info-box"><h4>Lesson 1.4: Wear Points</h4><p>Fork tines, spoon backs, handle ends. Yellow/gold color showing through = PLATED. Uniform silver everywhere = LIKELY SOLID.</p></div>
+      <div class="info-box"><h4>Lesson 1.5: 60-Second Checklist</h4><p>Marks → Weight → Wear points → Magnet → Decision. Focus on HEAVY items with NO wear color showing.</p></div>
+      <h3 style="margin-top:16px;margin-bottom:12px;font-size:16px">📝 Quick Quiz</h3>
+      <div class="quiz-question"><p>1. You pick up a teaspoon marked '925' weighing 18g. What is it?</p><div class="quiz-option" onclick="answerQuiz(this,true)">Solid sterling silver</div><div class="quiz-option" onclick="answerQuiz(this,false)">Silver plated</div><div class="quiz-option" onclick="answerQuiz(this,false)">Brass</div></div>
+      <div class="quiz-question"><p>2. A fork is marked 'EPNS'. Is it solid silver?</p><div class="quiz-option" onclick="answerQuiz(this,false)">Yes</div><div class="quiz-option" onclick="answerQuiz(this,true)">No — EPNS means Electroplated Nickel Silver</div></div>
+      <div class="quiz-question"><p>3. Yellow color showing at fork tips means?</p><div class="quiz-option" onclick="answerQuiz(this,true)">Silver plating worn through = PLATED</div><div class="quiz-option" onclick="answerQuiz(this,false)">It's solid silver</div></div>`
+  },
+  2: {
+    title: 'Module 2: Intermediate Silver Identification',
+    time: '45 min • Intermediate',
+    content: `<div class="info-box"><h4>British Hallmarks</h4><p><b>Lion Passant</b> = 925 sterling. <b>Assay offices:</b> London (anchor), Sheffield (rose), Edinburgh (castle), Glasgow (tree + fish). <b>Date letters</b> = year made. <b>Maker marks</b> = two initials in shield.</p></div>
+      <div class="info-box"><h4>Famous Makers</h4><p><b>Tiffany & Co.</b> — Extremely valuable. <b>Gorham</b> — Art Nouveau collectible. <b>Reed & Barton</b> — Quality American (1824-2015). <b>International Silver</b> — Common but collectible.</p></div>
+      <div class="info-box"><h4>Spotting Reproductions</h4><p>Perfect condition + modern fonts = suspicious. Wrong hallmark combos = fake. 2+ red flags = walk away.</p></div>
+      <div class="info-box"><h4>Old Sheffield Plate (OSP)</h4><p>Fused silver/copper sheets (1740s-1840s). Shows copper bleeding at wear points. Bluish cast vs electroplate. No EP marks.</p></div>
+      <h3 style="margin-top:16px;margin-bottom:12px;font-size:16px">📝 Quick Quiz</h3>
+      <div class="quiz-question"><p>1. What does the Lion Passant mark indicate?</p><div class="quiz-option" onclick="answerQuiz(this,true)">British sterling silver (925 purity)</div><div class="quiz-option" onclick="answerQuiz(this,false)">American sterling</div><div class="quiz-option" onclick="answerQuiz(this,false)">French silver</div></div>
+      <div class="quiz-question"><p>2. What does a Minerva head mark indicate?</p><div class="quiz-option" onclick="answerQuiz(this,true)">French silver (post-1838)</div><div class="quiz-option" onclick="answerQuiz(this,false)">British silver</div><div class="quiz-option" onclick="answerQuiz(this,false)">German silver</div></div>`
+  },
+  3: {
+    title: 'Module 3: Advanced Silver Identification',
+    time: '60 min • Advanced',
+    content: `<div class="info-box"><h4>Date Letter System</h4><p>Each assay office has its own alphabet cycle. Font style + shield shape = specific year. Look for small letter on back/underside.</p></div>
+      <div class="info-box"><h4>Rare & Valuable Marks</h4><p><b>Paul de Lamerie (PL)</b> — $5k-$100k+. <b>Paul Revere (PR)</b> — $10k-$500k+. <b>Britannia 958</b> — Higher purity, rare.</p></div>
+      <div class="info-box"><h4>Weighted Silver</h4><p>Silver shell filled with lead. Hollow sound when tapped. X-ray needed to detect.</p></div>
+      <div class="info-box"><h4>US Coin Silver</h4><p>Pre-1965 dimes/quarters/half dollars = 90% silver. Dime: 0.0723 oz | Quarter: 0.1600 oz | Half dollar: 0.3616 oz.</p></div>
+      <h3 style="margin-top:16px;margin-bottom:12px;font-size:16px">📝 Quick Quiz</h3>
+      <div class="quiz-question"><p>1. An item feels heavy but makes a hollow sound when tapped. What might it be?</p><div class="quiz-option" onclick="answerQuiz(this,true)">Likely weighted silver (silver shell filled with lead)</div><div class="quiz-option" onclick="answerQuiz(this,false)">Solid silver</div><div class="quiz-option" onclick="answerQuiz(this,false)">Old Sheffield Plate</div></div>`
+  },
+  4: {
+    title: 'Module 4: Practical Estate Sale Scenarios',
+    time: '30 min • Applied',
+    content: `<div class="info-box"><h4>Scenario 1: Drawer of Mixed Flatware</h4><p>Sort by weight (heavy = likely solid). Check each for 925 mark. Buy lot if 50%+ solid silver.</p></div>
+      <div class="info-box"><h4>Scenario 2: Service for 12</h4><p>Check if complete. Verify all pieces are solid (925 mark). Complete service worth 2-3x individual pieces.</p></div>
+      <div class="info-box"><h4>Scenario 3: Candlesticks</h4><p><b>PAIRS are essential for value.</b> Single = low value ($5-20). Pair of solid silver = valuable ($100-500+).</p></div>
+      <div class="info-box"><h4>Scenario 4: Coin Collection</h4><p>Check dates (pre-1965 = silver). Count total silver content. Buy if mostly pre-1965 coins.</p></div>
+      <div class="info-box"><h4>Golden Rules</h4><p>Heavy + No wear color + 925 mark = SOLID. Pairs > Singles. Complete services > Individual pieces.</p></div>`
+  }
+};
+
+function openModule(num) {
+  const m = modules[num];
+  if (!m) return;
+  document.getElementById('moduleContent').innerHTML = `<h2>${m.title}</h2><div class="meta" style="color:var(--text2);margin-bottom:16px">${m.time}</div>${m.content}`;
+  document.getElementById('moduleModal').classList.add('active');
+  // Save progress
+  try { localStorage.setItem('estatescout_module_' + num, 'opened'); } catch(e) {}
+  document.getElementById('prog' + num).style.width = '100%';
+  try { localStorage.setItem('estatescout_prog_' + num, '100'); } catch(e) {}
+}
+
+function closeModuleModal() { document.getElementById('moduleModal').classList.remove('active'); }
+
+function answerQuiz(el, correct) {
+  const siblings = el.parentElement.querySelectorAll('.quiz-option');
+  siblings.forEach(s => { s.style.pointerEvents = 'none'; });
+  if (correct) {
+    el.classList.add('correct');
+  } else {
+    el.classList.add('wrong');
+    siblings.forEach(s => { if (s.onclick && s.onclick.toString().includes('true')) s.classList.add('correct'); });
+  }
+}
+
+// Close modals
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
   overlay.addEventListener('click', function(e) {
-    if(e.target === this) this.classList.remove('active');
+    if (e.target === this) this.classList.remove('active');
   });
 });
 
 // Init
 renderCollection();
+
+// Restore progress
+try {
+  for (let i = 1; i <= 4; i++) {
+    const prog = localStorage.getItem('estatescout_prog_' + i);
+    if (prog) document.getElementById('prog' + i).style.width = prog + '%';
+  }
+} catch(e) {}
 </script>
 </body>
 </html>
