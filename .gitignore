@@ -1,0 +1,56 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# EstateScout data (user data, not code)
+data/items.json
+data/silver_knowledge.json
+data/marks_reference.json
+data/tools_reference.json
+data/annotated_images/
+data/photos/
+data/silver_prices.json
+public/feeds/
+data/library.json
+
+# Test fixtures
+data/test_item.jpg
+data/annotated_images/annotated_test_item.jpg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local

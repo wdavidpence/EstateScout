@@ -1,0 +1,43 @@
+name: EstateScout Pages deployment
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch Yahoo and Shanghai delayed prices
+        run: python public/refresh_prices.py
+
+      - name: Build Pages artifact
+        run: |
+          rm -rf site
+          mkdir -p site/feeds
+          cp index.html manifest.webmanifest sw.js site/
+          cp -R data site/data
+          cp -R training site/training
+          cp public/feeds/silver_prices.json site/feeds/silver_prices.json
+          printf '%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" > site/.nojekyll
+
+      - name: Publish PWA to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./site
+          force_orphan: true
+          commit_message: "deploy: EstateScout PWA and delayed price feed"

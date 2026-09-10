@@ -1672,13 +1672,31 @@ async function refreshPriceWidget() {
       renderPriceWidget(response.ok ? await response.json() : {status:'unavailable'});
       return;
     }
-    const quote = async symbol => {
-      const response = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=1m`);
-      const data = await response.json();
-      return data.chart.result[0].meta.regularMarketPrice;
-    };
-    const [western, fx] = await Promise.all([quote('SI=F'), quote('CNY=X')]);
-    renderPriceWidget({status:'delayed', western_usd_per_troy_oz:western, usd_cny:fx, western_source:'Yahoo Finance SI=F (COMEX futures, delayed)', shanghai_source:'No configured Shanghai source', fetched_at:Math.floor(Date.now() / 1000)});
+    try {
+      // Same-origin feed, refreshed every 10 minutes by GitHub Actions
+      // (public/feeds/silver_prices.json). Yahoo's API has no CORS headers,
+      // so browsers cannot call it directly — the server-side refresh exists
+      // precisely to serve it from this origin.
+      const feedResponse = await fetch('feeds/silver_prices.json', {headers:{'Accept':'application/json'}});
+      if (feedResponse.ok) {
+        const feed = await feedResponse.json();
+        if (feed.status && feed.status !== 'unavailable' && feed.western_usd_per_troy_oz != null) {
+          renderPriceWidget(feed);
+          return;
+        }
+      }
+    } catch (feedError) { /* fall through to direct Yahoo attempt */ }
+    try {
+      // Direct Yahoo attempt (works in desktop browsers that permit it;
+      // fails in most mobile PWA contexts due to missing CORS headers).
+      const quote = async symbol => {
+        const response = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=1m`);
+        const data = await response.json();
+        return data.chart.result[0].meta.regularMarketPrice;
+      };
+      const [western, fx] = await Promise.all([quote('SI=F'), quote('CNY=X')]);
+      renderPriceWidget({status:'delayed', western_usd_per_troy_oz:western, usd_cny:fx, western_source:'Yahoo Finance SI=F (COMEX futures, delayed)', shanghai_source:'No configured Shanghai source', fetched_at:Math.floor(Date.now() / 1000)});
+    } catch (error) { renderPriceWidget({status:'unavailable'}); }
   } catch (error) { renderPriceWidget({status:'unavailable'}); }
 }
 
