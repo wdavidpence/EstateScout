@@ -1,0 +1,35 @@
+name: EstateScout PWA checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Python test dependencies
+        run: python -m pip install pytest
+      - name: Run Python tests
+        run: python -m pytest -q
+      - name: Extract and validate inline PWA JavaScript
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path('index.html').read_text(encoding='utf-8')
+          Path('/tmp/estatescout-inline.js').write_text('\n'.join(re.findall(r'<script>(.*?)</script>', html, re.S)), encoding='utf-8')
+          PY
+          node --check /tmp/estatescout-inline.js
+          node --check sw.js
+      - name: Reject whitespace errors
+        run: git diff --check HEAD~1 HEAD

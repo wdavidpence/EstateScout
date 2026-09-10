@@ -6,6 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a1628">
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="application-name" content="EstateScout">
 <title>EstateScout</title>
 <style>
 :root {
@@ -228,16 +230,34 @@ body {
 /* Loading spinner */
 .spinner { display:inline-block; width:20px; height:20px; border:2px solid var(--accent); border-top-color:transparent; border-radius:50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to{transform:rotate(360deg)} }
+.floor-mode { --bg-primary:#000; --bg-secondary:#111; --bg-card:#181818; --text-primary:#fff; --text-secondary:#d1d5db; --accent:#ffd54a; --radius:12px; font-size:18px; }
+.floor-mode .card, .floor-mode .tool-card, .floor-mode .action-chip { border-color:rgba(255,213,74,.55); }
+.floor-mode .nav-item { min-height:68px; font-size:12px; }
+.floor-mode button, .floor-mode input, .floor-mode select { min-height:48px; font-size:16px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; } }
+:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
 </style>
 </head>
 <body>
+<div id="vaultLock" class="modal-overlay active" role="dialog" aria-modal="true" aria-labelledby="vaultTitle">
+  <div class="modal" style="max-width:430px;">
+    <h2 id="vaultTitle">Protect EstateScout</h2>
+    <p id="vaultMessage" style="margin:10px 0;color:var(--text-secondary);">Create a local PIN for this device. Your device Face ID/passcode remains the primary protection.</p>
+    <div class="form-group"><label for="vaultPin">Local PIN</label><input id="vaultPin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="32" aria-describedby="vaultMessage"></div>
+    <div class="form-group" id="vaultConfirmGroup"><label for="vaultConfirm">Confirm PIN</label><input id="vaultConfirm" type="password" inputmode="numeric" autocomplete="new-password" maxlength="32"></div>
+    <p id="vaultError" role="alert" style="color:var(--danger);min-height:20px;"></p>
+    <button class="btn-primary" id="vaultSubmit" onclick="submitVaultPin()">Create local PIN</button>
+  </div>
+</div>
+<div id="connectionStatus" role="status" aria-live="polite" style="position:fixed;top:8px;right:12px;z-index:150;font-size:11px;padding:5px 9px;border-radius:12px;background:rgba(74,222,128,.15);color:var(--success);">● Online</div>
+
 <!-- Header -->
 <div class="header">
   <div>
     <h1>EstateScout</h1>
     <div class="subtitle">AI-Powered Estate Sale Assistant</div>
   </div>
-  <div style="font-size:20px;">🏴‍☠️</div>
+  <button id="floorModeButton" class="annotation-btn" type="button" aria-pressed="false" onclick="toggleFloorMode()">☀️ Floor Mode</button>
 </div>
 
 <!-- PAGE: Home -->
@@ -249,6 +269,21 @@ body {
     <div class="action-chip" onclick="showPage('page-collection')">📦 Collection</div>
     <div class="action-chip" onclick="showPage('page-library')">📚 Library</div>
     <div class="action-chip" onclick="showPage('page-tools')">🛠️ Tools</div>
+  </div>
+
+  <h2 class="section-header">Live <span>Silver Prices</span></h2>
+  <div class="card" id="priceWidget">
+    <h3>🥈 Market Snapshot <span class="spinner" id="priceSpinner"></span></h3>
+    <div id="priceWidgetContent"><p>Loading verified market data…</p></div>
+  </div>
+  <div class="card">
+    <h3>Manual Field Price</h3>
+    <p>Use only when a verified source is unavailable. This stays on your device.</p>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <input id="manualWesternPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="USD / troy oz" aria-label="Manual Western silver price" style="flex:1;padding:10px;border-radius:10px;background:var(--bg-card);color:var(--text-primary);border:1px solid rgba(200,164,90,.2);">
+      <button class="annotation-btn" onclick="saveManualPrice()">Use price</button>
+    </div>
+    <button class="annotation-btn" style="margin-top:8px;" onclick="clearManualPrice()">Clear manual price</button>
   </div>
 
   <h2 class="section-header">Quick <span>Reference</span></h2>
@@ -278,8 +313,9 @@ body {
   </ul>
 
   <div class="info-box">
-    <h4>💡 Pro Tip</h4>
-    <p>Focus on HEAVY items with NO wear color showing. These are most likely solid silver.</p>
+    <h4>🔒 Private by default</h4>
+    <p>Your collection and photos stay on this device unless you export a backup or use an optional configured sync service. Market prices are informational only—not an appraisal or purchase guarantee.</p>
+    <button class="annotation-btn" style="margin-top:10px;" onclick="eraseDeviceData()">Delete device data</button>
   </div>
 </div>
 
@@ -458,9 +494,40 @@ body {
 <div id="page-photo" class="page">
   <h2 class="section-header">Scan <span>Item</span></h2>
 
+  <div id="captureChecklist" class="info-box" role="status" aria-live="polite">
+    <h4>Field Capture Checklist</h4>
+    <p>Take three evidence photos: whole item, underside/hallmark, then wear points. Add weight and magnet result before relying on a verdict.</p>
+  </div>
+
   <div class="photo-zone" id="photoZone" onclick="triggerFileInput()">
     <svg viewBox="0 0 24 24"><path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h2V3h2v2h3v2h-2s-.01 1.99 0 2h2v-2h3v-2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"/></svg>
     <p>Tap to take photo or choose from library</p>
+  </div>
+
+  <div class="card" id="compareCard">
+    <h3>⚖️ Compare Two Items</h3>
+    <p style="margin-bottom:12px;">Load two photos to compare evidence before buying.</p>
+    <input type="file" id="compareInputA" accept="image/*" style="display:none" onchange="loadComparePhoto('A', this)">
+    <input type="file" id="compareInputB" accept="image/*" style="display:none" onchange="loadComparePhoto('B', this)">
+    <div style="display:flex;gap:8px;">
+      <button class="annotation-btn" onclick="document.getElementById('compareInputA').click()">📷 Item A</button>
+      <button class="annotation-btn" onclick="document.getElementById('compareInputB').click()">📷 Item B</button>
+      <button class="annotation-btn" onclick="comparePhotos()">Compare</button>
+    </div>
+    <div id="comparePreview" style="display:flex;gap:8px;margin-top:12px;"></div>
+    <div id="compareResult" class="info-box" style="display:none;margin-top:12px;"></div>
+  </div>
+
+  <div class="card" id="priceTagCard">
+    <h3>🏷️ Price Tag Scanner</h3>
+    <p style="margin-bottom:12px;">Scan a barcode/QR price tag or enter the asking price.</p>
+    <input type="file" id="priceTagInput" accept="image/*" capture="environment" style="display:none" onchange="scanPriceTag(this)">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="annotation-btn" onclick="document.getElementById('priceTagInput').click()">📷 Scan Tag</button>
+      <input id="askingPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Asking price $" style="flex:1;padding:10px;border-radius:10px;background:var(--bg-card);color:var(--text-primary);border:1px solid rgba(200,164,90,.2);">
+      <button class="annotation-btn" onclick="evaluateAskingPrice()">Evaluate</button>
+    </div>
+    <div id="priceTagResult" class="info-box" style="display:none;margin-top:12px;"></div>
   </div>
 
   <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
@@ -481,8 +548,11 @@ body {
     <button class="annotation-btn active" onclick="setTool('circle')" id="toolCircle">⭕ Circle</button>
     <button class="annotation-btn" onclick="setTool('box')" id="toolBox">⬜ Box</button>
     <button class="annotation-btn" onclick="setTool('arrow')" id="toolArrow">➡️ Arrow</button>
+    <button class="annotation-btn" onclick="undoAnnotation()" id="toolUndo">↩️ Undo</button>
     <button class="annotation-btn" onclick="clearAnnotations()" id="toolClear">🗑️ Clear</button>
     <button class="annotation-btn" onclick="autoAnalyze()" id="toolAuto">🤖 Auto-Analyze</button>
+    <button class="annotation-btn" onclick="exportAnnotatedPNG()">⬇️ Export PNG</button>
+    <button class="annotation-btn" onclick="shareAnnotatedPNG()">↗️ Share Image</button>
   </div>
 
   <!-- Analysis Results -->
@@ -503,7 +573,26 @@ body {
 <div id="page-collection" class="page">
   <h2 class="section-header">My <span>Collection</span></h2>
   <div id="collectionList"></div>
-  <button class="btn-primary" onclick="openAddItem()" style="margin-top:16px;">+ Add Item Manually</button>
+  <div style="margin-bottom:12px;">
+    <input id="collectionSearch" type="search" placeholder="🔍 Search by type, marks, verdict, notes..." style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(200,164,90,.2);background:var(--bg-card);color:var(--text-primary);font-size:14px;" oninput="renderCollection(this.value)">
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <select id="collectionFilter" aria-label="Filter collection" onchange="renderCollection(document.getElementById('collectionSearch').value)" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(200,164,90,.2);background:var(--bg-card);color:var(--text-primary);">
+        <option value="all">All evidence states</option><option value="needs-evidence">Needs evidence</option><option value="high-confidence">High confidence</option><option value="sold">Sold items</option>
+      </select>
+      <select id="collectionSort" aria-label="Sort collection" onchange="renderCollection(document.getElementById('collectionSearch').value)" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(200,164,90,.2);background:var(--bg-card);color:var(--text-primary);">
+        <option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="value">Highest estimated value</option><option value="profit">Highest realized profit</option>
+      </select>
+    </div>
+    <span id="collectionCount" style="font-size:11px;color:var(--text-secondary);"></span>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;">
+    <button class="btn-primary" onclick="openAddItem()" style="flex:1;min-width:150px;">+ Add Item Manually</button>
+    <button class="annotation-btn" onclick="exportCollectionCSV()">⬇️ Export CSV</button>
+    <button class="annotation-btn" onclick="exportBackup()">🔐 Backup</button>
+    <button class="annotation-btn" onclick="document.getElementById('backupInput').click()">↥ Restore</button>
+    <input id="backupInput" type="file" accept="application/json" style="display:none" onchange="restoreBackup(this)">
+    <button class="annotation-btn" onclick="printCollectionReport()">🖨️ PDF / Print</button>
+  </div>
 </div>
 
 <!-- PAGE: Library -->
@@ -573,10 +662,10 @@ body {
 </div>
 
 <!-- Add Item Modal -->
-<div class="modal-overlay" id="addModal">
+<div class="modal-overlay" id="addModal" role="dialog" aria-modal="true" aria-labelledby="addModalTitle" aria-hidden="true">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">×</button>
-    <h2>Add Item to Collection</h2>
+    <h2 id="addModalTitle">Add Item to Collection</h2>
 
     <div class="form-group">
       <label>Item Type</label>
@@ -638,6 +727,26 @@ body {
     </div>
 
     <div class="form-group">
+      <label>Purchase Price</label>
+      <input type="number" id="itemPurchasePrice" min="0" step="0.01" inputmode="decimal" placeholder="What you paid">
+    </div>
+
+    <div class="form-group">
+      <label>Sale Price (optional)</label>
+      <input type="number" id="itemSalePrice" min="0" step="0.01" inputmode="decimal" placeholder="Leave empty until sold">
+    </div>
+
+    <div class="form-group">
+      <label>Evidence Observed</label>
+      <textarea id="itemEvidence" placeholder="Exact hallmark text, where it appears, wear/condition evidence..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Confidence</label>
+      <select id="itemConfidence"><option value="low">Low — needs more evidence</option><option value="medium" selected>Medium — preliminary</option><option value="high">High — multiple checks agree</option></select>
+    </div>
+
+    <div class="form-group">
       <label>Notes</label>
       <textarea id="itemNotes" placeholder="Any additional notes..."></textarea>
     </div>
@@ -681,6 +790,46 @@ body {
 </div>
 
 <script>
+// ── Local Device PIN ─────────────────────────────────────────────────
+const VAULT_META_KEY = 'estatescout_vault_pin';
+const VAULT_ITERATIONS = 210000;
+function bytesToBase64(bytes) { return btoa(String.fromCharCode(...new Uint8Array(bytes))); }
+async function pinDigest(pin, salt) {
+  const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(pin), 'PBKDF2', false, ['deriveBits']);
+  return crypto.subtle.deriveBits({name:'PBKDF2', salt, iterations:VAULT_ITERATIONS, hash:'SHA-256'}, material, 256);
+}
+function vaultMeta() { try { return JSON.parse(localStorage.getItem(VAULT_META_KEY) || 'null'); } catch { return null; } }
+function showVaultError(message) { document.getElementById('vaultError').textContent = message; }
+async function initVaultLock() {
+  const meta = vaultMeta();
+  const setup = !meta;
+  document.getElementById('vaultTitle').textContent = setup ? 'Protect EstateScout' : 'Unlock EstateScout';
+  document.getElementById('vaultMessage').textContent = setup ? 'Create a local PIN for this device. Your device Face ID/passcode remains the primary protection.' : 'Enter your local PIN to unlock this device.';
+  document.getElementById('vaultConfirmGroup').style.display = setup ? 'block' : 'none';
+  document.getElementById('vaultSubmit').textContent = setup ? 'Create local PIN' : 'Unlock';
+  document.getElementById('vaultPin').autocomplete = setup ? 'new-password' : 'current-password';
+  document.getElementById('vaultPin').focus();
+}
+async function submitVaultPin() {
+  const pin = document.getElementById('vaultPin').value;
+  const meta = vaultMeta();
+  showVaultError('');
+  if (pin.length < 6) { showVaultError('Use at least 6 characters.'); return; }
+  if (!meta) {
+    if (pin !== document.getElementById('vaultConfirm').value) { showVaultError('PIN entries do not match.'); return; }
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const digest = await pinDigest(pin, salt);
+    localStorage.setItem(VAULT_META_KEY, JSON.stringify({version:1, salt:bytesToBase64(salt), digest:bytesToBase64(digest), iterations:VAULT_ITERATIONS}));
+  } else {
+    const salt = Uint8Array.from(atob(meta.salt), c => c.charCodeAt(0));
+    const digest = bytesToBase64(await pinDigest(pin, salt));
+    if (digest !== meta.digest) { showVaultError('Incorrect PIN.'); return; }
+  }
+  document.getElementById('vaultPin').value = ''; document.getElementById('vaultConfirm').value = '';
+  document.getElementById('vaultLock').classList.remove('active');
+  navigator.storage?.persist?.();
+}
+
 // ── Navigation ────────────────────────────────────────────────────────
 function showPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -695,15 +844,108 @@ function showPage(pageId) {
   if(pageId === 'page-library') renderLibrary();
 }
 
+// ── Price Tag / Barcode Scanner ───────────────────────────────────────
+async function scanPriceTag(input) {
+  const result = document.getElementById('priceTagResult');
+  if (!input.files?.[0]) return;
+  if (!('BarcodeDetector' in window)) {
+    result.textContent = 'Barcode scanning is not supported by this browser. Enter the asking price manually.';
+    result.style.display = 'block';
+    return;
+  }
+  try {
+    const bitmap = await createImageBitmap(input.files[0]);
+    const detector = new BarcodeDetector({formats: ['qr_code','code_128','code_39','ean_13','upc_a']});
+    const codes = await detector.detect(bitmap);
+    const match = codes.map(code => code.rawValue).find(value => /^\$?\s*\d+(?:\.\d{1,2})?$/.test(value));
+    if (match) {
+      document.getElementById('askingPrice').value = parseFloat(match.replace('$',''));
+      result.textContent = `Barcode read: ${match}. Tap Evaluate to compare it with the item value.`;
+    } else {
+      result.textContent = 'Barcode found, but it did not contain a readable dollar amount. Enter the asking price manually.';
+    }
+  } catch (error) {
+    result.textContent = 'Could not read this tag. Try a closer, brighter photo or enter the asking price manually.';
+  }
+  result.style.display = 'block';
+}
+function evaluateAskingPrice() {
+  const price = Number(document.getElementById('askingPrice').value);
+  const result = document.getElementById('priceTagResult');
+  if (!Number.isFinite(price) || price < 0) { result.textContent = 'Enter a valid asking price first.'; result.style.display = 'block'; return; }
+  const latest = collectionItems()[0] || {};
+  const range = String(latest.value || '').match(/\\d+(?:\\.\\d+)?/g)?.map(Number) || [];
+  const low = range[0] || 0;
+  const high = range[1] || low;
+  let label = 'CONSIDER';
+  let explanation = 'Add verified marks, weight, condition, and maker evidence before buying.';
+  if (high > 0 && price <= low * 0.6) { label = 'BUY'; explanation = 'Asking price is substantially below the recorded value range.'; }
+  else if (high > 0 && price > high) { label = 'WALK'; explanation = 'Asking price is above the recorded value range.'; }
+  result.innerHTML = `<h4>Recommendation: ${label}</h4><p>Asking price: <b>$${price.toFixed(2)}</b>${high ? ` • Recorded range: $${low.toFixed(2)}–$${high.toFixed(2)}` : ''}</p><p>${explanation}</p>`;
+  result.style.display = 'block';
+}
+
+// ── Photo Comparison ──────────────────────────────────────────────────
+const comparePhotosState = {A: null, B: null};
+function loadComparePhoto(side, input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = event => {
+    comparePhotosState[side] = event.target.result;
+    const preview = document.getElementById('comparePreview');
+    const existing = document.getElementById(`compare-${side}`);
+    if (existing) existing.remove();
+    const image = document.createElement('img');
+    image.id = `compare-${side}`;
+    image.src = event.target.result;
+    image.alt = `Comparison item ${side}`;
+    image.style.cssText = 'width:50%;max-height:180px;object-fit:contain;border-radius:8px;border:1px solid rgba(200,164,90,.2);';
+    preview.appendChild(image);
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function comparePhotos() {
+  const result = document.getElementById('compareResult');
+  if (!comparePhotosState.A || !comparePhotosState.B) {
+    result.textContent = 'Load both Item A and Item B before comparing.';
+    result.style.display = 'block';
+    return;
+  }
+  const aSize = comparePhotosState.A.length;
+  const bSize = comparePhotosState.B.length;
+  result.innerHTML = `<h4>Comparison Ready</h4><p>Both items are loaded. Review each photo at close range for marks, weight, wear, and maker evidence. Photo A: ${aSize.toLocaleString()} bytes. Photo B: ${bSize.toLocaleString()} bytes.</p><p><b>Next step:</b> record each item's evidence separately, then use the stronger verified mark/weight combination—not appearance alone—to decide.</p>`;
+  result.style.display = 'block';
+}
+
 // ── Photo Handling ────────────────────────────────────────────────────
 let currentPhotoDataUrl = null;
 let currentPhotoWidth = 0;
 let currentPhotoHeight = 0;
 let currentAnnotations = [];
+let annotationHistory = [];
 let currentTool = 'circle';
 
 function triggerFileInput() {
   document.getElementById('fileInput').click();
+}
+
+function toggleFloorMode() {
+  const active = document.body.classList.toggle('floor-mode');
+  localStorage.setItem('estatescout_floor_mode', active ? '1' : '0');
+  const button = document.getElementById('floorModeButton');
+  button.setAttribute('aria-pressed', String(active));
+  button.textContent = active ? '🌙 Standard Mode' : '☀️ Floor Mode';
+}
+function updateCaptureQuality(file, image) {
+  const checklist = document.getElementById('captureChecklist');
+  const problems = [];
+  if (file.size > 12 * 1024 * 1024) problems.push('large file');
+  if (image.naturalWidth < 1200 || image.naturalHeight < 900) problems.push('low resolution');
+  if (problems.length) {
+    checklist.innerHTML = `<h4>Retake for better evidence</h4><p>This photo may be hard to verify (${problems.join(', ')}). Use bright indirect light and fill the frame with the mark.</p>`;
+  } else {
+    checklist.innerHTML = '<h4>Photo quality looks usable</h4><p>Next: annotate the visible mark, record weight and magnet result, then save the evidence.</p>';
+  }
 }
 
 function handlePhoto(input) {
@@ -711,7 +953,9 @@ function handlePhoto(input) {
     const reader = new FileReader();
     reader.onload = function(e) {
       currentPhotoDataUrl = e.target.result;
-      document.getElementById('previewImg').src = e.target.result;
+      const preview = document.getElementById('previewImg');
+      preview.onload = () => updateCaptureQuality(input.files[0], preview);
+      preview.src = e.target.result;
       document.getElementById('photoPreview').style.display = 'block';
       document.getElementById('photoAnalysis').style.display = 'none';
       document.getElementById('annotationCanvas').style.display = 'none';
@@ -734,6 +978,7 @@ function retakePhoto() {
   document.getElementById('photoZone').style.display = 'block';
   currentPhotoDataUrl = null;
   currentAnnotations = [];
+  annotationHistory = [];
 }
 
 // ── Annotation System ─────────────────────────────────────────────────
@@ -761,6 +1006,7 @@ function showAnnotationMode() {
     
     // Clear annotations
     currentAnnotations = [];
+    annotationHistory = [];
   };
   img.src = currentPhotoDataUrl;
 }
@@ -782,6 +1028,7 @@ document.getElementById('annotationCanvas').addEventListener('click', function(e
   
   const canvas = this;
   const ctx = canvas.getContext('2d');
+  annotationHistory.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
   
   if(currentTool === 'circle') {
     const radius = 40;
@@ -823,12 +1070,39 @@ document.getElementById('annotationCanvas').addEventListener('click', function(e
     });
   }
   
-  // Draw label
-  const label = currentTool === 'circle' ? 'Hallmark' : currentTool === 'box' ? 'Wear Point' : 'Maker Mark';
+  // Let the user name the mark; cancel keeps a useful default.
+  const customLabel = window.prompt('Label this annotation', currentTool === 'circle' ? 'Hallmark' : currentTool === 'box' ? 'Wear Point' : 'Maker Mark');
+  const label = customLabel === null || !customLabel.trim() ? (currentTool === 'circle' ? 'Hallmark' : currentTool === 'box' ? 'Wear Point' : 'Maker Mark') : customLabel.trim();
+  currentAnnotations[currentAnnotations.length - 1].label = label;
   ctx.fillStyle = currentTool === 'circle' ? 'red' : currentTool === 'box' ? 'yellow' : 'purple';
   ctx.font = `${14/xScale}px sans-serif`;
   ctx.fillText(label, x - 30/xScale, y + (currentTool === 'box' ? 50/xScale : -10/xScale));
 });
+
+function undoAnnotation() {
+  const canvas = document.getElementById('annotationCanvas');
+  const ctx = canvas.getContext('2d');
+  if (!annotationHistory.length) return;
+  ctx.putImageData(annotationHistory.pop(), 0, 0);
+  currentAnnotations.pop();
+}
+function exportAnnotatedPNG() {
+  const canvas = document.getElementById('annotationCanvas');
+  if (canvas.style.display === 'none') { alert('Annotate a photo first.'); return; }
+  const link = document.createElement('a');
+  link.download = `estatescout-annotated-${Date.now()}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+async function shareAnnotatedPNG() {
+  const canvas = document.getElementById('annotationCanvas');
+  if (canvas.style.display === 'none') { alert('Annotate a photo first.'); return; }
+  canvas.toBlob(async blob => {
+    const file = new File([blob], 'estatescout-annotated.png', {type:'image/png'});
+    if (navigator.canShare?.({files:[file]})) await navigator.share({title:'EstateScout annotation', files:[file]});
+    else exportAnnotatedPNG();
+  }, 'image/png');
+}
 
 function clearAnnotations() {
   const canvas = document.getElementById('annotationCanvas');
@@ -837,6 +1111,7 @@ function clearAnnotations() {
   img.onload = function() {
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     currentAnnotations = [];
+    annotationHistory = [];
   };
   img.src = currentPhotoDataUrl;
 }
@@ -932,7 +1207,7 @@ function saveToLibrary() {
   // Save to localStorage
   let library = JSON.parse(localStorage.getItem('estatescout_library') || '[]');
   const item = {
-    id: 'lib_' + Date.now(),
+    id: `lib_${crypto.randomUUID()}`,
     photo: currentPhotoDataUrl,
     date: new Date().toLocaleDateString(),
     annotations: currentAnnotations.length,
@@ -940,6 +1215,7 @@ function saveToLibrary() {
   };
   library.unshift(item);
   localStorage.setItem('estatescout_library', JSON.stringify(library));
+  publishApiWrite('/library', {item});
   
   alert('✅ Photo saved to Library!');
   retakePhoto();
@@ -947,51 +1223,204 @@ function saveToLibrary() {
 }
 
 // ── Collection Management ─────────────────────────────────────────────
-function renderCollection() {
-  const items = JSON.parse(localStorage.getItem('estatescout_items') || '[]');
+function collectionItems() {
+  return JSON.parse(localStorage.getItem('estatescout_items') || '[]');
+}
+function csvCell(value) {
+  return '"' + String(value ?? '').replace(/"/g, '""') + '"';
+}
+function eraseDeviceData() {
+  if (!confirm('Delete this device\'s collection, library, training progress, and manual price? Export a backup first if you want to keep them.')) return;
+  ['estatescout_items', 'estatescout_library', TRAINING_KEY, MANUAL_PRICE_KEY, OUTBOX_KEY].forEach(key => localStorage.removeItem(key));
+  retakePhoto(); renderCollection(); renderLibrary(); saveTrainingProgress(); refreshPriceWidget();
+}
+function exportBackup() {
+  const backup = {
+    format: 'EstateScout backup', version: 1, exportedAt: new Date().toISOString(),
+    items: collectionItems(), library: JSON.parse(localStorage.getItem('estatescout_library') || '[]'),
+    training: getTrainingProgress()
+  };
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], {type:'application/json'}));
+  link.download = `estatescout-backup-${new Date().toISOString().slice(0,10)}.json`;
+  link.click(); URL.revokeObjectURL(link.href);
+}
+function restoreBackup(input) {
+  const file = input.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const backup = JSON.parse(String(reader.result));
+      if (backup.format !== 'EstateScout backup' || !Array.isArray(backup.items) || !Array.isArray(backup.library)) throw new Error('Unsupported backup');
+      if (!confirm(`Replace this device's collection with ${backup.items.length} backed-up items?`)) return;
+      localStorage.setItem('estatescout_items', JSON.stringify(backup.items));
+      localStorage.setItem('estatescout_library', JSON.stringify(backup.library));
+      localStorage.setItem(TRAINING_KEY, JSON.stringify(backup.training || {}));
+      renderCollection(); renderLibrary(); saveTrainingProgress();
+    } catch (error) { alert('That file is not a valid EstateScout backup.'); }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+function exportCollectionCSV() {
+  const items = collectionItems();
+  const fields = ['type','desc','marks','weight','magnet','condition','verdict','value','notes','date'];
+  const csv = [fields, ...items.map(item => fields.map(field => item[field]))]
+    .map(row => row.map(csvCell).join(',')).join('\\r\\n');
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  link.download = `estatescout-collection-${new Date().toISOString().slice(0,10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+function printCollectionReport() {
+  const items = collectionItems();
+  const report = items.length ? items.map(item => `<article><h2>${escapeHtml(item.desc || 'EstateScout item')}</h2><p><b>Verdict:</b> ${escapeHtml(item.verdict || 'Unknown')}</p><p><b>Marks:</b> ${escapeHtml(item.marks || 'Not recorded')} &nbsp; <b>Weight:</b> ${escapeHtml(item.weight || 'Not recorded')}g</p><p>${escapeHtml(item.notes || '')}</p></article>`).join('') : '<p>No collection items saved.</p>';
+  const win = window.open('', '_blank');
+  if (!win) { alert('Please allow pop-ups to create the report.'); return; }
+  win.document.write(`<title>EstateScout Collection Report</title><style>body{font-family:Arial;padding:24px;color:#172033}article{border-bottom:1px solid #ccc;padding:12px 0}h1{color:#8b6b2e}</style><h1>EstateScout Collection Report</h1><p>Generated ${new Date().toLocaleString()}</p>${report}`);
+  win.document.close(); win.focus(); win.print();
+}
+function escapeHtml(value) { return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+async function shareCollectionItem(index) {
+  const item = collectionItems()[index];
+  if (!item) return;
+  const text = `EstateScout: ${item.desc || 'Item'} — ${item.verdict || 'Unknown'}${item.value ? `, estimated ${item.value}` : ''}`;
+  if (navigator.share) await navigator.share({title:'EstateScout item', text});
+  else await navigator.clipboard?.writeText(text);
+}
+
+function recentSalesFor(item) {
+  const type = String(item.type || 'flatware').toLowerCase();
+  const ranges = {
+    flatware: [18, 72], holloware: [85, 420], jewelry: [25, 180], coin: [30, 260], decorative: [35, 240]
+  };
+  const [low, high] = ranges[type] || ranges.decorative;
+  return [Math.round(low * 1.05), Math.round((low + high) / 2), Math.round(high * .92)];
+}
+function renderRecentSales(item) {
+  const est = estimateValue(item);
+  return `<div class="info-box" style="margin-top:10px;"><h4>📊 Value Estimate</h4><p>Estimated range: <b>${est}</b>. Based on type, marks, maker, condition, and weight. For purchase decisions, verify with a verified marketplace feed.</p></div>`;
+}
+
+function renderCollection(searchTerm) {
+  const allItems = collectionItems();
+  const indexedItems = allItems.map((item, index) => ({item, index}));
+  let items = searchTerm ? indexedItems.filter(({item}) => filterCollection(searchTerm).includes(item)) : indexedItems;
+  const filter = document.getElementById('collectionFilter')?.value || 'all';
+  if (filter === 'needs-evidence') items = items.filter(({item}) => item.confidence !== 'high' || !item.evidence || !item.weight || !item.magnet);
+  if (filter === 'high-confidence') items = items.filter(({item}) => item.confidence === 'high');
+  if (filter === 'sold') items = items.filter(({item}) => Number(item.salePrice) > 0);
+  const sort = document.getElementById('collectionSort')?.value || 'newest';
+  const money = value => Number.parseFloat(String(value || '').replace(/[^0-9.-]/g, '')) || 0;
+  items.sort((a, b) => {
+    if (sort === 'oldest') return a.index - b.index;
+    if (sort === 'value') return money(b.item.value) - money(a.item.value);
+    if (sort === 'profit') return (money(b.item.salePrice) - money(b.item.purchasePrice)) - (money(a.item.salePrice) - money(a.item.purchasePrice));
+    return a.index - b.index;
+  });
   const container = document.getElementById('collectionList');
-  
-  if(items.length === 0) {
-    container.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg><p>Your collection is empty.<br>Tap "Add Item" to start tracking.</p></div>`;
+
+  if(allItems.length === 0) {
+    container.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg><p>Your collection is empty.<br>Tap "Add Item" to start tracking.</p></div>`;
     return;
   }
-  
-  container.innerHTML = items.map((item, i) => {
+
+  container.innerHTML = items.map(({item, index}) => {
     const verdictColors = {'solid silver':'var(--success)','plated':'var(--warning)','fake':'var(--danger)','unknown':'var(--text-secondary)'};
     const verdictEmoji = {'solid silver':'✅','plated':'⚠️','fake':'❌','unknown':'❓'};
     return `
       <div class="collection-item">
         <div class="item-header">
-          <span class="item-type">${item.type}</span>
+          <span class="item-type">${escapeHtml(item.type || 'item')}</span>
           <span style="font-size:18px;">${verdictEmoji[item.verdict] || '🔍'}</span>
-          <button onclick="deleteCollectionItem(${i})" style="background:none;border:none;font-size:18px;cursor:pointer;">🗑️</button>
+          <span style="font-size:11px;color:var(--text-secondary);">${escapeHtml(item.date || '')}</span>
+          <button onclick="shareCollectionItem(${index})" style="background:none;border:none;font-size:16px;cursor:pointer;" aria-label="Share item">↗️</button>
+          <button onclick="editCollectionItem(${index})" style="background:none;border:none;font-size:16px;cursor:pointer;" aria-label="Edit item">✏️</button>
+          <button onclick="deleteCollectionItem(${index})" style="background:none;border:none;font-size:16px;cursor:pointer;" aria-label="Delete item">🗑️</button>
         </div>
-        <div class="item-desc">${item.desc || 'No description'}</div>
-        ${item.marks ? `<div style="font-size:12px;color:var(--accent);margin-bottom:6px;">🏷️ ${item.marks}</div>` : ''}
+        <div class="item-desc">${escapeHtml(item.desc || 'No description')}</div>
+        ${item.marks ? `<div style="font-size:12px;color:var(--accent);margin-bottom:6px;">🏷️ ${escapeHtml(item.marks)}</div>` : ''}
         <div class="item-meta">
-          ${item.weight ? `<span>⚖️ ${item.weight}g</span>` : ''}
-          <span style="color:${verdictColors[item.verdict] || 'var(--text-secondary)'}">${item.verdict}</span>
-          ${item.value ? `<span>💰 ${item.value}</span>` : ''}
+          ${item.weight ? `<span>⚖️ ${escapeHtml(item.weight)}g</span>` : ''}
+          <span style="color:${verdictColors[item.verdict] || 'var(--text-secondary)'}">${escapeHtml(item.verdict || 'unknown')}</span>
+          ${item.value ? `<span>💰 ${escapeHtml(item.value)}</span>` : ''}
         </div>
+        ${item.purchasePrice ? `<div class="item-meta"><span>Paid: $${escapeHtml(item.purchasePrice)}</span>${item.salePrice ? `<span>Sold: $${escapeHtml(item.salePrice)} • Profit: $${(Number(item.salePrice) - Number(item.purchasePrice)).toFixed(2)}</span>` : '<span>Unsold</span>'}</div>` : ''}
+        <div class="info-box" style="margin-top:10px;"><h4>Evidence • ${escapeHtml(item.confidence || 'medium')} confidence</h4><p>${escapeHtml(item.evidence || 'No item-specific evidence recorded yet. Capture hallmark, weight, magnet, and wear observations before relying on a verdict.')}</p></div>
+        ${renderRecentSales(item)}
       </div>
     `;
   }).join('');
+
+  const countEl = document.getElementById('collectionCount');
+  if (countEl) {
+    countEl.textContent = allItems.length === items.length
+      ? `${allItems.length} items`
+      : `${items.length} of ${allItems.length} items`;
+  }
 }
 
-function deleteCollectionItem(index) {
+async function deleteCollectionItem(index) {
   if(!confirm('Delete this item?')) return;
-  const items = JSON.parse(localStorage.getItem('estatescout_items') || '[]');
-  items.splice(index, 1);
+  const items = collectionItems();
+  const [item] = items.splice(index, 1);
   localStorage.setItem('estatescout_items', JSON.stringify(items));
+  if (item?.id) await publishApiWrite(`/items/${encodeURIComponent(item.id)}`, null, 'DELETE');
   renderCollection();
 }
 
-function openAddItem() {
+function editCollectionItem(index) {
+  const items = JSON.parse(localStorage.getItem('estatescout_items') || '[]');
+  const item = items[index];
+  if (!item) return;
+  // Pre-fill the add modal with existing data
+  document.getElementById('itemType').value = item.type || 'flatware';
+  document.getElementById('itemDesc').value = item.desc || '';
+  document.getElementById('itemMarks').value = item.marks || '';
+  document.getElementById('itemWeight').value = item.weight || '';
+  document.getElementById('itemMagnet').value = item.magnet || 'not attracted';
+  document.getElementById('itemCondition').value = item.condition || 'good';
+  document.getElementById('itemVerdict').value = item.verdict || 'unknown';
+  document.getElementById('itemValue').value = item.value || '';
+  document.getElementById('itemPurchasePrice').value = item.purchasePrice ?? '';
+  document.getElementById('itemSalePrice').value = item.salePrice ?? '';
+  document.getElementById('itemEvidence').value = item.evidence || '';
+  document.getElementById('itemConfidence').value = item.confidence || 'medium';
+  document.getElementById('itemNotes').value = item.notes || '';
+  // Store edit index in a data attribute
+  document.getElementById('addModal').dataset.editIndex = index;
+  document.querySelector('#addModal h2').textContent = 'Edit Item';
+  // Show photo if available
+  const photoPreview = document.getElementById('itemPhotoPreview');
+  if (item.photo) {
+    photoPreview.src = item.photo;
+    photoPreview.style.display = 'block';
+  }
+  document.getElementById('addModal').setAttribute('aria-hidden', 'false');
   document.getElementById('addModal').classList.add('active');
+  document.getElementById('itemDesc').focus();
+}
+
+function openAddItem() {
+  document.getElementById('addModal').dataset.editIndex = '';
+  document.querySelector('#addModal h2').textContent = 'Add Item to Collection';
+  // Reset form fields
+  ['itemDesc','itemMarks','itemWeight','itemValue','itemPurchasePrice','itemSalePrice','itemEvidence','itemNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('itemConfidence').value = 'medium';
+  document.getElementById('itemPhoto').value = '';
+  document.getElementById('itemPhotoPreview').style.display = 'none';
+  document.getElementById('addModal').setAttribute('aria-hidden', 'false');
+  document.getElementById('addModal').classList.add('active');
+  document.getElementById('itemDesc').focus();
 }
 
 function closeModal() {
+  document.getElementById('addModal').setAttribute('aria-hidden', 'true');
   document.getElementById('addModal').classList.remove('active');
+  document.getElementById('addModal').dataset.editIndex = '';
+  document.querySelector('#addModal h2').textContent = 'Add Item to Collection';
 }
 
 function previewItemPhoto(input) {
@@ -1007,6 +1436,7 @@ function previewItemPhoto(input) {
 }
 
 function saveItem() {
+  const editIndex = parseInt(document.getElementById('addModal').dataset.editIndex || '-1', 10);
   const item = {
     type: document.getElementById('itemType').value,
     desc: document.getElementById('itemDesc').value,
@@ -1016,27 +1446,52 @@ function saveItem() {
     condition: document.getElementById('itemCondition').value,
     verdict: document.getElementById('itemVerdict').value,
     value: document.getElementById('itemValue').value,
+    purchasePrice: document.getElementById('itemPurchasePrice').value,
+    salePrice: document.getElementById('itemSalePrice').value,
+    evidence: document.getElementById('itemEvidence').value,
+    confidence: document.getElementById('itemConfidence').value,
     notes: document.getElementById('itemNotes').value,
-    date: new Date().toLocaleDateString()
+    date: new Date().toLocaleDateString(),
+    id: editIndex >= 0 ? JSON.parse(localStorage.getItem('estatescout_items') || '[]')[editIndex]?.id : `item_${crypto.randomUUID()}`
   };
-  
+
   // Handle photo if provided
   const photoPreview = document.getElementById('itemPhotoPreview');
   if(photoPreview.style.display !== 'none' && photoPreview.src) {
     item.photo = photoPreview.src;
   }
-  
+
   const items = JSON.parse(localStorage.getItem('estatescout_items') || '[]');
-  items.unshift(item);
+  if (editIndex >= 0 && editIndex < items.length) {
+    // Update existing item, preserve photo if not replaced
+    if (!item.photo && items[editIndex].photo) item.photo = items[editIndex].photo;
+    items[editIndex] = item;
+  } else {
+    items.unshift(item);
+  }
   localStorage.setItem('estatescout_items', JSON.stringify(items));
-  
+
+  // Auto-estimate value and save training progress
+  const newItem = items[editIndex >= 0 ? editIndex : 0] || item;
+  if (!newItem.value) {
+    newItem.value = estimateValue(newItem);
+    items[editIndex >= 0 ? editIndex : 0] = newItem;
+    localStorage.setItem('estatescout_items', JSON.stringify(items));
+  }
+  const savedItem = items[editIndex >= 0 ? editIndex : 0] || item;
+  publishApiWrite(editIndex >= 0 ? `/items/${encodeURIComponent(savedItem.id)}` : '/items', {item: savedItem}, editIndex >= 0 ? 'PUT' : 'POST');
+  saveTrainingProgress();
+
   closeModal();
   renderCollection();
-  
+
   // Reset form
-  ['itemDesc','itemMarks','itemWeight','itemValue','itemNotes'].forEach(id => document.getElementById(id).value = '');
+  ['itemDesc','itemMarks','itemWeight','itemValue','itemPurchasePrice','itemSalePrice','itemEvidence','itemNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('itemConfidence').value = 'medium';
   document.getElementById('itemPhoto').value = '';
   document.getElementById('itemPhotoPreview').style.display = 'none';
+  document.getElementById('addModal').dataset.editIndex = '';
+  document.querySelector('#addModal h2').textContent = 'Add Item to Collection';
 }
 
 // ── Library ───────────────────────────────────────────────────────────
@@ -1073,11 +1528,12 @@ function viewLibraryPhoto(index) {
   }
 }
 
-function deleteLibraryItem(index) {
+async function deleteLibraryItem(index) {
   if(!confirm('Delete this library item?')) return;
   const library = JSON.parse(localStorage.getItem('estatescout_library') || '[]');
-  library.splice(index, 1);
+  const [item] = library.splice(index, 1);
   localStorage.setItem('estatescout_library', JSON.stringify(library));
+  if (item?.id) await publishApiWrite(`/library/${encodeURIComponent(item.id)}`, null, 'DELETE');
   renderLibrary();
 }
 
@@ -1158,9 +1614,225 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
   });
 });
 
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    if (document.getElementById('addModal').classList.contains('active')) closeModal();
+    if (document.getElementById('moduleModal').classList.contains('active')) closeModuleModal();
+  }
+});
+
+function renderPriceWidget(prices) {
+  const content = document.getElementById('priceWidgetContent');
+  const spinner = document.getElementById('priceSpinner');
+  if (spinner) spinner.style.display = 'none';
+  if (!prices || prices.status === 'unavailable' || prices.western_usd_per_troy_oz == null) {
+    content.innerHTML = '<p>Verified live pricing is unavailable. No estimate is being shown.</p>';
+    return;
+  }
+  const status = String(prices.status || 'unknown').toUpperCase();
+  const delayed = /delayed|futures/i.test(`${prices.status || ''} ${prices.western_source || ''}`);
+  const timestamp = prices.fetched_at ? new Date(Number(prices.fetched_at) * 1000).toLocaleString() : 'unknown';
+  const westernSource = escapeHtml(prices.western_source || 'Western feed');
+  const shanghaiSource = escapeHtml(prices.shanghai_source || 'Shanghai feed');
+  const shanghai = prices.shanghai_cny_per_gram == null
+    ? '<div class="benchmark-row"><span class="benchmark-label">🇨🇳 Shanghai</span><b>Unavailable</b></div><div class="benchmark-row"><span class="benchmark-label">🇨🇳 Shanghai converted</span><b>Unavailable</b></div>'
+    : `<div class="benchmark-row"><span class="benchmark-label">🇨🇳 Shanghai</span><b>¥${Number(prices.shanghai_cny_per_gram).toFixed(2)} CNY / gram</b></div><div class="benchmark-row"><span class="benchmark-label">🇨🇳 Shanghai converted</span><b>$${Number(prices.shanghai_usd_per_troy_oz).toFixed(2)} USD / troy oz</b></div>`;
+  const badge = delayed ? '<span class="badge badge-plated">Delayed futures</span>' : `<span class="badge badge-solid">${status}</span>`;
+  const fx = Number(prices.usd_cny) > 0 ? `FX: 1 USD = ¥${Number(prices.usd_cny).toFixed(4)} • 31.1034768 g/troy oz` : 'FX and Shanghai conversion unavailable';
+  content.innerHTML = `<div class="benchmark-row"><span class="benchmark-label">🌎 Western price</span><b>$${Number(prices.western_usd_per_troy_oz).toFixed(2)} USD / troy oz</b></div>${shanghai}<p style="font-size:11px;margin-top:10px;">${badge} &nbsp; Updated: ${timestamp}<br>Western: ${westernSource}<br>Shanghai: ${shanghaiSource}<br>${fx}</p>`;
+}
+const MANUAL_PRICE_KEY = 'estatescout_manual_western_price';
+function manualPrice() {
+  const value = Number(localStorage.getItem(MANUAL_PRICE_KEY));
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+function saveManualPrice() {
+  const input = document.getElementById('manualWesternPrice');
+  const value = Number(input.value);
+  if (!Number.isFinite(value) || value <= 0) { input.setCustomValidity('Enter a positive USD per troy ounce price.'); input.reportValidity(); return; }
+  input.setCustomValidity('');
+  localStorage.setItem(MANUAL_PRICE_KEY, String(value));
+  refreshPriceWidget();
+}
+function clearManualPrice() {
+  localStorage.removeItem(MANUAL_PRICE_KEY);
+  document.getElementById('manualWesternPrice').value = '';
+  refreshPriceWidget();
+}
+async function refreshPriceWidget() {
+  try {
+    const manual = manualPrice();
+    if (manual) {
+      document.getElementById('manualWesternPrice').value = manual;
+      renderPriceWidget({status:'manual', western_usd_per_troy_oz:manual, usd_cny:0, western_source:'Manual field entry — verify before buying', shanghai_source:'Not entered', fetched_at:Math.floor(Date.now() / 1000)});
+      return;
+    }
+    if (ESTATESCOUT_API) {
+      const response = await fetch(`${ESTATESCOUT_API}/silver-price`, {headers:{'Accept':'application/json'}});
+      renderPriceWidget(response.ok ? await response.json() : {status:'unavailable'});
+      return;
+    }
+    const quote = async symbol => {
+      const response = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=1m`);
+      const data = await response.json();
+      return data.chart.result[0].meta.regularMarketPrice;
+    };
+    const [western, fx] = await Promise.all([quote('SI=F'), quote('CNY=X')]);
+    renderPriceWidget({status:'delayed', western_usd_per_troy_oz:western, usd_cny:fx, western_source:'Yahoo Finance SI=F (COMEX futures, delayed)', shanghai_source:'No configured Shanghai source', fetched_at:Math.floor(Date.now() / 1000)});
+  } catch (error) { renderPriceWidget({status:'unavailable'}); }
+}
+
+// ── Shared API / Offline Sync ─────────────────────────────────────────
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
+const ESTATESCOUT_API = localStorage.getItem('estatescout_api') || '';
+const OUTBOX_KEY = 'estatescout_outbox';
+function queueApiWrite(path, payload, method = 'POST') {
+  const outbox = JSON.parse(localStorage.getItem(OUTBOX_KEY) || '[]');
+  outbox.push({path, payload, method, queuedAt: new Date().toISOString()});
+  localStorage.setItem(OUTBOX_KEY, JSON.stringify(outbox));
+}
+async function flushOutbox() {
+  const outbox = JSON.parse(localStorage.getItem(OUTBOX_KEY) || '[]');
+  const remaining = [];
+  for (const entry of outbox) {
+    try {
+      const options = {method: entry.method || 'POST', headers:{'Content-Type':'application/json'}};
+      if (entry.payload !== null) options.body = JSON.stringify(entry.payload);
+      const response = await fetch(`${ESTATESCOUT_API}${entry.path}`, options);
+      if (!response.ok) throw new Error('write failed');
+    } catch (error) { remaining.push(entry); }
+  }
+  localStorage.setItem(OUTBOX_KEY, JSON.stringify(remaining));
+}
+async function publishApiWrite(path, payload, method = 'POST') {
+  if (!ESTATESCOUT_API) return;
+  try {
+    const options = {method, headers:{'Content-Type':'application/json'}};
+    if (payload !== null) options.body = JSON.stringify(payload);
+    const response = await fetch(`${ESTATESCOUT_API}${path}`, options);
+    if (!response.ok) throw new Error('write failed');
+  } catch (error) { queueApiWrite(path, payload, method); setConnectionStatus(false); }
+}
+function setConnectionStatus(online) {
+  const el = document.getElementById('connectionStatus');
+  if (!el) return;
+  el.textContent = online ? '● Online' : '● Offline';
+  el.style.color = online ? 'var(--success)' : 'var(--warning)';
+  el.style.background = online ? 'rgba(74,222,128,.15)' : 'rgba(251,191,36,.15)';
+}
+async function syncFromServer() {
+  if (!ESTATESCOUT_API) {
+    const el = document.getElementById('connectionStatus');
+    if (el) { el.textContent = '● Device-only'; el.style.color = 'var(--accent)'; el.style.background = 'rgba(200,164,90,.15)'; }
+    return;
+  }
+  try {
+    const [itemsResponse, libraryResponse] = await Promise.all([
+      fetch(`${ESTATESCOUT_API}/items`, {headers: {'Accept': 'application/json'}}),
+      fetch(`${ESTATESCOUT_API}/library`, {headers: {'Accept': 'application/json'}})
+    ]);
+    if (!itemsResponse.ok || !libraryResponse.ok) throw new Error('sync failed');
+    const items = await itemsResponse.json();
+    const library = await libraryResponse.json();
+    if (Array.isArray(items.items)) localStorage.setItem('estatescout_items', JSON.stringify(items.items));
+    if (Array.isArray(library.items)) localStorage.setItem('estatescout_library', JSON.stringify(library.items));
+    setConnectionStatus(true);
+    renderCollection();
+    renderLibrary();
+  } catch (error) {
+    setConnectionStatus(false);
+  }
+}
+window.addEventListener('online', () => { setConnectionStatus(true); flushOutbox().then(syncFromServer); });
+window.addEventListener('offline', () => setConnectionStatus(false));
+
+// ── Training Progress ─────────────────────────────────────────────────
+const TRAINING_KEY = 'estatescout_training';
+function getTrainingProgress() {
+  try { return JSON.parse(localStorage.getItem(TRAINING_KEY) || '{}'); } catch { return {}; }
+}
+function saveTrainingProgress() {
+  const progress = getTrainingProgress();
+  // Calculate progress based on items in collection
+  const items = collectionItems();
+  const solidCount = items.filter(i => i.verdict === 'solid silver').length;
+  const platedCount = items.filter(i => i.verdict === 'plated').length;
+  const total = items.length;
+  // Module 1 is 100% when user has identified at least 3 items
+  progress.m1 = total >= 3 ? 100 : Math.min(100, Math.round((total / 3) * 100));
+  // Module 2 is 100% when user has identified both solid and plated
+  progress.m2 = (solidCount > 0 && platedCount > 0) ? 100 : 0;
+  // Module 3 is 100% when user has identified 2+ famous makers
+  const makers = items.filter(i => i.marks && /tiffany|gorham|reed|storr|revere|lamerie/i.test(i.marks)).length;
+  progress.m3 = makers >= 2 ? 100 : 0;
+  // Module 4 is 100% when user has 3+ solid items with no wear
+  const noWear = items.filter(i => i.verdict === 'solid silver' && i.condition === 'excellent').length;
+  progress.m4 = noWear >= 3 ? 100 : 0;
+  localStorage.setItem(TRAINING_KEY, JSON.stringify(progress));
+  updateProgressBars(progress);
+}
+function updateProgressBars(progress) {
+  document.querySelectorAll('.progress-fill').forEach((bar, idx) => {
+    const pct = progress['m' + (idx + 1)] || 0;
+    bar.style.width = pct + '%';
+  });
+}
+
+// ── Value Estimation ──────────────────────────────────────────────────
+function estimateValue(item) {
+  const type = String(item.type || 'flatware').toLowerCase();
+  const verdict = String(item.verdict || '').toLowerCase();
+  const marks = String(item.marks || '').toLowerCase();
+  const weight = parseFloat(item.weight) || 0;
+  const condition = String(item.condition || 'fair').toLowerCase();
+
+  let base = 0;
+  const ranges = {
+    flatware: [18, 72], holloware: [85, 420], jewelry: [25, 180],
+    coin: [30, 260], decorative: [35, 240]
+  };
+  const [low, high] = ranges[type] || ranges.decorative;
+
+  // Base value from type
+  base = (low + high) / 2;
+
+  // Multipliers
+  let mult = 1;
+
+  // Solid silver mark
+  if (/925|sterling|800|835|958|coin silver/i.test(marks)) {
+    mult *= 2.5;
+  } else if (/epns|plated|ep |a1/i.test(marks)) {
+    mult *= 0.15;
+  }
+
+  // Famous maker
+  if (/tiffany|gorham|reed.*barton|storr|revere|lamerie/i.test(marks)) {
+    mult *= 3;
+  }
+
+  // Condition
+  const condMult = { excellent: 1.5, good: 1.0, fair: 0.7, poor: 0.4 };
+  mult *= condMult[condition] || 0.5;
+
+  // Weight bonus for solid pieces
+  if (/925|sterling/i.test(marks) && weight > 15) {
+    mult *= 1.2;
+  }
+
+  const estLow = Math.round(base * mult * 0.6);
+  const estHigh = Math.round(base * mult * 1.4);
+  return estLow > 0 ? `$${estLow}–$${estHigh}` : '—';
+}
+
 // ── Init ──────────────────────────────────────────────────────────────
+initVaultLock();
+if (localStorage.getItem('estatescout_floor_mode') === '1') toggleFloorMode();
 renderCollection();
 renderLibrary();
+syncFromServer();
+refreshPriceWidget();
+saveTrainingProgress();
 </script>
 </body>
 </html>
