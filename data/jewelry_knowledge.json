@@ -1,0 +1,309 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-09-08",
+  "description": "Comprehensive guide to identifying and valuing jewelry at estate sales",
+  "silver_jewelry": {
+    "marks": {
+      "925": {
+        "description": "92.5 percent silver, most common sterling mark",
+        "location": "Inside ring band, clasp, or back of pendant",
+        "value": "Standard sterling silver"
+      },
+      "STERLING": {
+        "description": "American sterling mark",
+        "location": "Inside band or clasp",
+        "value": "Standard sterling silver"
+      },
+      "925/1000": {
+        "description": "Full purity mark",
+        "location": "Inside band or clasp",
+        "value": "Standard sterling silver"
+      },
+      "925 ARG": {
+        "description": "Argentine silver standard",
+        "location": "Inside band or clasp",
+        "value": "Standard sterling silver"
+      },
+      "MERCURY": {
+        "description": "Mexican sterling mark",
+        "location": "Inside band or clasp",
+        "value": "Standard sterling silver"
+      }
+    },
+    "jewelry_types": {
+      "rings": {
+        "weight_range_grams": "5-15g",
+        "marks_location": "Inside band",
+        "valuable_features": [
+          "925 mark inside band",
+          "Famous maker marks (Tiffany, Cartier, Van Cleef)",
+          "Antique designs (Art Deco, Victorian, Edwardian)",
+          "Gemstones with silver settings",
+          "Heavy weight (solid vs hollow)"
+        ]
+      },
+      "bracelets": {
+        "weight_range_grams": "20-60g",
+        "marks_location": "Clasp or inside link",
+        "valuable_features": [
+          "925 mark on clasp",
+          "Famous maker marks",
+          "Antique designs (Art Deco, Art Nouveau)",
+          "Heavy weight (solid links)",
+          "Matching sets"
+        ]
+      },
+      "brooches": {
+        "weight_range_grams": "10-30g",
+        "marks_location": "Back or clasp",
+        "valuable_features": [
+          "925 mark",
+          "Famous maker marks",
+          "Enamel work (champleve, cloisonne)",
+          "Gemstone settings",
+          "Antique periods (Victorian, Art Deco)"
+        ]
+      },
+      "necklaces": {
+        "weight_range_grams": "20-100g",
+        "marks_location": "Clasp or each link",
+        "valuable_features": [
+          "925 mark on clasp",
+          "Famous maker marks",
+          "Heavy chain links",
+          "Matching pendant sets",
+          "Antique periods"
+        ]
+      },
+      "earrings": {
+        "weight_range_grams": "3-10g per pair",
+        "marks_location": "Post, back, or clasp",
+        "valuable_features": [
+          "925 mark",
+          "Famous maker marks",
+          "Antique designs",
+          "Matching pairs (essential for value)",
+          "Gemstone settings"
+        ]
+      },
+      "pins": {
+        "weight_range_grams": "15-40g",
+        "marks_location": "Back or hinge",
+        "valuable_features": [
+          "925 mark",
+          "Famous maker marks",
+          "Enamel work",
+          "Antique periods",
+          "Decorative designs"
+        ]
+      }
+    }
+  },
+  "gold_jewelry": {
+    "karat_marks": {
+      "24K": {
+        "purity": "99.9 percent gold",
+        "description": "Pure gold. Very soft, mostly bullion or coins",
+        "mark": "24K, 999, GOLD"
+      },
+      "22K": {
+        "purity": "91.7 percent gold",
+        "description": "Common in Middle Eastern and Asian jewelry",
+        "mark": "22K, 917"
+      },
+      "18K": {
+        "purity": "75.0 percent gold",
+        "description": "High quality. Common in European and luxury jewelry",
+        "mark": "18K, 750, 18CT"
+      },
+      "14K": {
+        "purity": "58.3 percent gold",
+        "description": "Most common US gold jewelry standard",
+        "mark": "14K, 583, 14CT"
+      },
+      "10K": {
+        "purity": "41.7 percent gold",
+        "description": "Minimum US standard for gold labeling",
+        "mark": "10K, 417, 10CT"
+      },
+      "9K": {
+        "purity": "37.5 percent gold",
+        "description": "UK/European minimum standard",
+        "mark": "9K, 375"
+      }
+    },
+    "platinum": {
+      "marks": [
+        "PT950",
+        "PLAT",
+        "PT999",
+        "950 PLAT"
+      ],
+      "purity": "95 percent platinum (PT950) or 99.9 percent (PT999)",
+      "value": "More valuable than gold by weight. Heavy, dense",
+      "note": "Platinum jewelry is very valuable. Look for PT marks."
+    }
+  },
+  "gemstone_identification": {
+    "diamond": {
+      "value": "Highest value gemstone",
+      "identification": [
+        "Sparkle/fire (refraction index 2.42)",
+        "Hardness 10 on Mohs scale",
+        "Check for certificates (GIA, AGS)",
+        "Look for laser inscription on girdle"
+      ],
+      "estate_sale_tip": "Look for diamond jewelry with certificates. Even small diamonds in silver settings can be valuable."
+    },
+    "ruby": {
+      "value": "Very valuable, especially Burmese rubies",
+      "identification": [
+        "Deep red color (pigeon blood is most valuable)",
+        "Hardness 9 on Mohs scale",
+        "May have silk inclusions"
+      ],
+      "estate_sale_tip": "Look for deep red stones in silver or gold settings. Old mine cuts are collectible."
+    },
+    "sapphire": {
+      "value": "Very valuable, especially Ceylon/Kashmir sapphires",
+      "identification": [
+        "Blue color (can also be pink, yellow, white)",
+        "Hardness 9 on Mohs scale",
+        "Check for color zoning"
+      ],
+      "estate_sale_tip": "Blue stones in silver/gold settings are common. Older cuts (cushion, oval) are collectible."
+    },
+    "emerald": {
+      "value": "Very valuable, especially Colombian emeralds",
+      "identification": [
+        "Green color (may have jardin inclusions)",
+        "Hardness 7.5-8 Mohs",
+        "Often oil-treated"
+      ],
+      "estate_sale_tip": "Green stones in silver/gold settings. Look for jardin inclusions."
+    },
+    "opal": {
+      "value": "Varies widely. Australian black opal most valuable",
+      "identification": [
+        "Play-of-color (rainbow flash)",
+        "Softness (5.5-6.5 Mohs)",
+        "Can be fragile"
+      ],
+      "estate_sale_tip": "Look for rainbow flash. Australian opals are most valuable."
+    },
+    "pearl": {
+      "value": "Varies widely. Akoya, South Sea, and Tahitian pearls most valuable",
+      "identification": [
+        "Warm to touch (not cold like glass)",
+        "Slight toothiness when rubbed against teeth",
+        "Luster and surface quality"
+      ],
+      "estate_sale_tip": "Old pearl necklaces are common. Check for matching quality and clasp marks."
+    },
+    "garnet": {
+      "value": "Moderate. Common estate sale find",
+      "identification": [
+        "Deep red/burgundy color",
+        "Hardness 6.5-7.5 Mohs",
+        "Often found in Victorian jewelry"
+      ],
+      "estate_sale_tip": "Common but can be valuable in antique Victorian settings."
+    },
+    "amber": {
+      "value": "Moderate. Fossils increase value",
+      "identification": [
+        "Warm golden color",
+        "Lightweight (floats in salt water)",
+        "May contain fossils"
+      ],
+      "estate_sale_tip": "Look for Baltic amber with fossils. Old carved pieces are collectible."
+    },
+    "turquoise": {
+      "value": "Moderate to high. Persian and Sleeping Beauty most valuable",
+      "identification": [
+        "Blue-green color",
+        "Matrix (dark veins) adds character",
+        "Stabilized vs natural"
+      ],
+      "estate_sale_tip": "Look for Native American silver settings (Navajo, Zuni). Old turquoise in silver is collectible."
+    }
+  },
+  "famous_jewelry_makers": {
+    "Cartier": {
+      "period": "1847-present",
+      "value": "Extremely valuable. Museum quality",
+      "marks": [
+        "CARTIER",
+        "Cartier Paris/London/NYC"
+      ],
+      "notable": "Tank, Love, Just un Clou, Panthere collections"
+    },
+    "Van Cleef and Arpels": {
+      "period": "1906-present",
+      "value": "Extremely valuable",
+      "marks": [
+        "VCA",
+        "Van Cleef and Arpels"
+      ],
+      "notable": "Alhambra, Perlage, Zip Necklace"
+    },
+    "Bulgari": {
+      "period": "1884-present",
+      "value": "Very valuable",
+      "marks": [
+        "BVLGARI",
+        "BVLGARI"
+      ],
+      "notable": "Serpenti, B.zero1, Assoluta"
+    },
+    "Tiffany and Co.": {
+      "period": "1837-present",
+      "value": "Extremely valuable",
+      "marks": [
+        "TIFFANY and CO.",
+        "Tiffany",
+        "T and Co"
+      ],
+      "notable": "Elsa Peretti, Paloma Picasso, Return to Tiffany"
+    },
+    "David Yurman": {
+      "period": "1978-present",
+      "value": "Moderate to high",
+      "marks": [
+        "DY",
+        "David Yurman"
+      ],
+      "notable": "Cable bracelet, Chatelaine"
+    },
+    "old_vintage": {
+      "description": "Unmarked antique jewelry can be very valuable",
+      "periods": {
+        "Georgian (1714-1837)": "Hand-made, rose-cut diamonds, paste jewelry",
+        "Victorian (1837-1901)": "Closed back settings, foil backing, cameos",
+        "Edwardian (1901-1915)": "Lace-like filigree, platinum, old European cuts",
+        "Art Deco (1920-1935)": "Geometric designs, onyx, jade, baguette cuts",
+        "Retro (1940-1955)": "Bold, oversized, gold, colored stones"
+      }
+    }
+  },
+  "jewelry_condition_checklist": [
+    "Check clasps and clasps mechanisms (working?)",
+    "Check for missing stones",
+    "Check for broken links or solder repairs",
+    "Check for tarnish (can be polished)",
+    "Check for dents or deformations",
+    "Check for hallmarks and maker marks",
+    "Check for certificates of authenticity",
+    "Check if pieces match (necklaces with earrings, etc.)"
+  ],
+  "jewelry_value_tips": [
+    "Pairs are essential for earrings",
+    "Complete sets (necklace + earrings) worth more than individual pieces",
+    "Famous maker marks add 5-10x value",
+    "Antique periods (Victorian, Art Deco) command premiums",
+    "Gemstones in silver/gold settings are common estate sale finds",
+    "Old European cut diamonds are collectible",
+    "Natural (not lab-created) stones are more valuable",
+    "Jewelry with certificates is worth more"
+  ]
+}

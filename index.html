@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a1628">
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="application-name" content="EstateScout">
+<title>EstateScout</title>
+<style>
+:root {
+  --bg-primary: #0a1628;
+  --bg-secondary: #132038;
+  --bg-card: #1a2d4a;
+  --accent: #c8a45a;
+  --accent-glow: rgba(200,164,90,0.3);
+  --text-primary: #f0ece2;
+  --text-secondary: #8a9bb5;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --radius: 16px;
+  --safe-top: env(safe-area-inset-top, 20px);
+  --safe-bottom: env(safe-area-inset-bottom, 20px);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  padding-top: var(--safe-top);
+  padding-bottom: calc(80px + var(--safe-bottom));
+}
+/* Header */
+.header {
+  position: sticky; top:0; z-index:100;
+  background: linear-gradient(180deg, var(--bg-primary) 60%, transparent);
+  padding: 12px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header h1 {
+  font-size: 28px; font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), #e8d5a0);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.header .subtitle { font-size: 12px; color: var(--text-secondary); }
+/* Bottom Nav */
+.bottom-nav {
+  position: fixed; bottom:0; left:0; right:0; z-index:100;
+  background: rgba(19,32,56,0.95);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(200,164,90,0.15);
+  display: flex; padding-bottom: var(--safe-bottom);
+}
+.nav-item {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  padding: 8px 0 calc(4px + var(--safe-bottom)/2);
+  color: var(--text-secondary); font-size:10px; gap:4px;
+  cursor:pointer; transition: color 0.2s;
+}
+.nav-item.active { color: var(--accent); }
+.nav-item svg { width:24px; height:24px; fill: currentColor; }
+/* Pages */
+.page { display:none; padding: 0 16px; animation: fadeIn 0.3s ease; }
+.page.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 20px; margin-bottom: 16px;
+  border: 1px solid rgba(200,164,90,0.1);
+  transition: transform 0.2s;
+}
+.card:active { transform: scale(0.98); }
+.card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.card p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+.section-header { font-size: 20px; font-weight: 700; margin: 24px 0 16px; padding-left: 4px; }
+.section-header span { color: var(--accent); }
+/* Badges */
+.badge { display:inline-block; padding: 4px 10px; border-radius:20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-solid { background: rgba(74,222,128,0.15); color: var(--success); }
+.badge-plated { background: rgba(251,191,36,0.15); color: var(--warning); }
+.badge-fake { background: rgba(248,113,113,0.15); color: var(--danger); }
+/* Hallmark Grid */
+.hallmark-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.hallmark-card {
+  background: var(--bg-secondary); border-radius: 12px; padding: 16px;
+  text-align: center; border: 1px solid rgba(200,164,90,0.08);
+}
+.hallmark-card .mark { font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.hallmark-card .name { font-size: 13px; color: var(--text-primary); }
+.hallmark-card .purity { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+/* Checklist */
+.checklist { list-style:none; padding:0; }
+.checklist li { display:flex; align-items:center; gap:12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px; }
+.checklist li:last-child { border:none; }
+.check-icon { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.check-icon.green { background: rgba(74,222,128,0.15); color: var(--success); }
+.check-icon.yellow { background: rgba(251,191,36,0.15); color: var(--warning); }
+.check-icon.red { background: rgba(248,113,113,0.15); color: var(--danger); }
+/* Training Module Cards */
+.module-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+  border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+  border-left: 3px solid var(--accent); cursor:pointer;
+}
+.module-card h4 { font-size: 16px; margin-bottom: 6px; }
+.module-card .meta { font-size: 12px; color: var(--text-secondary); }
+.module-card .progress { height:4px; background:rgba(255,255,255,0.1); border-radius:4px; margin-top:12px; overflow:hidden; }
+.module-card .progress-fill { height:100%; background: var(--accent); border-radius:4px; transition: width 0.3s; }
+/* Photo Zone */
+.photo-zone {
+  border: 2px dashed rgba(200,164,90,0.3); border-radius: var(--radius);
+  padding: 40px; text-align:center; cursor:pointer; margin-bottom:16px;
+  transition: all 0.2s;
+}
+.photo-zone:active { border-color: var(--accent); background: rgba(200,164,90,0.05); }
+.photo-zone svg { width:48px; height:48px; fill: var(--accent); margin-bottom:12px; }
+.photo-zone p { color: var(--text-secondary); font-size: 14px; }
+/* Collection */
+.collection-item {
+  background: var(--bg-card); border-radius: 12px; padding: 16px;
+  margin-bottom: 12px; border: 1px solid rgba(200,164,90,0.08);
+}
+.collection-item .item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.collection-item .item-type { font-size: 12px; color: var(--accent); text-transform:uppercase; letter-spacing:0.5px; }
+.collection-item .item-desc { font-size: 14px; margin-bottom:8px; }
+.collection-item .item-meta { display:flex; gap:16px; font-size: 12px; color: var(--text-secondary); }
+.collection-item .item-image { width:100%; max-height:200px; object-fit:cover; border-radius:8px; margin-bottom:8px; }
+/* Tools */
+.tool-card {
+  background: var(--bg-secondary); border-radius: 12px; padding: 16px;
+  margin-bottom: 12px; display:flex; gap:14px; align-items:center;
+}
+.tool-icon { width:48px; height:48px; border-radius:12px; background: rgba(200,164,90,0.1); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.tool-icon svg { width:24px; height:24px; fill: var(--accent); }
+.tool-info h4 { font-size: 15px; margin-bottom:2px; }
+.tool-info p { font-size: 12px; color: var(--text-secondary); }
+.tool-price { margin-left:auto; font-size: 16px; font-weight:700; color: var(--accent); white-space:nowrap; }
+/* Empty State */
+.empty-state { text-align:center; padding: 60px 20px; }
+.empty-state svg { width:64px; height:64px; fill: var(--text-secondary); opacity:0.3; margin-bottom:16px; }
+.empty-state p { color: var(--text-secondary); font-size: 14px; }
+/* Scrollbar */
+::-webkit-scrollbar { width:0; }
+/* Quick Actions */
+.quick-actions { display:flex; gap:10px; overflow-x:auto; padding-bottom:8px; margin-bottom:20px; -webkit-overflow-scrolling:touch; }
+.quick-actions::-webkit-scrollbar { display:none; }
+.action-chip {
+  flex-shrink:0; padding: 10px 18px; border-radius:24px;
+  background: var(--bg-card); border:1px solid rgba(200,164,90,0.15);
+  font-size: 13px; color: var(--text-primary); cursor:pointer;
+  white-space:nowrap; transition: all 0.2s;
+}
+.action-chip:active { background: var(--accent); color: var(--bg-primary); }
+/* Modal */
+.modal-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); align-items:flex-end; justify-content:center; }
+.modal-overlay.active { display:flex; }
+.modal {
+  background: var(--bg-secondary); border-radius: var(--radius) var(--radius) 0 0;
+  width:100%; max-height:85vh; overflow-y:auto; padding:24px 20px calc(24px + var(--safe-bottom));
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:none} }
+.modal h2 { font-size: 20px; margin-bottom:16px; }
+.modal-close { float:right; background:none; border:none; color:var(--text-secondary); font-size:24px; cursor:pointer; }
+/* Form */
+.form-group { margin-bottom:16px; }
+.form-group label { display:block; font-size:13px; color:var(--text-secondary); margin-bottom:6px; }
+.form-group input, .form-group select, .form-group textarea {
+  width:100%; padding:14px; border-radius:12px; border:1px solid rgba(200,164,90,0.15);
+  background:var(--bg-card); color:var(--text-primary); font-size:15px;
+  -webkit-appearance:none;
+}
+.form-group textarea { min-height:80px; resize:vertical; }
+.btn-primary {
+  width:100%; padding:16px; border-radius:12px; border:none;
+  background: linear-gradient(135deg, var(--accent), #d4b06a);
+  color:var(--bg-primary); font-size:16px; font-weight:700; cursor:pointer;
+}
+.btn-primary:active { opacity:0.85; }
+/* Info Box */
+.info-box { background: rgba(200,164,90,0.08); border-radius:12px; padding:16px; margin-bottom:16px; border-left:3px solid var(--accent); }
+.info-box h4 { font-size:14px; color:var(--accent); margin-bottom:6px; }
+.info-box p { font-size:13px; color:var(--text-secondary); line-height:1.5; }
+/* Weight Benchmarks */
+.benchmark-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.06); font-size:14px; }
+.benchmark-row:last-child { border:none; }
+.benchmark-label { color:var(--text-secondary); }
+.benchmark-values { font-weight:600; }
+/* Tags */
+.tag-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+.tag { padding:6px 12px; border-radius:20px; background:rgba(200,164,90,0.1); font-size:12px; color:var(--accent); }
+/* Annotation Canvas */
+#annotationCanvas { width:100%; border-radius:12px; border:1px solid rgba(200,164,90,0.2); display:none; margin-bottom:16px; }
+.annotation-controls { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.annotation-btn {
+  padding: 8px 14px; border-radius:20px; border:1px solid rgba(200,164,90,0.2);
+  background: var(--bg-card); color: var(--text-primary); font-size: 12px;
+  cursor:pointer;
+}
+.annotation-btn:active { background: var(--accent); color: var(--bg-primary); }
+.annotation-btn.active { background: var(--accent); color: var(--bg-primary); }
+/* Analysis Results */
+.analysis-result { display:none; }
+.analysis-result .card { animation: fadeIn 0.5s ease; }
+/* Library */
+.library-item {
+  background: var(--bg-card); border-radius: 12px; padding: 12px;
+  margin-bottom: 12px; border: 1px solid rgba(200,164,90,0.08);
+  display: flex; gap: 12px; align-items: center;
+}
+.library-thumb { width:80px; height:80px; border-radius:8px; object-fit:cover; flex-shrink:0; }
+.library-info { flex:1; }
+.library-info h4 { font-size: 14px; margin-bottom: 4px; }
+.library-info p { font-size: 12px; color: var(--text-secondary); }
+.library-actions { display:flex; gap:6px; }
+.library-actions button {
+  padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(200,164,90,0.2);
+  background: var(--bg-secondary); color: var(--text-primary); font-size: 11px;
+  cursor:pointer;
+}
+/* Training SVG Examples */
+.training-svg { width: 100%; max-width: 300px; margin: 12px auto; display: block; }
+/* Loading spinner */
+.spinner { display:inline-block; width:20px; height:20px; border:2px solid var(--accent); border-top-color:transparent; border-radius:50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.floor-mode { --bg-primary:#000; --bg-secondary:#111; --bg-card:#181818; --text-primary:#fff; --text-secondary:#d1d5db; --accent:#ffd54a; --radius:12px; font-size:18px; }
+.floor-mode .card, .floor-mode .tool-card, .floor-mode .action-chip { border-color:rgba(255,213,74,.55); }
+.floor-mode .nav-item { min-height:68px; font-size:12px; }
+.floor-mode button, .floor-mode input, .floor-mode select { min-height:48px; font-size:16px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; } }
+:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+</style>
+</head>
+<body>
+<div id="vaultLock" class="modal-overlay active" role="dialog" aria-modal="true" aria-labelledby="vaultTitle">
+  <div class="modal" style="max-width:430px;">
+    <h2 id="vaultTitle">Protect EstateScout</h2>
+    <p id="vaultMessage" style="margin:10px 0;color:var(--text-secondary);">Create a local PIN for this device. Your device Face ID/passcode remains the primary protection.</p>
+    <div class="form-group"><label for="vaultPin">Local PIN</label><input id="vaultPin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="32" aria-describedby="vaultMessage"></div>
+    <div class="form-group" id="vaultConfirmGroup"><label for="vaultConfirm">Confirm PIN</label><input id="vaultConfirm" type="password" inputmode="numeric" autocomplete="new-password" maxlength="32"></div>
+    <p id="vaultError" role="alert" style="color:var(--danger);min-height:20px;"></p>
+    <button class="btn-primary" id="vaultSubmit" onclick="submitVaultPin()">Create local PIN</button>
+  </div>
+</div>
+<div id="connectionStatus" role="status" aria-live="polite" style="position:fixed;top:8px;right:12px;z-index:150;font-size:11px;padding:5px 9px;border-radius:12px;background:rgba(74,222,128,.15);color:var(--success);">● Online</div>
+
+<!-- Header -->
+<div class="header">
+  <div>
+    <h1>EstateScout</h1>
+    <div class="subtitle">AI-Powered Estate Sale Assistant</div>
+  </div>
+  <button id="floorModeButton" class="annotation-btn" type="button" aria-pressed="false" onclick="toggleFloorMode()">☀️ Floor Mode</button>
+</div>
+
+<!-- PAGE: Home -->
+<div id="page-home" class="page active">
+  <div class="quick-actions">
+    <div class="action-chip" onclick="showPage('page-silver')">🏷️ Silver Guide</div>
+    <div class="action-chip" onclick="showPage('page-training')">📚 Training</div>
+    <div class="action-chip" onclick="showPage('page-photo')">📷 Scan Item</div>
+    <div class="action-chip" onclick="showPage('page-collection')">📦 Collection</div>
+    <div class="action-chip" onclick="showPage('page-library')">📚 Library</div>
+    <div class="action-chip" onclick="showPage('page-tools')">🛠️ Tools</div>
+  </div>
+
+  <h2 class="section-header">Live <span>Silver Prices</span></h2>
+  <div class="card" id="priceWidget">
+    <h3>🥈 Market Snapshot <span class="spinner" id="priceSpinner"></span></h3>
+    <div id="priceWidgetContent"><p>Loading verified market data…</p></div>
+  </div>
+  <div class="card">
+    <h3>Manual Field Price</h3>
+    <p>Use only when a verified source is unavailable. This stays on your device.</p>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <input id="manualWesternPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="USD / troy oz" aria-label="Manual Western silver price" style="flex:1;padding:10px;border-radius:10px;background:var(--bg-card);color:var(--text-primary);border:1px solid rgba(200,164,90,.2);">
+      <button class="annotation-btn" onclick="saveManualPrice()">Use price</button>
+    </div>
+    <button class="annotation-btn" style="margin-top:8px;" onclick="clearManualPrice()">Clear manual price</button>
+  </div>
+
+  <h2 class="section-header">Quick <span>Reference</span></h2>
+
+  <div class="card" onclick="showPage('page-silver')">
+    <h3>🏷️ Solid vs Plated</h3>
+    <p>Quick guide to identifying real silver from plated items. Know the marks that matter.</p>
+  </div>
+
+  <div class="card" onclick="showPage('page-training')">
+    <h3>📖 Training Modules</h3>
+    <p>Progressive lessons from basic identification to advanced hallmark decoding.</p>
+  </div>
+
+  <div class="card" onclick="showPage('page-photo')">
+    <h3>📷 Scan an Item</h3>
+    <p>Take a photo of an estate sale item. I'll analyze it and draw red circles on hallmarks.</p>
+  </div>
+
+  <h2 class="section-header">60-Second <span>Checklist</span></h2>
+  <ul class="checklist">
+    <li><div class="check-icon green">✓</div> Look for marks: 925/Sterling = solid | EPNS/Plated = not</li>
+    <li><div class="check-icon green">✓</div> Check weight: Heavy for size = likely solid</li>
+    <li><div class="check-icon yellow">!</div> Check wear points: Yellow/copper = plated</li>
+    <li><div class="check-icon green">✓</div> Magnet test: Sticks = NOT silver</li>
+    <li><div class="check-icon green">✓</div> Make decision: Solid + good = BUY</li>
+  </ul>
+
+  <div class="info-box">
+    <h4>🔒 Private by default</h4>
+    <p>Your collection and photos stay on this device unless you export a backup or use an optional configured sync service. Market prices are informational only—not an appraisal or purchase guarantee.</p>
+    <button class="annotation-btn" style="margin-top:10px;" onclick="eraseDeviceData()">Delete device data</button>
+  </div>
+</div>
+
+<!-- PAGE: Silver Guide -->
+<div id="page-silver" class="page">
+  <h2 class="section-header">Silver <span>Guide</span></h2>
+
+  <div class="info-box">
+    <h4>Solid Silver Marks (WORTH $$$$)</h4>
+    <p>If you see any of these, it's solid silver. Check weight and condition.</p>
+  </div>
+
+  <div class="hallmark-grid">
+    <div class="hallmark-card"><div class="mark">925</div><div class="name">Sterling Silver</div><div class="purity">92.5% purity</div></div>
+    <div class="hallmark-card"><div class="mark">STERLING</div><div class="name">American Sterling</div><div class="purity">92.5% purity</div></div>
+    <div class="hallmark-card"><div class="mark">800</div><div class="name">Continental Silver</div><div class="purity">80% purity</div></div>
+    <div class="hallmark-card"><div class="mark">835</div><div class="name">French Silver</div><div class="purity">83.5% purity</div></div>
+    <div class="hallmark-card"><div class="mark">958</div><div class="name">Britannia Silver</div><div class="purity">95.8% purity</div></div>
+    <div class="hallmark-card"><div class="mark">🦁</div><div class="name">Lion Passant</div><div class="purity">British sterling</div></div>
+  </div>
+
+  <h2 class="section-header">British <span>Hallmarks</span></h2>
+  <div class="card">
+    <p><b>Lion Passant</b> = Walking lion = 925 sterling. Most recognizable hallmark.</p>
+    <p style="margin-top:8px;"><b>Assay Office Marks:</b></p>
+    <ul class="checklist">
+      <li><div class="check-icon green">◆</div> London — Anchor symbol</li>
+      <li><div class="check-icon green">◆</div> Birmingham — Anchor (different shield)</li>
+      <li><div class="check-icon green">◆</div> Sheffield — Rose</li>
+      <li><div class="check-icon green">◆</div> Edinburgh — Castle</li>
+      <li><div class="check-icon green">◆</div> Glasgow — Tree + 3 fish</li>
+    </ul>
+  </div>
+
+  <div class="info-box">
+    <h4>Plated Marks (WORTH $)</h4>
+    <p>If you see these, it's NOT solid silver. Lower value but may still be collectible.</p>
+  </div>
+
+  <div class="hallmark-grid">
+    <div class="hallmark-card"><div class="mark" style="color:var(--warning)">EPNS</div><div class="name">Electroplated Nickel Silver</div><div class="purity">NOT solid silver</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--warning)">SILVER PLATED</div><div class="name">Silver Plated</div><div class="purity">NOT solid silver</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--warning)">EP</div><div class="name">Electroplated</div><div class="purity">NOT solid silver</div></div>
+    <div class="hallmark-card"><div class="mark" style="color:var(--warning)">A1</div><div class="name">American Plated</div><div class="purity">NOT solid silver</div></div>
+  </div>
+
+  <h2 class="section-header">Famous <span>Makers</span></h2>
+  <div class="card"><h3>Tiffany & Co.</h3><p>Extremely valuable. Museum quality pieces command high prices. 1837-present.</p></div>
+  <div class="card"><h3>Gorham</h3><p>High-quality American silver. Art Nouveau designs. 1831-2010.</p></div>
+  <div class="card"><h3>Reed & Barton</h3><p>Quality American silver. Sterling pieces valuable (1824-2015). Bankrupt 2015.</p></div>
+  <div class="card"><h3>International Silver Co.</h3><p>Common but collectible. Quality silver plate and sterling (1870-1960s).</p></div>
+  <div class="card"><h3>Towle Silver Co.</h3><p>American silver plate/sterling (1840-1970s).</p></div>
+
+  <h2 class="section-header">Weight <span>Benchmarks</span></h2>
+  <div class="card">
+    <div class="benchmark-row"><span class="benchmark-label">Teaspoon</span><span class="benchmark-values" style="color:var(--success)">Solid 15-20g</span><span class="benchmark-values" style="color:var(--warning)">Plated 8-12g</span></div>
+    <div class="benchmark-row"><span class="benchmark-label">Dinner Fork</span><span class="benchmark-values" style="color:var(--success)">Solid 25-35g</span><span class="benchmark-values" style="color:var(--warning)">Plated 15-20g</span></div>
+    <div class="benchmark-row"><span class="benchmark-label">Soup Spoon</span><span class="benchmark-values" style="color:var(--success)">Solid 30-40g</span><span class="benchmark-values" style="color:var(--warning)">Plated 18-25g</span></div>
+  </div>
+
+  <h2 class="section-header">Fakes & <span>Reproductions</span></h2>
+  <div class="card">
+    <ul class="checklist">
+      <li><div class="check-icon yellow">!</div> Shallow stamping — fake hallmarks</li>
+      <li><div class="check-icon yellow">!</div> Wrong font on antique items</li>
+      <li><div class="check-icon yellow">!</div> Perfectly identical marks = reproduction</li>
+      <li><div class="check-icon red">✗</div> Magnet sticks = NOT silver</li>
+      <li><div class="check-icon yellow">!</div> Weighted silver (lead-filled)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- PAGE: Training -->
+<div id="page-training" class="page">
+  <h2 class="section-header">Training <span>Academy</span></h2>
+
+  <div class="module-card" onclick="openModule(1)">
+    <h4>🟢 Module 1: Basic Identification</h4>
+    <div class="meta">30 min • Learn to tell solid from plated in 60 seconds</div>
+    <div class="progress"><div class="progress-fill" style="width:100%"></div></div>
+  </div>
+
+  <div class="module-card" onclick="openModule(2)">
+    <h4>🟡 Module 2: Intermediate</h4>
+    <div class="meta">45 min • British hallmarks, maker marks, spotting fakes</div>
+    <div class="progress"><div class="progress-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="module-card" onclick="openModule(3)">
+    <h4>🟠 Module 3: Advanced</h4>
+    <div class="meta">60 min • Rare hallmarks, date letters, weighted silver</div>
+    <div class="progress"><div class="progress-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="module-card" onclick="openModule(4)">
+    <h4>🔴 Module 4: Practical</h4>
+    <div class="meta">30 min • Estate sale scenarios and decision-making</div>
+    <div class="progress"><div class="progress-fill" style="width:0%"></div></div>
+  </div>
+
+  <h2 class="section-header">Visual <span>Hallmark Reference</span></h2>
+  <div class="card">
+    <h3>British Hallmarks SVG Guide</h3>
+    <svg class="training-svg" viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg">
+      <!-- Shield shape with hallmarks -->
+      <defs>
+        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#c8a45a;stop-opacity:0.3" />
+          <stop offset="100%" style="stop-color:#c8a45a;stop-opacity:0.1" />
+        </linearGradient>
+      </defs>
+      <!-- Shield outline -->
+      <path d="M150 10 L270 40 L270 120 Q270 160 150 175 Q30 160 30 120 L30 40 Z" fill="url(#shieldGrad)" stroke="#c8a45a" stroke-width="2"/>
+      <!-- Lion passant (walking lion) -->
+      <text x="150" y="70" text-anchor="middle" fill="#c8a45a" font-size="28">🦁</text>
+      <text x="150" y="90" text-anchor="middle" fill="#f0ece2" font-size="11">Lion Passant</text>
+      <!-- Date letter -->
+      <rect x="130" y="100" width="40" height="25" fill="none" stroke="#8a9bb5" stroke-width="1"/>
+      <text x="150" y="118" text-anchor="middle" fill="#8a9bb5" font-size="16" font-family="serif">A</text>
+      <text x="150" y="135" text-anchor="middle" fill="#8a9bb5" font-size="9">Date Letter</text>
+      <!-- Anchor (London) -->
+      <text x="70" y="145" text-anchor="middle" fill="#c8a45a" font-size="18">⚓</text>
+      <text x="70" y="160" text-anchor="middle" fill="#8a9bb5" font-size="8">London</text>
+      <!-- Rose (Sheffield) -->
+      <text x="230" y="145" text-anchor="middle" fill="#c8a45a" font-size="18">🌹</text>
+      <text x="230" y="160" text-anchor="middle" fill="#8a9bb5" font-size="8">Sheffield</text>
+    </svg>
+    <p style="margin-top:8px;">British hallmarks include: Lion Passant (925), assay office mark, date letter, and maker's mark — all within a shield.</p>
+  </div>
+
+  <div class="card">
+    <h3>Common Marks Visual Reference</h3>
+    <svg class="training-svg" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- Solid marks -->
+      <text x="150" y="25" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="bold">SOLID SILVER MARKS</text>
+      <rect x="30" y="35" width="120" height="30" rx="4" fill="rgba(74,222,128,0.15)" stroke="#4ade80" stroke-width="1"/>
+      <text x="90" y="55" text-anchor="middle" fill="#4ade80" font-size="18" font-weight="bold">925</text>
+      <text x="90" y="78" text-anchor="middle" fill="#8a9bb5" font-size="9">Sterling (92.5%)</text>
+      
+      <rect x="150" y="35" width="120" height="30" rx="4" fill="rgba(74,222,128,0.15)" stroke="#4ade80" stroke-width="1"/>
+      <text x="210" y="55" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="bold">STERLING</text>
+      <text x="210" y="78" text-anchor="middle" fill="#8a9bb5" font-size="9">American (92.5%)</text>
+      
+      <rect x="30" y="75" width="60" height="30" rx="4" fill="rgba(74,222,128,0.15)" stroke="#4ade80" stroke-width="1"/>
+      <text x="60" y="95" text-anchor="middle" fill="#4ade80" font-size="18" font-weight="bold">800</text>
+      <text x="60" y="112" text-anchor="middle" fill="#8a9bb5" font-size="9">Continental</text>
+      
+      <rect x="100" y="75" width="60" height="30" rx="4" fill="rgba(74,222,128,0.15)" stroke="#4ade80" stroke-width="1"/>
+      <text x="130" y="95" text-anchor="middle" fill="#4ade80" font-size="18" font-weight="bold">835</text>
+      <text x="130" y="112" text-anchor="middle" fill="#8a9bb5" font-size="9">French</text>
+
+      <!-- Plated marks -->
+      <text x="150" y="135" text-anchor="middle" fill="#fbbf24" font-size="14" font-weight="bold">PLATED MARKS</text>
+      <rect x="30" y="145" width="120" height="30" rx="4" fill="rgba(251,191,36,0.15)" stroke="#fbbf24" stroke-width="1"/>
+      <text x="90" y="165" text-anchor="middle" fill="#fbbf24" font-size="16" font-weight="bold">EPNS</text>
+      <text x="90" y="185" text-anchor="middle" fill="#8a9bb5" font-size="9">NOT solid</text>
+      
+      <rect x="150" y="145" width="120" height="30" rx="4" fill="rgba(251,191,36,0.15)" stroke="#fbbf24" stroke-width="1"/>
+      <text x="210" y="165" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="bold">SILVER PLATED</text>
+      <text x="210" y="185" text-anchor="middle" fill="#8a9bb5" font-size="9">NOT solid</text>
+    </svg>
+  </div>
+
+  <h2 class="section-header">Quick <span>Cheat Sheet</span></h2>
+  <div class="card">
+    <p style="font-family:monospace; font-size:13px; line-height:1.8;">
+      <span style="color:var(--success)">925 + Heavy + No wear</span> = SOLID ✓<br>
+      <span style="color:var(--warning)">EPNS + Light + Yellow wear</span> = PLATED ✗<br>
+      <span style="color:var(--text-secondary)">No marks + Heavy + Uniform</span> = CHECK<br>
+      <span style="color:var(--danger)">Magnet sticks</span> = NOT SILVER ✗
+    </p>
+  </div>
+</div>
+
+<!-- PAGE: Photo Scan -->
+<div id="page-photo" class="page">
+  <h2 class="section-header">Scan <span>Item</span></h2>
+
+  <div id="captureChecklist" class="info-box" role="status" aria-live="polite">
+    <h4>Field Capture Checklist</h4>
+    <p>Take three evidence photos: whole item, underside/hallmark, then wear points. Add weight and magnet result before relying on a verdict.</p>
+  </div>
+
+  <div class="photo-zone" id="photoZone" onclick="triggerFileInput()">
+    <svg viewBox="0 0 24 24"><path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h2V3h2v2h3v2h-2s-.01 1.99 0 2h2v-2h3v-2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"/></svg>
+    <p>Tap to take photo or choose from library</p>
+  </div>
+
+  <div class="card" id="compareCard">
+    <h3>⚖️ Compare Two Items</h3>
+    <p style="margin-bottom:12px;">Load two photos to compare evidence before buying.</p>
+    <input type="file" id="compareInputA" accept="image/*" style="display:none" onchange="loadComparePhoto('A', this)">
+    <input type="file" id="compareInputB" accept="image/*" style="display:none" onchange="loadComparePhoto('B', this)">
+    <div style="display:flex;gap:8px;">
+      <button class="annotation-btn" onclick="document.getElementById('compareInputA').click()">📷 Item A</button>
+      <button class="annotation-btn" onclick="document.getElementById('compareInputB').click()">📷 Item B</button>
+      <button class="annotation-btn" onclick="comparePhotos()">Compare</button>
+    </div>
+    <div id="comparePreview" style="display:flex;gap:8px;margin-top:12px;"></div>
+    <div id="compareResult" class="info-box" style="display:none;margin-top:12px;"></div>
+  </div>
+
+  <div class="card" id="priceTagCard">
+    <h3>🏷️ Price Tag Scanner</h3>
+    <p style="margin-bottom:12px;">Scan a barcode/QR price tag or enter the asking price.</p>
+    <input type="file" id="priceTagInput" accept="image/*" capture="environment" style="display:none" onchange="scanPriceTag(this)">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="annotation-btn" onclick="document.getElementById('priceTagInput').click()">📷 Scan Tag</button>
+      <input id="askingPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Asking price $" style="flex:1;padding:10px;border-radius:10px;background:var(--bg-card);color:var(--text-primary);border:1px solid rgba(200,164,90,.2);">
+      <button class="annotation-btn" onclick="evaluateAskingPrice()">Evaluate</button>
+    </div>
+    <div id="priceTagResult" class="info-box" style="display:none;margin-top:12px;"></div>
+  </div>
+
+  <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
+
+  <!-- Original photo preview -->
+  <div id="photoPreview" style="display:none; margin-bottom:16px;">
+    <img id="previewImg" style="width:100%; border-radius:12px; border:1px solid rgba(200,164,90,0.2);">
+    <div style="display:flex; justify-content:space-between; margin-top:8px;">
+      <button class="btn-primary" style="width:auto; padding:8px 16px; font-size:12px;" onclick="retakePhoto()">📷 Retake</button>
+      <button class="btn-primary" style="width:auto; padding:8px 16px; font-size:12px;" onclick="showAnnotationMode()">✏️ Annotate</button>
+      <button class="btn-primary" style="width:auto; padding:8px 16px; font-size:12px;" onclick="saveToLibrary()">💾 Save</button>
+    </div>
+  </div>
+
+  <!-- Annotation canvas (hidden until annotate mode) -->
+  <canvas id="annotationCanvas" style="display:none;"></canvas>
+  <div id="annotationControls" class="annotation-controls" style="display:none;">
+    <button class="annotation-btn active" onclick="setTool('circle')" id="toolCircle">⭕ Circle</button>
+    <button class="annotation-btn" onclick="setTool('box')" id="toolBox">⬜ Box</button>
+    <button class="annotation-btn" onclick="setTool('arrow')" id="toolArrow">➡️ Arrow</button>
+    <button class="annotation-btn" onclick="undoAnnotation()" id="toolUndo">↩️ Undo</button>
+    <button class="annotation-btn" onclick="clearAnnotations()" id="toolClear">🗑️ Clear</button>
+    <button class="annotation-btn" onclick="autoAnalyze()" id="toolAuto">🤖 Auto-Analyze</button>
+    <button class="annotation-btn" onclick="exportAnnotatedPNG()">⬇️ Export PNG</button>
+    <button class="annotation-btn" onclick="shareAnnotatedPNG()">↗️ Share Image</button>
+  </div>
+
+  <!-- Analysis Results -->
+  <div id="photoAnalysis" class="analysis-result">
+    <div class="card">
+      <h3>🔍 Analysis Results</h3>
+      <div id="analysisContent"></div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h4>📸 Photo Tips</h4>
+    <p>Get close-up shots of marks/hallmarks. Good lighting is key. Show the whole item and any details.</p>
+  </div>
+</div>
+
+<!-- PAGE: Collection -->
+<div id="page-collection" class="page">
+  <h2 class="section-header">My <span>Collection</span></h2>
+  <div id="collectionList"></div>
+  <div style="margin-bottom:12px;">
+    <input id="collectionSearch" type="search" placeholder="🔍 Search by type, marks, verdict, notes..." style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(200,164,90,.2);background:var(--bg-card);color:var(--text-primary);font-size:14px;" oninput="renderCollection(this.value)">
+    <div style="display:flex;gap:8px;margin-top:8px;">
+      <select id="collectionFilter" aria-label="Filter collection" onchange="renderCollection(document.getElementById('collectionSearch').value)" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(200,164,90,.2);background:var(--bg-card);color:var(--text-primary);">
+        <option value="all">All evidence states</option><option value="needs-evidence">Needs evidence</option><option value="high-confidence">High confidence</option><option value="sold">Sold items</option>
+      </select>
+      <select id="collectionSort" aria-label="Sort collection" onchange="renderCollection(document.getElementById('collectionSearch').value)" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(200,164,90,.2);background:var(--bg-card);color:var(--text-primary);">
+        <option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="value">Highest estimated value</option><option value="profit">Highest realized profit</option>
+      </select>
+    </div>
+    <span id="collectionCount" style="font-size:11px;color:var(--text-secondary);"></span>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;">
+    <button class="btn-primary" onclick="openAddItem()" style="flex:1;min-width:150px;">+ Add Item Manually</button>
+    <button class="annotation-btn" onclick="exportCollectionCSV()">⬇️ Export CSV</button>
+    <button class="annotation-btn" onclick="exportBackup()">🔐 Backup</button>
+    <button class="annotation-btn" onclick="document.getElementById('backupInput').click()">↥ Restore</button>
+    <input id="backupInput" type="file" accept="application/json" style="display:none" onchange="restoreBackup(this)">
+    <button class="annotation-btn" onclick="printCollectionReport()">🖨️ PDF / Print</button>
+  </div>
+</div>
+
+<!-- PAGE: Library -->
+<div id="page-library" class="page">
+  <h2 class="section-header">My <span>Library</span></h2>
+  <div id="libraryList"></div>
+  <div class="info-box">
+    <h4>📚 Your Annotated Photo Library</h4>
+    <p>All scanned and annotated images are saved here. Scan items to build your collection!</p>
+  </div>
+</div>
+
+<!-- PAGE: Tools -->
+<div id="page-tools" class="page">
+  <h2 class="section-header">Estate Sale <span>Toolkit</span></h2>
+
+  <div class="tool-card">
+    <div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg></div>
+    <div class="tool-info"><h4>USB-C Pocket Scale</h4><p>0.01g precision, credit-card sized</p></div>
+    <div class="tool-price">$10-20</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+    <div class="tool-info"><h4>Neodymium Magnet</h4><p>Tests for steel core (plated/fake)</p></div>
+    <div class="tool-price">$3-5</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.88 6.5l-2.43-.97L12 13.5 6.88 8.53l-2.43.97L12 16.08l7.88-5.58zM12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+    <div class="tool-info"><h4>Magnifying Glass</h4><p>Read small hallmarks and maker marks</p></div>
+    <div class="tool-price">$5</div>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/></svg></div>
+    <div class="tool-info"><h4>Microfiber Cloth</h4><p>Wipe items to reveal hidden marks</p></div>
+    <div class="tool-price">$2-5</div>
+  </div>
+
+  <h2 class="section-header">Total Cost: <span style="color:var(--accent)">$20-35</span></h2>
+
+  <div class="info-box">
+    <h4>📱 Pocket Scale Recommendations</h4>
+    <p><b>Etekcity ESF-300</b> — $12-15. 0.01g precision, USB-C charging.<br>
+    <b>MyWeigh MD-500</b> — $20-25. 0.01g / 500g max.</p>
+  </div>
+
+  <h2 class="section-header">Weight <span>Benchmarks</span></h2>
+  <div class="card">
+    <div class="benchmark-row"><span class="benchmark-label">Teaspoon</span><span class="benchmark-values" style="color:var(--success)">Solid 15-20g</span><span class="benchmark-values" style="color:var(--warning)">Plated 8-12g</span></div>
+    <div class="benchmark-row"><span class="benchmark-label">Dinner Fork</span><span class="benchmark-values" style="color:var(--success)">Solid 25-35g</span><span class="benchmark-values" style="color:var(--warning)">Plated 15-20g</span></div>
+    <div class="benchmark-row"><span class="benchmark-label">Soup Spoon</span><span class="benchmark-values" style="color:var(--success)">Solid 30-40g</span><span class="benchmark-values" style="color:var(--warning)">Plated 18-25g</span></div>
+    <div class="benchmark-row"><span class="benchmark-label">Bowl</span><span class="benchmark-values" style="color:var(--success)">Solid 300-1500g</span></div>
+    <div class="benchmark-row"><span class="benchmark-label">Tray</span><span class="benchmark-values" style="color:var(--success)">Solid 500-2000g</span></div>
+    <div class="benchmark-row"><span class="benchmark-label">Candlestick (pair)</span><span class="benchmark-values" style="color:var(--success)">Solid 400-1500g</span></div>
+  </div>
+
+  <h2 class="section-header">Coin Silver <span>Values</span></h2>
+  <div class="card">
+    <p style="margin-bottom:8px;">Pre-1965 US coins are 90% silver:</p>
+    <div class="benchmark-row"><span class="benchmark-label">Dime</span><span class="benchmark-values">0.0723 troy oz</span></div>
+    <div class="benchmark-row"><span class="benchmark-label">Quarter</span><span class="benchmark-values">0.1600 troy oz</span></div>
+    <div class="benchmark-row"><span class="benchmark-label">Half Dollar</span><span class="benchmark-values">0.3616 troy oz</span></div>
+    <div class="benchmark-row"><span class="benchmark-label">Morgan Dollar</span><span class="benchmark-values">0.7734 troy oz</span></div>
+  </div>
+</div>
+
+<!-- Add Item Modal -->
+<div class="modal-overlay" id="addModal" role="dialog" aria-modal="true" aria-labelledby="addModalTitle" aria-hidden="true">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2 id="addModalTitle">Add Item to Collection</h2>
+
+    <div class="form-group">
+      <label>Item Type</label>
+      <select id="itemType">
+        <option value="flatware">Flatware (forks, spoons, knives)</option>
+        <option value="holloware">Holloware (bowls, trays, teapots)</option>
+        <option value="jewelry">Jewelry</option>
+        <option value="coin">Coin</option>
+        <option value="decorative">Decorative Object</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text" id="itemDesc" placeholder="e.g., Teaspoon found at Main St Estate Sale">
+    </div>
+
+    <div class="form-group">
+      <label>Marks Found</label>
+      <input type="text" id="itemMarks" placeholder="e.g., 925, Lion Passant">
+    </div>
+
+    <div class="form-group">
+      <label>Weight (grams)</label>
+      <input type="number" id="itemWeight" placeholder="e.g., 18">
+    </div>
+
+    <div class="form-group">
+      <label>Magnet Test</label>
+      <select id="itemMagnet">
+        <option value="not attracted">Not attracted (could be silver)</option>
+        <option value="attracted">Attracted (NOT silver - steel core)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Condition</label>
+      <select id="itemCondition">
+        <option value="excellent">Excellent</option>
+        <option value="good" selected>Good</option>
+        <option value="fair">Fair</option>
+        <option value="poor">Poor</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>My Verdict</label>
+      <select id="itemVerdict">
+        <option value="solid silver">Solid Silver</option>
+        <option value="plated">Silver Plated</option>
+        <option value="fake">Fake / Reproduction</option>
+        <option value="unknown">Unknown - Need More Info</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Estimated Value Range</label>
+      <input type="text" id="itemValue" placeholder="e.g., $10-30">
+    </div>
+
+    <div class="form-group">
+      <label>Purchase Price</label>
+      <input type="number" id="itemPurchasePrice" min="0" step="0.01" inputmode="decimal" placeholder="What you paid">
+    </div>
+
+    <div class="form-group">
+      <label>Sale Price (optional)</label>
+      <input type="number" id="itemSalePrice" min="0" step="0.01" inputmode="decimal" placeholder="Leave empty until sold">
+    </div>
+
+    <div class="form-group">
+      <label>Evidence Observed</label>
+      <textarea id="itemEvidence" placeholder="Exact hallmark text, where it appears, wear/condition evidence..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Confidence</label>
+      <select id="itemConfidence"><option value="low">Low — needs more evidence</option><option value="medium" selected>Medium — preliminary</option><option value="high">High — multiple checks agree</option></select>
+    </div>
+
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="itemNotes" placeholder="Any additional notes..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Photo (optional)</label>
+      <input type="file" id="itemPhoto" accept="image/*" style="padding:10px;" onchange="previewItemPhoto(this)">
+      <img id="itemPhotoPreview" style="width:100%; max-height:200px; object-fit:cover; border-radius:8px; margin-top:8px; display:none;">
+    </div>
+
+    <button class="btn-primary" onclick="saveItem()">Save Item</button>
+  </div>
+</div>
+
+<!-- Module Modal -->
+<div class="modal-overlay" id="moduleModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModuleModal()">×</button>
+    <div id="moduleContent"></div>
+  </div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="showPage('page-home')">
+    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    Home
+  </div>
+  <div class="nav-item" onclick="showPage('page-silver')">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+    Silver
+  </div>
+  <div class="nav-item" onclick="showPage('page-photo')">
+    <svg viewBox="0 0 24 24"><path d="M9.4 10.5l4.77-8.26C14.47 1.95 15.13 1.5 16 1.5c1.93 0 3.5 1.57 3.5 3.5 0 .88-.32 1.67-.85 2.27L19.5 10.5h-3l-4.5-6zM21 12c0 3.31-2.69 6-6 6-.88 0-1.67-.32-2.27-.85L9 10.5h3l4.5-6c.27-.38.5-.8.5-1.5 0-.83-.67-1.5-1.5-1.5-.42 0-.8.17-1.09.46L8.5 9H3v12h18V12h-4z"/></svg>
+    Scan
+  </div>
+  <div class="nav-item" onclick="showPage('page-collection')">
+    <svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+    Collection
+  </div>
+</div>
+
+<script>
+// ── Local Device PIN ─────────────────────────────────────────────────
+const VAULT_META_KEY = 'estatescout_vault_pin';
+const VAULT_ITERATIONS = 210000;
+function bytesToBase64(bytes) { return btoa(String.fromCharCode(...new Uint8Array(bytes))); }
+async function pinDigest(pin, salt) {
+  const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(pin), 'PBKDF2', false, ['deriveBits']);
+  return crypto.subtle.deriveBits({name:'PBKDF2', salt, iterations:VAULT_ITERATIONS, hash:'SHA-256'}, material, 256);
+}
+function vaultMeta() { try { return JSON.parse(localStorage.getItem(VAULT_META_KEY) || 'null'); } catch { return null; } }
+function showVaultError(message) { document.getElementById('vaultError').textContent = message; }
+async function initVaultLock() {
+  const meta = vaultMeta();
+  const setup = !meta;
+  document.getElementById('vaultTitle').textContent = setup ? 'Protect EstateScout' : 'Unlock EstateScout';
+  document.getElementById('vaultMessage').textContent = setup ? 'Create a local PIN for this device. Your device Face ID/passcode remains the primary protection.' : 'Enter your local PIN to unlock this device.';
+  document.getElementById('vaultConfirmGroup').style.display = setup ? 'block' : 'none';
+  document.getElementById('vaultSubmit').textContent = setup ? 'Create local PIN' : 'Unlock';
+  document.getElementById('vaultPin').autocomplete = setup ? 'new-password' : 'current-password';
+  document.getElementById('vaultPin').focus();
+}
+async function submitVaultPin() {
+  const pin = document.getElementById('vaultPin').value;
+  const meta = vaultMeta();
+  showVaultError('');
+  if (pin.length < 6) { showVaultError('Use at least 6 characters.'); return; }
+  if (!meta) {
+    if (pin !== document.getElementById('vaultConfirm').value) { showVaultError('PIN entries do not match.'); return; }
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const digest = await pinDigest(pin, salt);
+    localStorage.setItem(VAULT_META_KEY, JSON.stringify({version:1, salt:bytesToBase64(salt), digest:bytesToBase64(digest), iterations:VAULT_ITERATIONS}));
+  } else {
+    const salt = Uint8Array.from(atob(meta.salt), c => c.charCodeAt(0));
+    const digest = bytesToBase64(await pinDigest(pin, salt));
+    if (digest !== meta.digest) { showVaultError('Incorrect PIN.'); return; }
+  }
+  document.getElementById('vaultPin').value = ''; document.getElementById('vaultConfirm').value = '';
+  document.getElementById('vaultLock').classList.remove('active');
+  navigator.storage?.persist?.();
+}
+
+// ── Navigation ────────────────────────────────────────────────────────
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navMap = {'page-home':0,'page-silver':1,'page-photo':2,'page-collection':3};
+  const idx = navMap[pageId];
+  if(idx !== undefined) document.querySelectorAll('.nav-item')[idx].classList.add('active');
+  
+  if(pageId === 'page-collection') renderCollection();
+  if(pageId === 'page-library') renderLibrary();
+}
+
+// ── Price Tag / Barcode Scanner ───────────────────────────────────────
+async function scanPriceTag(input) {
+  const result = document.getElementById('priceTagResult');
+  if (!input.files?.[0]) return;
+  if (!('BarcodeDetector' in window)) {
+    result.textContent = 'Barcode scanning is not supported by this browser. Enter the asking price manually.';
+    result.style.display = 'block';
+    return;
+  }
+  try {
+    const bitmap = await createImageBitmap(input.files[0]);
+    const detector = new BarcodeDetector({formats: ['qr_code','code_128','code_39','ean_13','upc_a']});
+    const codes = await detector.detect(bitmap);
+    const match = codes.map(code => code.rawValue).find(value => /^\$?\s*\d+(?:\.\d{1,2})?$/.test(value));
+    if (match) {
+      document.getElementById('askingPrice').value = parseFloat(match.replace('$',''));
+      result.textContent = `Barcode read: ${match}. Tap Evaluate to compare it with the item value.`;
+    } else {
+      result.textContent = 'Barcode found, but it did not contain a readable dollar amount. Enter the asking price manually.';
+    }
+  } catch (error) {
+    result.textContent = 'Could not read this tag. Try a closer, brighter photo or enter the asking price manually.';
+  }
+  result.style.display = 'block';
+}
+function evaluateAskingPrice() {
+  const price = Number(document.getElementById('askingPrice').value);
+  const result = document.getElementById('priceTagResult');
+  if (!Number.isFinite(price) || price < 0) { result.textContent = 'Enter a valid asking price first.'; result.style.display = 'block'; return; }
+  const latest = collectionItems()[0] || {};
+  const range = String(latest.value || '').match(/\\d+(?:\\.\\d+)?/g)?.map(Number) || [];
+  const low = range[0] || 0;
+  const high = range[1] || low;
+  let label = 'CONSIDER';
+  let explanation = 'Add verified marks, weight, condition, and maker evidence before buying.';
+  if (high > 0 && price <= low * 0.6) { label = 'BUY'; explanation = 'Asking price is substantially below the recorded value range.'; }
+  else if (high > 0 && price > high) { label = 'WALK'; explanation = 'Asking price is above the recorded value range.'; }
+  result.innerHTML = `<h4>Recommendation: ${label}</h4><p>Asking price: <b>$${price.toFixed(2)}</b>${high ? ` • Recorded range: $${low.toFixed(2)}–$${high.toFixed(2)}` : ''}</p><p>${explanation}</p>`;
+  result.style.display = 'block';
+}
+
+// ── Photo Comparison ──────────────────────────────────────────────────
+const comparePhotosState = {A: null, B: null};
+function loadComparePhoto(side, input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = event => {
+    comparePhotosState[side] = event.target.result;
+    const preview = document.getElementById('comparePreview');
+    const existing = document.getElementById(`compare-${side}`);
+    if (existing) existing.remove();
+    const image = document.createElement('img');
+    image.id = `compare-${side}`;
+    image.src = event.target.result;
+    image.alt = `Comparison item ${side}`;
+    image.style.cssText = 'width:50%;max-height:180px;object-fit:contain;border-radius:8px;border:1px solid rgba(200,164,90,.2);';
+    preview.appendChild(image);
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function comparePhotos() {
+  const result = document.getElementById('compareResult');
+  if (!comparePhotosState.A || !comparePhotosState.B) {
+    result.textContent = 'Load both Item A and Item B before comparing.';
+    result.style.display = 'block';
+    return;
+  }
+  const aSize = comparePhotosState.A.length;
+  const bSize = comparePhotosState.B.length;
+  result.innerHTML = `<h4>Comparison Ready</h4><p>Both items are loaded. Review each photo at close range for marks, weight, wear, and maker evidence. Photo A: ${aSize.toLocaleString()} bytes. Photo B: ${bSize.toLocaleString()} bytes.</p><p><b>Next step:</b> record each item's evidence separately, then use the stronger verified mark/weight combination—not appearance alone—to decide.</p>`;
+  result.style.display = 'block';
+}
+
+// ── Photo Handling ────────────────────────────────────────────────────
+let currentPhotoDataUrl = null;
+let currentPhotoWidth = 0;
+let currentPhotoHeight = 0;
+let currentAnnotations = [];
+let annotationHistory = [];
+let currentTool = 'circle';
+
+function triggerFileInput() {
+  document.getElementById('fileInput').click();
+}
+
+function toggleFloorMode() {
+  const active = document.body.classList.toggle('floor-mode');
+  localStorage.setItem('estatescout_floor_mode', active ? '1' : '0');
+  const button = document.getElementById('floorModeButton');
+  button.setAttribute('aria-pressed', String(active));
+  button.textContent = active ? '🌙 Standard Mode' : '☀️ Floor Mode';
+}
+function updateCaptureQuality(file, image) {
+  const checklist = document.getElementById('captureChecklist');
+  const problems = [];
+  if (file.size > 12 * 1024 * 1024) problems.push('large file');
+  if (image.naturalWidth < 1200 || image.naturalHeight < 900) problems.push('low resolution');
+  if (problems.length) {
+    checklist.innerHTML = `<h4>Retake for better evidence</h4><p>This photo may be hard to verify (${problems.join(', ')}). Use bright indirect light and fill the frame with the mark.</p>`;
+  } else {
+    checklist.innerHTML = '<h4>Photo quality looks usable</h4><p>Next: annotate the visible mark, record weight and magnet result, then save the evidence.</p>';
+  }
+}
+
+function handlePhoto(input) {
+  if(input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      currentPhotoDataUrl = e.target.result;
+      const preview = document.getElementById('previewImg');
+      preview.onload = () => updateCaptureQuality(input.files[0], preview);
+      preview.src = e.target.result;
+      document.getElementById('photoPreview').style.display = 'block';
+      document.getElementById('photoAnalysis').style.display = 'none';
+      document.getElementById('annotationCanvas').style.display = 'none';
+      document.getElementById('annotationControls').style.display = 'none';
+      currentAnnotations = [];
+      
+      // Hide the upload zone text
+      document.getElementById('photoZone').style.display = 'none';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function retakePhoto() {
+  document.getElementById('fileInput').value = '';
+  document.getElementById('photoPreview').style.display = 'none';
+  document.getElementById('photoAnalysis').style.display = 'none';
+  document.getElementById('annotationCanvas').style.display = 'none';
+  document.getElementById('annotationControls').style.display = 'none';
+  document.getElementById('photoZone').style.display = 'block';
+  currentPhotoDataUrl = null;
+  currentAnnotations = [];
+  annotationHistory = [];
+}
+
+// ── Annotation System ─────────────────────────────────────────────────
+function showAnnotationMode() {
+  if(!currentPhotoDataUrl) return;
+  
+  const canvas = document.getElementById('annotationCanvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  
+  img.onload = function() {
+    currentPhotoWidth = img.width;
+    currentPhotoHeight = img.height;
+    
+    // Scale canvas to fit screen width
+    const containerWidth = document.getElementById('photoPreview').clientWidth;
+    const scale = containerWidth / img.width;
+    canvas.width = containerWidth;
+    canvas.height = img.height * scale;
+    
+    // Draw original photo
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    canvas.style.display = 'block';
+    document.getElementById('annotationControls').style.display = 'flex';
+    
+    // Clear annotations
+    currentAnnotations = [];
+    annotationHistory = [];
+  };
+  img.src = currentPhotoDataUrl;
+}
+
+function setTool(tool) {
+  currentTool = tool;
+  document.querySelectorAll('.annotation-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tool' + tool.charAt(0).toUpperCase() + tool.slice(1)).classList.add('active');
+}
+
+// Canvas click handler for annotations
+document.getElementById('annotationCanvas').addEventListener('click', function(e) {
+  const rect = this.getBoundingClientRect();
+  const x = (e.clientX - rect.left) * (currentPhotoWidth / this.width);
+  const y = (e.clientY - rect.top) * (currentPhotoHeight / this.height);
+  
+  const xScale = this.width / currentPhotoWidth;
+  const yScale = this.height / currentPhotoHeight;
+  
+  const canvas = this;
+  const ctx = canvas.getContext('2d');
+  annotationHistory.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+  
+  if(currentTool === 'circle') {
+    const radius = 40;
+    ctx.beginPath();
+    ctx.arc(x, y, radius / xScale, 0, Math.PI * 2);
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 3 / xScale;
+    ctx.stroke();
+    currentAnnotations.push({
+      type: 'circle',
+      x: x, y: y, radius: radius,
+      label: 'Hallmark'
+    });
+  } else if(currentTool === 'box') {
+    const size = 60;
+    ctx.strokeStyle = 'yellow';
+    ctx.lineWidth = 3 / xScale;
+    ctx.strokeRect(x - size/xScale/2, y - size/yScale/2, size/xScale, size/yScale);
+    currentAnnotations.push({
+      type: 'box',
+      x: x, y: y, size: size,
+      label: 'Wear Point'
+    });
+  } else if(currentTool === 'arrow') {
+    // Draw arrow from a point to the click
+    const startX = x - 80;
+    const startY = y - 40;
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = 'purple';
+    ctx.lineWidth = 3 / xScale;
+    ctx.stroke();
+    currentAnnotations.push({
+      type: 'arrow',
+      startX: startX, startY: startY,
+      x: x, y: y,
+      label: 'Maker Mark'
+    });
+  }
+  
+  // Let the user name the mark; cancel keeps a useful default.
+  const customLabel = window.prompt('Label this annotation', currentTool === 'circle' ? 'Hallmark' : currentTool === 'box' ? 'Wear Point' : 'Maker Mark');
+  const label = customLabel === null || !customLabel.trim() ? (currentTool === 'circle' ? 'Hallmark' : currentTool === 'box' ? 'Wear Point' : 'Maker Mark') : customLabel.trim();
+  currentAnnotations[currentAnnotations.length - 1].label = label;
+  ctx.fillStyle = currentTool === 'circle' ? 'red' : currentTool === 'box' ? 'yellow' : 'purple';
+  ctx.font = `${14/xScale}px sans-serif`;
+  ctx.fillText(label, x - 30/xScale, y + (currentTool === 'box' ? 50/xScale : -10/xScale));
+});
+
+function undoAnnotation() {
+  const canvas = document.getElementById('annotationCanvas');
+  const ctx = canvas.getContext('2d');
+  if (!annotationHistory.length) return;
+  ctx.putImageData(annotationHistory.pop(), 0, 0);
+  currentAnnotations.pop();
+}
+function exportAnnotatedPNG() {
+  const canvas = document.getElementById('annotationCanvas');
+  if (canvas.style.display === 'none') { alert('Annotate a photo first.'); return; }
+  const link = document.createElement('a');
+  link.download = `estatescout-annotated-${Date.now()}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+async function shareAnnotatedPNG() {
+  const canvas = document.getElementById('annotationCanvas');
+  if (canvas.style.display === 'none') { alert('Annotate a photo first.'); return; }
+  canvas.toBlob(async blob => {
+    const file = new File([blob], 'estatescout-annotated.png', {type:'image/png'});
+    if (navigator.canShare?.({files:[file]})) await navigator.share({title:'EstateScout annotation', files:[file]});
+    else exportAnnotatedPNG();
+  }, 'image/png');
+}
+
+function clearAnnotations() {
+  const canvas = document.getElementById('annotationCanvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.onload = function() {
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    currentAnnotations = [];
+    annotationHistory = [];
+  };
+  img.src = currentPhotoDataUrl;
+}
+
+function autoAnalyze() {
+  if(!currentPhotoDataUrl) return;
+  
+  const canvas = document.getElementById('annotationCanvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  
+  img.onload = function() {
+    // Redraw original
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    
+    // Smart annotation: mark likely hallmark areas
+    const w = canvas.width;
+    const h = canvas.height;
+    
+    // Hallmark area (bottom center)
+    const hx = w / 2;
+    const hy = h * 0.85;
+    ctx.beginPath();
+    ctx.arc(hx, hy, 30, 0, Math.PI * 2);
+    ctx.strokeStyle = 'green';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.fillStyle = 'green';
+    ctx.font = '12px sans-serif';
+    ctx.fillText('Likely Hallmark Area', hx - 60, hy + 40);
+    
+    // Wear points (top left)
+    const wx = w * 0.25;
+    const wy = h * 0.25;
+    ctx.strokeStyle = 'yellow';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(wx - 30, wy - 25, 60, 50);
+    ctx.fillStyle = 'yellow';
+    ctx.font = '12px sans-serif';
+    ctx.fillText('Wear Points', wx - 25, wy + 40);
+    
+    // Maker mark (center)
+    const mx = w * 0.5;
+    const my = h * 0.5;
+    ctx.beginPath();
+    ctx.moveTo(mx - 50, my - 30);
+    ctx.lineTo(mx, my);
+    ctx.strokeStyle = 'purple';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.fillStyle = 'purple';
+    ctx.font = '12px sans-serif';
+    ctx.fillText('Check Maker Marks', mx - 60, my - 35);
+    
+    currentAnnotations = [
+      { type: 'circle', x: hx, y: hy, radius: 30, label: 'Hallmark Area' },
+      { type: 'box', x: wx, y: wy, size: 60, label: 'Wear Points' },
+      { type: 'arrow', startX: mx - 50, startY: my - 30, x: mx, y: my, label: 'Maker Marks' }
+    ];
+    
+    // Show analysis results
+    showAnalysisResults();
+  };
+  img.src = currentPhotoDataUrl;
+}
+
+function showAnalysisResults() {
+  const content = document.getElementById('analysisContent');
+  const recommendations = [
+    'Check underside for 925/Sterling marks',
+    'Look for wear points (yellow/copper = plated)',
+    'Test with magnet (sticks = NOT silver)',
+    'Check weight (heavy for size = likely solid)'
+  ];
+  
+  content.innerHTML = `
+    <div class="info-box">
+      <h4>📷 Photo Analysis Complete</h4>
+      <p>Image: ${currentPhotoWidth}x${currentPhotoHeight}</p>
+      <p>Annotations: ${currentAnnotations.length} marks identified</p>
+    </div>
+    <ul class="checklist">
+      ${recommendations.map(r => `<li><div class="check-icon green">✓</div> ${r}</li>`).join('')}
+    </ul>
+  `;
+  document.getElementById('photoAnalysis').style.display = 'block';
+}
+
+// ── Save to Library ───────────────────────────────────────────────────
+function saveToLibrary() {
+  if(!currentPhotoDataUrl) return;
+  
+  // Save to localStorage
+  let library = JSON.parse(localStorage.getItem('estatescout_library') || '[]');
+  const item = {
+    id: `lib_${crypto.randomUUID()}`,
+    photo: currentPhotoDataUrl,
+    date: new Date().toLocaleDateString(),
+    annotations: currentAnnotations.length,
+    type: 'scanned'
+  };
+  library.unshift(item);
+  localStorage.setItem('estatescout_library', JSON.stringify(library));
+  publishApiWrite('/library', {item});
+  
+  alert('✅ Photo saved to Library!');
+  retakePhoto();
+  renderLibrary();
+}
+
+// ── Collection Management ─────────────────────────────────────────────
+function collectionItems() {
+  return JSON.parse(localStorage.getItem('estatescout_items') || '[]');
+}
+function csvCell(value) {
+  return '"' + String(value ?? '').replace(/"/g, '""') + '"';
+}
+function eraseDeviceData() {
+  if (!confirm('Delete this device\'s collection, library, training progress, and manual price? Export a backup first if you want to keep them.')) return;
+  ['estatescout_items', 'estatescout_library', TRAINING_KEY, MANUAL_PRICE_KEY, OUTBOX_KEY].forEach(key => localStorage.removeItem(key));
+  retakePhoto(); renderCollection(); renderLibrary(); saveTrainingProgress(); refreshPriceWidget();
+}
+function exportBackup() {
+  const backup = {
+    format: 'EstateScout backup', version: 1, exportedAt: new Date().toISOString(),
+    items: collectionItems(), library: JSON.parse(localStorage.getItem('estatescout_library') || '[]'),
+    training: getTrainingProgress()
+  };
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], {type:'application/json'}));
+  link.download = `estatescout-backup-${new Date().toISOString().slice(0,10)}.json`;
+  link.click(); URL.revokeObjectURL(link.href);
+}
+function restoreBackup(input) {
+  const file = input.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const backup = JSON.parse(String(reader.result));
+      if (backup.format !== 'EstateScout backup' || !Array.isArray(backup.items) || !Array.isArray(backup.library)) throw new Error('Unsupported backup');
+      if (!confirm(`Replace this device's collection with ${backup.items.length} backed-up items?`)) return;
+      localStorage.setItem('estatescout_items', JSON.stringify(backup.items));
+      localStorage.setItem('estatescout_library', JSON.stringify(backup.library));
+      localStorage.setItem(TRAINING_KEY, JSON.stringify(backup.training || {}));
+      renderCollection(); renderLibrary(); saveTrainingProgress();
+    } catch (error) { alert('That file is not a valid EstateScout backup.'); }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+function exportCollectionCSV() {
+  const items = collectionItems();
+  const fields = ['type','desc','marks','weight','magnet','condition','verdict','value','notes','date'];
+  const csv = [fields, ...items.map(item => fields.map(field => item[field]))]
+    .map(row => row.map(csvCell).join(',')).join('\\r\\n');
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  link.download = `estatescout-collection-${new Date().toISOString().slice(0,10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+function printCollectionReport() {
+  const items = collectionItems();
+  const report = items.length ? items.map(item => `<article><h2>${escapeHtml(item.desc || 'EstateScout item')}</h2><p><b>Verdict:</b> ${escapeHtml(item.verdict || 'Unknown')}</p><p><b>Marks:</b> ${escapeHtml(item.marks || 'Not recorded')} &nbsp; <b>Weight:</b> ${escapeHtml(item.weight || 'Not recorded')}g</p><p>${escapeHtml(item.notes || '')}</p></article>`).join('') : '<p>No collection items saved.</p>';
+  const win = window.open('', '_blank');
+  if (!win) { alert('Please allow pop-ups to create the report.'); return; }
+  win.document.write(`<title>EstateScout Collection Report</title><style>body{font-family:Arial;padding:24px;color:#172033}article{border-bottom:1px solid #ccc;padding:12px 0}h1{color:#8b6b2e}</style><h1>EstateScout Collection Report</h1><p>Generated ${new Date().toLocaleString()}</p>${report}`);
+  win.document.close(); win.focus(); win.print();
+}
+function escapeHtml(value) { return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+async function shareCollectionItem(index) {
+  const item = collectionItems()[index];
+  if (!item) return;
+  const text = `EstateScout: ${item.desc || 'Item'} — ${item.verdict || 'Unknown'}${item.value ? `, estimated ${item.value}` : ''}`;
+  if (navigator.share) await navigator.share({title:'EstateScout item', text});
+  else await navigator.clipboard?.writeText(text);
+}
+
+function recentSalesFor(item) {
+  const type = String(item.type || 'flatware').toLowerCase();
+  const ranges = {
+    flatware: [18, 72], holloware: [85, 420], jewelry: [25, 180], coin: [30, 260], decorative: [35, 240]
+  };
+  const [low, high] = ranges[type] || ranges.decorative;
+  return [Math.round(low * 1.05), Math.round((low + high) / 2), Math.round(high * .92)];
+}
+function renderRecentSales(item) {
+  const est = estimateValue(item);
+  return `<div class="info-box" style="margin-top:10px;"><h4>📊 Value Estimate</h4><p>Estimated range: <b>${est}</b>. Based on type, marks, maker, condition, and weight. For purchase decisions, verify with a verified marketplace feed.</p></div>`;
+}
+
+function renderCollection(searchTerm) {
+  const allItems = collectionItems();
+  const indexedItems = allItems.map((item, index) => ({item, index}));
+  let items = searchTerm ? indexedItems.filter(({item}) => filterCollection(searchTerm).includes(item)) : indexedItems;
+  const filter = document.getElementById('collectionFilter')?.value || 'all';
+  if (filter === 'needs-evidence') items = items.filter(({item}) => item.confidence !== 'high' || !item.evidence || !item.weight || !item.magnet);
+  if (filter === 'high-confidence') items = items.filter(({item}) => item.confidence === 'high');
+  if (filter === 'sold') items = items.filter(({item}) => Number(item.salePrice) > 0);
+  const sort = document.getElementById('collectionSort')?.value || 'newest';
+  const money = value => Number.parseFloat(String(value || '').replace(/[^0-9.-]/g, '')) || 0;
+  items.sort((a, b) => {
+    if (sort === 'oldest') return a.index - b.index;
+    if (sort === 'value') return money(b.item.value) - money(a.item.value);
+    if (sort === 'profit') return (money(b.item.salePrice) - money(b.item.purchasePrice)) - (money(a.item.salePrice) - money(a.item.purchasePrice));
+    return a.index - b.index;
+  });
+  const container = document.getElementById('collectionList');
+
+  if(allItems.length === 0) {
+    container.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg><p>Your collection is empty.<br>Tap "Add Item" to start tracking.</p></div>`;
+    return;
+  }
+
+  container.innerHTML = items.map(({item, index}) => {
+    const verdictColors = {'solid silver':'var(--success)','plated':'var(--warning)','fake':'var(--danger)','unknown':'var(--text-secondary)'};
+    const verdictEmoji = {'solid silver':'✅','plated':'⚠️','fake':'❌','unknown':'❓'};
+    return `
+      <div class="collection-item">
+        <div class="item-header">
+          <span class="item-type">${escapeHtml(item.type || 'item')}</span>
+          <span style="font-size:18px;">${verdictEmoji[item.verdict] || '🔍'}</span>
+          <span style="font-size:11px;color:var(--text-secondary);">${escapeHtml(item.date || '')}</span>
+          <button onclick="shareCollectionItem(${index})" style="background:none;border:none;font-size:16px;cursor:pointer;" aria-label="Share item">↗️</button>
+          <button onclick="editCollectionItem(${index})" style="background:none;border:none;font-size:16px;cursor:pointer;" aria-label="Edit item">✏️</button>
+          <button onclick="deleteCollectionItem(${index})" style="background:none;border:none;font-size:16px;cursor:pointer;" aria-label="Delete item">🗑️</button>
+        </div>
+        <div class="item-desc">${escapeHtml(item.desc || 'No description')}</div>
+        ${item.marks ? `<div style="font-size:12px;color:var(--accent);margin-bottom:6px;">🏷️ ${escapeHtml(item.marks)}</div>` : ''}
+        <div class="item-meta">
+          ${item.weight ? `<span>⚖️ ${escapeHtml(item.weight)}g</span>` : ''}
+          <span style="color:${verdictColors[item.verdict] || 'var(--text-secondary)'}">${escapeHtml(item.verdict || 'unknown')}</span>
+          ${item.value ? `<span>💰 ${escapeHtml(item.value)}</span>` : ''}
+        </div>
+        ${item.purchasePrice ? `<div class="item-meta"><span>Paid: $${escapeHtml(item.purchasePrice)}</span>${item.salePrice ? `<span>Sold: $${escapeHtml(item.salePrice)} • Profit: $${(Number(item.salePrice) - Number(item.purchasePrice)).toFixed(2)}</span>` : '<span>Unsold</span>'}</div>` : ''}
+        <div class="info-box" style="margin-top:10px;"><h4>Evidence • ${escapeHtml(item.confidence || 'medium')} confidence</h4><p>${escapeHtml(item.evidence || 'No item-specific evidence recorded yet. Capture hallmark, weight, magnet, and wear observations before relying on a verdict.')}</p></div>
+        ${renderRecentSales(item)}
+      </div>
+    `;
+  }).join('');
+
+  const countEl = document.getElementById('collectionCount');
+  if (countEl) {
+    countEl.textContent = allItems.length === items.length
+      ? `${allItems.length} items`
+      : `${items.length} of ${allItems.length} items`;
+  }
+}
+
+async function deleteCollectionItem(index) {
+  if(!confirm('Delete this item?')) return;
+  const items = collectionItems();
+  const [item] = items.splice(index, 1);
+  localStorage.setItem('estatescout_items', JSON.stringify(items));
+  if (item?.id) await publishApiWrite(`/items/${encodeURIComponent(item.id)}`, null, 'DELETE');
+  renderCollection();
+}
+
+function editCollectionItem(index) {
+  const items = JSON.parse(localStorage.getItem('estatescout_items') || '[]');
+  const item = items[index];
+  if (!item) return;
+  // Pre-fill the add modal with existing data
+  document.getElementById('itemType').value = item.type || 'flatware';
+  document.getElementById('itemDesc').value = item.desc || '';
+  document.getElementById('itemMarks').value = item.marks || '';
+  document.getElementById('itemWeight').value = item.weight || '';
+  document.getElementById('itemMagnet').value = item.magnet || 'not attracted';
+  document.getElementById('itemCondition').value = item.condition || 'good';
+  document.getElementById('itemVerdict').value = item.verdict || 'unknown';
+  document.getElementById('itemValue').value = item.value || '';
+  document.getElementById('itemPurchasePrice').value = item.purchasePrice ?? '';
+  document.getElementById('itemSalePrice').value = item.salePrice ?? '';
+  document.getElementById('itemEvidence').value = item.evidence || '';
+  document.getElementById('itemConfidence').value = item.confidence || 'medium';
+  document.getElementById('itemNotes').value = item.notes || '';
+  // Store edit index in a data attribute
+  document.getElementById('addModal').dataset.editIndex = index;
+  document.querySelector('#addModal h2').textContent = 'Edit Item';
+  // Show photo if available
+  const photoPreview = document.getElementById('itemPhotoPreview');
+  if (item.photo) {
+    photoPreview.src = item.photo;
+    photoPreview.style.display = 'block';
+  }
+  document.getElementById('addModal').setAttribute('aria-hidden', 'false');
+  document.getElementById('addModal').classList.add('active');
+  document.getElementById('itemDesc').focus();
+}
+
+function openAddItem() {
+  document.getElementById('addModal').dataset.editIndex = '';
+  document.querySelector('#addModal h2').textContent = 'Add Item to Collection';
+  // Reset form fields
+  ['itemDesc','itemMarks','itemWeight','itemValue','itemPurchasePrice','itemSalePrice','itemEvidence','itemNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('itemConfidence').value = 'medium';
+  document.getElementById('itemPhoto').value = '';
+  document.getElementById('itemPhotoPreview').style.display = 'none';
+  document.getElementById('addModal').setAttribute('aria-hidden', 'false');
+  document.getElementById('addModal').classList.add('active');
+  document.getElementById('itemDesc').focus();
+}
+
+function closeModal() {
+  document.getElementById('addModal').setAttribute('aria-hidden', 'true');
+  document.getElementById('addModal').classList.remove('active');
+  document.getElementById('addModal').dataset.editIndex = '';
+  document.querySelector('#addModal h2').textContent = 'Add Item to Collection';
+}
+
+function previewItemPhoto(input) {
+  if(input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const preview = document.getElementById('itemPhotoPreview');
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function saveItem() {
+  const editIndex = parseInt(document.getElementById('addModal').dataset.editIndex || '-1', 10);
+  const item = {
+    type: document.getElementById('itemType').value,
+    desc: document.getElementById('itemDesc').value,
+    marks: document.getElementById('itemMarks').value,
+    weight: document.getElementById('itemWeight').value,
+    magnet: document.getElementById('itemMagnet').value,
+    condition: document.getElementById('itemCondition').value,
+    verdict: document.getElementById('itemVerdict').value,
+    value: document.getElementById('itemValue').value,
+    purchasePrice: document.getElementById('itemPurchasePrice').value,
+    salePrice: document.getElementById('itemSalePrice').value,
+    evidence: document.getElementById('itemEvidence').value,
+    confidence: document.getElementById('itemConfidence').value,
+    notes: document.getElementById('itemNotes').value,
+    date: new Date().toLocaleDateString(),
+    id: editIndex >= 0 ? JSON.parse(localStorage.getItem('estatescout_items') || '[]')[editIndex]?.id : `item_${crypto.randomUUID()}`
+  };
+
+  // Handle photo if provided
+  const photoPreview = document.getElementById('itemPhotoPreview');
+  if(photoPreview.style.display !== 'none' && photoPreview.src) {
+    item.photo = photoPreview.src;
+  }
+
+  const items = JSON.parse(localStorage.getItem('estatescout_items') || '[]');
+  if (editIndex >= 0 && editIndex < items.length) {
+    // Update existing item, preserve photo if not replaced
+    if (!item.photo && items[editIndex].photo) item.photo = items[editIndex].photo;
+    items[editIndex] = item;
+  } else {
+    items.unshift(item);
+  }
+  localStorage.setItem('estatescout_items', JSON.stringify(items));
+
+  // Auto-estimate value and save training progress
+  const newItem = items[editIndex >= 0 ? editIndex : 0] || item;
+  if (!newItem.value) {
+    newItem.value = estimateValue(newItem);
+    items[editIndex >= 0 ? editIndex : 0] = newItem;
+    localStorage.setItem('estatescout_items', JSON.stringify(items));
+  }
+  const savedItem = items[editIndex >= 0 ? editIndex : 0] || item;
+  publishApiWrite(editIndex >= 0 ? `/items/${encodeURIComponent(savedItem.id)}` : '/items', {item: savedItem}, editIndex >= 0 ? 'PUT' : 'POST');
+  saveTrainingProgress();
+
+  closeModal();
+  renderCollection();
+
+  // Reset form
+  ['itemDesc','itemMarks','itemWeight','itemValue','itemPurchasePrice','itemSalePrice','itemEvidence','itemNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('itemConfidence').value = 'medium';
+  document.getElementById('itemPhoto').value = '';
+  document.getElementById('itemPhotoPreview').style.display = 'none';
+  document.getElementById('addModal').dataset.editIndex = '';
+  document.querySelector('#addModal h2').textContent = 'Add Item to Collection';
+}
+
+// ── Library ───────────────────────────────────────────────────────────
+function renderLibrary() {
+  const library = JSON.parse(localStorage.getItem('estatescout_library') || '[]');
+  const container = document.getElementById('libraryList');
+  
+  if(library.length === 0) {
+    container.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><p>Your library is empty.<br>Scan items to build your annotated photo library!</p></div>`;
+    return;
+  }
+  
+  container.innerHTML = library.map((item, i) => `
+    <div class="library-item">
+      <img src="${item.photo}" class="library-thumb" onclick="viewLibraryPhoto(${i})">
+      <div class="library-info">
+        <h4>📷 Scanned Item</h4>
+        <p>${item.date} • ${item.annotations} annotations</p>
+      </div>
+      <div class="library-actions">
+        <button onclick="deleteLibraryItem(${i})">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function viewLibraryPhoto(index) {
+  const library = JSON.parse(localStorage.getItem('estatescout_library') || '[]');
+  const item = library[index];
+  if(item && item.photo) {
+    // Open in new tab or show in modal
+    const win = window.open();
+    win.document.write(`<img src="${item.photo}" style="max-width:100%;">`);
+  }
+}
+
+async function deleteLibraryItem(index) {
+  if(!confirm('Delete this library item?')) return;
+  const library = JSON.parse(localStorage.getItem('estatescout_library') || '[]');
+  const [item] = library.splice(index, 1);
+  localStorage.setItem('estatescout_library', JSON.stringify(library));
+  if (item?.id) await publishApiWrite(`/library/${encodeURIComponent(item.id)}`, null, 'DELETE');
+  renderLibrary();
+}
+
+// ── Module Content ────────────────────────────────────────────────────
+const modules = {
+  1: {
+    title: 'Module 1: Basic Silver Identification',
+    time: '30 min • Beginner',
+    content: `
+      <div class="info-box"><h4>Lesson 1.1: The Two Marks That Matter Most</h4><p>SOLID SILVER (WORTH $$$$): <b>925</b>, <b>STERLING</b>, <b>800/835</b>, <b>Lion Passant</b>. NOT SOLID (WORTH $): <b>EPNS</b>, <b>SILVER PLATED</b>, <b>EP</b>, <b>A1</b>.</p></div>
+      
+      <div class="info-box"><h4>Lesson 1.2: Weight Test</h4><p>Solid silver is dense and heavy. Teaspoon: Solid = 15-20g | Plated = 8-12g. If it feels LIGHT, it's probably plated.</p></div>
+      
+      <div class="info-box"><h4>Lesson 1.3: Magnet Test</h4><p>Silver is NOT magnetic. If magnet sticks = steel core, NOT silver. No stick = could be silver OR non-magnetic base metal (brass, nickel silver).</p></div>
+      
+      <div class="info-box"><h4>Lesson 1.4: Wear Points</h4><p>Fork tines, spoon backs, handle ends. Yellow/gold color showing through = PLATED. Uniform silver everywhere = LIKELY SOLID.</p></div>
+      
+      <div class="info-box"><h4>Lesson 1.5: 60-Second Checklist</h4><p>Marks → Weight → Wear points → Magnet → Decision. Focus on HEAVY items with NO wear color showing.</p></div>
+    `
+  },
+  2: {
+    title: 'Module 2: Intermediate Silver Identification',
+    time: '45 min • Intermediate',
+    content: `
+      <div class="info-box"><h4>British Hallmarks</h4><p><b>Lion Passant</b> = 925 sterling. <b>Assay offices:</b> London (anchor), Birmingham (anchor), Sheffield (rose), Edinburgh (castle). <b>Date letters</b> = year made. <b>Maker marks</b> = two initials in shield.</p></div>
+      
+      <div class="info-box"><h4>Famous Makers</h4><p><b>Tiffany & Co.</b> - Extremely valuable. <b>Gorham</b> - Art Nouveau collectible. <b>Reed & Barton</b> - Quality American (1824-2015). <b>International Silver</b> - Common but collectible.</p></div>
+      
+      <div class="info-box"><h4>Spotting Reproductions</h4><p>Perfect condition + modern fonts = suspicious. Wrong hallmark combos = fake. 2+ red flags = walk away.</p></div>
+      
+      <div class="info-box"><h4>Old Sheffield Plate (OSP)</h4><p>Fused silver/copper sheets (1740s-1840s). Shows copper bleeding at wear points. Bluish cast vs electroplate. No EP marks.</p></div>
+    `
+  },
+  3: {
+    title: 'Module 3: Advanced Silver Identification',
+    time: '60 min • Advanced',
+    content: `
+      <div class="info-box"><h4>Date Letter System</h4><p>Each assay office has its own alphabet cycle. Font style + shield shape = specific year. Look for small letter on back/underside.</p></div>
+      
+      <div class="info-box"><h4>Rare & Valuable Marks</h4><p><b>Paul de Lamerie (PL)</b> - $5k-$100k+. <b>Paul Revere (PR)</b> - $10k-$500k+. <b>Britannia 958</b> - Higher purity, rare.</p></div>
+      
+      <div class="info-box"><h4>Weighted Silver</h4><p>Silver shell filled with lead. Hollow sound when tapped. X-ray needed to detect.</p></div>
+      
+      <div class="info-box"><h4>US Coin Silver</h4><p>Pre-1965 dimes/quarters/half dollars = 90% silver. Dime: 0.0723 oz | Quarter: 0.1600 oz | Half dollar: 0.3616 oz.</p></div>
+    `
+  },
+  4: {
+    title: 'Module 4: Practical Estate Sale Scenarios',
+    time: '30 min • Applied',
+    content: `
+      <div class="info-box"><h4>Scenario 1: Drawer of Mixed Flatware</h4><p>Sort by weight (heavy = likely solid). Check each for 925 mark. Buy lot if 50%+ solid silver.</p></div>
+      
+      <div class="info-box"><h4>Scenario 2: Service for 12</h4><p>Check if complete. Verify all pieces are solid (925 mark). Complete service worth 2-3x individual pieces.</p></div>
+      
+      <div class="info-box"><h4>Scenario 3: Candlesticks</h4><p><b>PAIRS are essential for value.</b> Single = low value ($5-20). Pair of solid silver = valuable ($100-500+).</p></div>
+      
+      <div class="info-box"><h4>Scenario 4: Coin Collection</h4><p>Check dates (pre-1965 = silver). Count total silver content. Buy if mostly pre-1965 coins.</p></div>
+      
+      <div class="info-box"><h4>Golden Rules</h4><p>Heavy + No wear color + 925 mark = SOLID. Pairs > Singles. Complete services > Individual pieces.</p></div>
+    `
+  }
+};
+
+function openModule(num) {
+  const m = modules[num];
+  document.getElementById('moduleContent').innerHTML = `<h2>${m.title}</h2><div class="meta" style="color:var(--text-secondary);margin-bottom:16px;">${m.time}</div>${m.content}`;
+  document.getElementById('moduleModal').classList.add('active');
+}
+
+function closeModuleModal() {
+  document.getElementById('moduleModal').classList.remove('active');
+}
+
+// ── Close modals on overlay click ─────────────────────────────────────
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if(e.target === this) this.classList.remove('active');
+  });
+});
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    if (document.getElementById('addModal').classList.contains('active')) closeModal();
+    if (document.getElementById('moduleModal').classList.contains('active')) closeModuleModal();
+  }
+});
+
+function renderPriceWidget(prices) {
+  const content = document.getElementById('priceWidgetContent');
+  const spinner = document.getElementById('priceSpinner');
+  if (spinner) spinner.style.display = 'none';
+  if (!prices || prices.status === 'unavailable' || prices.western_usd_per_troy_oz == null) {
+    content.innerHTML = '<p>Verified live pricing is unavailable. No estimate is being shown.</p>';
+    return;
+  }
+  const status = String(prices.status || 'unknown').toUpperCase();
+  const delayed = /delayed|futures/i.test(`${prices.status || ''} ${prices.western_source || ''}`);
+  const timestamp = prices.fetched_at ? new Date(Number(prices.fetched_at) * 1000).toLocaleString() : 'unknown';
+  const westernSource = escapeHtml(prices.western_source || 'Western feed');
+  const shanghaiSource = escapeHtml(prices.shanghai_source || 'Shanghai feed');
+  const shanghai = prices.shanghai_cny_per_gram == null
+    ? '<div class="benchmark-row"><span class="benchmark-label">🇨🇳 Shanghai</span><b>Unavailable</b></div><div class="benchmark-row"><span class="benchmark-label">🇨🇳 Shanghai converted</span><b>Unavailable</b></div>'
+    : `<div class="benchmark-row"><span class="benchmark-label">🇨🇳 Shanghai</span><b>¥${Number(prices.shanghai_cny_per_gram).toFixed(2)} CNY / gram</b></div><div class="benchmark-row"><span class="benchmark-label">🇨🇳 Shanghai converted</span><b>$${Number(prices.shanghai_usd_per_troy_oz).toFixed(2)} USD / troy oz</b></div>`;
+  const badge = delayed ? '<span class="badge badge-plated">Delayed futures</span>' : `<span class="badge badge-solid">${status}</span>`;
+  const fx = Number(prices.usd_cny) > 0 ? `FX: 1 USD = ¥${Number(prices.usd_cny).toFixed(4)} • 31.1034768 g/troy oz` : 'FX and Shanghai conversion unavailable';
+  content.innerHTML = `<div class="benchmark-row"><span class="benchmark-label">🌎 Western price</span><b>$${Number(prices.western_usd_per_troy_oz).toFixed(2)} USD / troy oz</b></div>${shanghai}<p style="font-size:11px;margin-top:10px;">${badge} &nbsp; Updated: ${timestamp}<br>Western: ${westernSource}<br>Shanghai: ${shanghaiSource}<br>${fx}</p>`;
+}
+const MANUAL_PRICE_KEY = 'estatescout_manual_western_price';
+function manualPrice() {
+  const value = Number(localStorage.getItem(MANUAL_PRICE_KEY));
+  return Number.isFinite(value) && value > 0 ? value : null;
+}
+function saveManualPrice() {
+  const input = document.getElementById('manualWesternPrice');
+  const value = Number(input.value);
+  if (!Number.isFinite(value) || value <= 0) { input.setCustomValidity('Enter a positive USD per troy ounce price.'); input.reportValidity(); return; }
+  input.setCustomValidity('');
+  localStorage.setItem(MANUAL_PRICE_KEY, String(value));
+  refreshPriceWidget();
+}
+function clearManualPrice() {
+  localStorage.removeItem(MANUAL_PRICE_KEY);
+  document.getElementById('manualWesternPrice').value = '';
+  refreshPriceWidget();
+}
+async function refreshPriceWidget() {
+  try {
+    const manual = manualPrice();
+    if (manual) {
+      document.getElementById('manualWesternPrice').value = manual;
+      renderPriceWidget({status:'manual', western_usd_per_troy_oz:manual, usd_cny:0, western_source:'Manual field entry — verify before buying', shanghai_source:'Not entered', fetched_at:Math.floor(Date.now() / 1000)});
+      return;
+    }
+    if (ESTATESCOUT_API) {
+      const response = await fetch(`${ESTATESCOUT_API}/silver-price`, {headers:{'Accept':'application/json'}});
+      renderPriceWidget(response.ok ? await response.json() : {status:'unavailable'});
+      return;
+    }
+    try {
+      // Same-origin feed, refreshed every 10 minutes by GitHub Actions
+      // (public/feeds/silver_prices.json). Yahoo's API has no CORS headers,
+      // so browsers cannot call it directly — the server-side refresh exists
+      // precisely to serve it from this origin.
+      const feedResponse = await fetch('feeds/silver_prices.json', {headers:{'Accept':'application/json'}});
+      if (feedResponse.ok) {
+        const feed = await feedResponse.json();
+        if (feed.status && feed.status !== 'unavailable' && feed.western_usd_per_troy_oz != null) {
+          renderPriceWidget(feed);
+          return;
+        }
+      }
+    } catch (feedError) { /* fall through to direct Yahoo attempt */ }
+    try {
+      // Direct Yahoo attempt (works in desktop browsers that permit it;
+      // fails in most mobile PWA contexts due to missing CORS headers).
+      const quote = async symbol => {
+        const response = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1d&interval=1m`);
+        const data = await response.json();
+        return data.chart.result[0].meta.regularMarketPrice;
+      };
+      const [western, fx] = await Promise.all([quote('SI=F'), quote('CNY=X')]);
+      renderPriceWidget({status:'delayed', western_usd_per_troy_oz:western, usd_cny:fx, western_source:'Yahoo Finance SI=F (COMEX futures, delayed)', shanghai_source:'No configured Shanghai source', fetched_at:Math.floor(Date.now() / 1000)});
+    } catch (error) { renderPriceWidget({status:'unavailable'}); }
+  } catch (error) { renderPriceWidget({status:'unavailable'}); }
+}
+
+// ── Shared API / Offline Sync ─────────────────────────────────────────
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
+const ESTATESCOUT_API = localStorage.getItem('estatescout_api') || '';
+const OUTBOX_KEY = 'estatescout_outbox';
+function queueApiWrite(path, payload, method = 'POST') {
+  const outbox = JSON.parse(localStorage.getItem(OUTBOX_KEY) || '[]');
+  outbox.push({path, payload, method, queuedAt: new Date().toISOString()});
+  localStorage.setItem(OUTBOX_KEY, JSON.stringify(outbox));
+}
+async function flushOutbox() {
+  const outbox = JSON.parse(localStorage.getItem(OUTBOX_KEY) || '[]');
+  const remaining = [];
+  for (const entry of outbox) {
+    try {
+      const options = {method: entry.method || 'POST', headers:{'Content-Type':'application/json'}};
+      if (entry.payload !== null) options.body = JSON.stringify(entry.payload);
+      const response = await fetch(`${ESTATESCOUT_API}${entry.path}`, options);
+      if (!response.ok) throw new Error('write failed');
+    } catch (error) { remaining.push(entry); }
+  }
+  localStorage.setItem(OUTBOX_KEY, JSON.stringify(remaining));
+}
+async function publishApiWrite(path, payload, method = 'POST') {
+  if (!ESTATESCOUT_API) return;
+  try {
+    const options = {method, headers:{'Content-Type':'application/json'}};
+    if (payload !== null) options.body = JSON.stringify(payload);
+    const response = await fetch(`${ESTATESCOUT_API}${path}`, options);
+    if (!response.ok) throw new Error('write failed');
+  } catch (error) { queueApiWrite(path, payload, method); setConnectionStatus(false); }
+}
+function setConnectionStatus(online) {
+  const el = document.getElementById('connectionStatus');
+  if (!el) return;
+  el.textContent = online ? '● Online' : '● Offline';
+  el.style.color = online ? 'var(--success)' : 'var(--warning)';
+  el.style.background = online ? 'rgba(74,222,128,.15)' : 'rgba(251,191,36,.15)';
+}
+async function syncFromServer() {
+  if (!ESTATESCOUT_API) {
+    const el = document.getElementById('connectionStatus');
+    if (el) { el.textContent = '● Device-only'; el.style.color = 'var(--accent)'; el.style.background = 'rgba(200,164,90,.15)'; }
+    return;
+  }
+  try {
+    const [itemsResponse, libraryResponse] = await Promise.all([
+      fetch(`${ESTATESCOUT_API}/items`, {headers: {'Accept': 'application/json'}}),
+      fetch(`${ESTATESCOUT_API}/library`, {headers: {'Accept': 'application/json'}})
+    ]);
+    if (!itemsResponse.ok || !libraryResponse.ok) throw new Error('sync failed');
+    const items = await itemsResponse.json();
+    const library = await libraryResponse.json();
+    if (Array.isArray(items.items)) localStorage.setItem('estatescout_items', JSON.stringify(items.items));
+    if (Array.isArray(library.items)) localStorage.setItem('estatescout_library', JSON.stringify(library.items));
+    setConnectionStatus(true);
+    renderCollection();
+    renderLibrary();
+  } catch (error) {
+    setConnectionStatus(false);
+  }
+}
+window.addEventListener('online', () => { setConnectionStatus(true); flushOutbox().then(syncFromServer); });
+window.addEventListener('offline', () => setConnectionStatus(false));
+
+// ── Training Progress ─────────────────────────────────────────────────
+const TRAINING_KEY = 'estatescout_training';
+function getTrainingProgress() {
+  try { return JSON.parse(localStorage.getItem(TRAINING_KEY) || '{}'); } catch { return {}; }
+}
+function saveTrainingProgress() {
+  const progress = getTrainingProgress();
+  // Calculate progress based on items in collection
+  const items = collectionItems();
+  const solidCount = items.filter(i => i.verdict === 'solid silver').length;
+  const platedCount = items.filter(i => i.verdict === 'plated').length;
+  const total = items.length;
+  // Module 1 is 100% when user has identified at least 3 items
+  progress.m1 = total >= 3 ? 100 : Math.min(100, Math.round((total / 3) * 100));
+  // Module 2 is 100% when user has identified both solid and plated
+  progress.m2 = (solidCount > 0 && platedCount > 0) ? 100 : 0;
+  // Module 3 is 100% when user has identified 2+ famous makers
+  const makers = items.filter(i => i.marks && /tiffany|gorham|reed|storr|revere|lamerie/i.test(i.marks)).length;
+  progress.m3 = makers >= 2 ? 100 : 0;
+  // Module 4 is 100% when user has 3+ solid items with no wear
+  const noWear = items.filter(i => i.verdict === 'solid silver' && i.condition === 'excellent').length;
+  progress.m4 = noWear >= 3 ? 100 : 0;
+  localStorage.setItem(TRAINING_KEY, JSON.stringify(progress));
+  updateProgressBars(progress);
+}
+function updateProgressBars(progress) {
+  document.querySelectorAll('.progress-fill').forEach((bar, idx) => {
+    const pct = progress['m' + (idx + 1)] || 0;
+    bar.style.width = pct + '%';
+  });
+}
+
+// ── Value Estimation ──────────────────────────────────────────────────
+function estimateValue(item) {
+  const type = String(item.type || 'flatware').toLowerCase();
+  const verdict = String(item.verdict || '').toLowerCase();
+  const marks = String(item.marks || '').toLowerCase();
+  const weight = parseFloat(item.weight) || 0;
+  const condition = String(item.condition || 'fair').toLowerCase();
+
+  let base = 0;
+  const ranges = {
+    flatware: [18, 72], holloware: [85, 420], jewelry: [25, 180],
+    coin: [30, 260], decorative: [35, 240]
+  };
+  const [low, high] = ranges[type] || ranges.decorative;
+
+  // Base value from type
+  base = (low + high) / 2;
+
+  // Multipliers
+  let mult = 1;
+
+  // Solid silver mark
+  if (/925|sterling|800|835|958|coin silver/i.test(marks)) {
+    mult *= 2.5;
+  } else if (/epns|plated|ep |a1/i.test(marks)) {
+    mult *= 0.15;
+  }
+
+  // Famous maker
+  if (/tiffany|gorham|reed.*barton|storr|revere|lamerie/i.test(marks)) {
+    mult *= 3;
+  }
+
+  // Condition
+  const condMult = { excellent: 1.5, good: 1.0, fair: 0.7, poor: 0.4 };
+  mult *= condMult[condition] || 0.5;
+
+  // Weight bonus for solid pieces
+  if (/925|sterling/i.test(marks) && weight > 15) {
+    mult *= 1.2;
+  }
+
+  const estLow = Math.round(base * mult * 0.6);
+  const estHigh = Math.round(base * mult * 1.4);
+  return estLow > 0 ? `$${estLow}–$${estHigh}` : '—';
+}
+
+// ── Init ──────────────────────────────────────────────────────────────
+initVaultLock();
+if (localStorage.getItem('estatescout_floor_mode') === '1') toggleFloorMode();
+renderCollection();
+renderLibrary();
+syncFromServer();
+refreshPriceWidget();
+saveTrainingProgress();
+</script>
+</body>
+</html>

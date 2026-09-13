@@ -1,0 +1,93 @@
+{
+  "positive_indicators": [
+    {
+      "mark": "925",
+      "description": "Sterling silver (92.5% pure)",
+      "confidence": "high"
+    },
+    {
+      "mark": "800",
+      "description": "Continental/European silver standard (80%)",
+      "confidence": "high"
+    },
+    {
+      "mark": "900",
+      "description": "British/Mexican coin silver (90%)",
+      "confidence": "high"
+    },
+    {
+      "mark": "835",
+      "description": "Canadian/Australian sterling equivalent (83.5%)",
+      "confidence": "high"
+    },
+    {
+      "mark": "999",
+      "description": "Fine silver (99.9% pure)",
+      "confidence": "high"
+    },
+    {
+      "mark": "Lion Passant",
+      "description": "British sterling standard mark",
+      "confidence": "high"
+    },
+    {
+      "mark": "Crown",
+      "description": "British silver (pre-1972)",
+      "confidence": "high"
+    },
+    {
+      "mark": "Eagle",
+      "description": "American silver mark",
+      "confidence": "high"
+    }
+  ],
+  "negative_indicators": [
+    {
+      "mark": "EPNS",
+      "description": "Electroplated Nickel Silver - NO silver content",
+      "confidence": "high"
+    },
+    {
+      "mark": "EP",
+      "description": "Electroplated - silver plated over base metal",
+      "confidence": "high"
+    },
+    {
+      "mark": "E.P.",
+      "description": "Electroplated",
+      "confidence": "high"
+    },
+    {
+      "mark": "Silver Plate",
+      "description": "Silver-plated, not solid silver",
+      "confidence": "high"
+    },
+    {
+      "mark": "Alpaca",
+      "description": "German silver - contains NO actual silver",
+      "confidence": "high"
+    },
+    {
+      "mark": "German Silver",
+      "description": "Same as Alpaca - no silver content",
+      "confidence": "high"
+    }
+  ],
+  "neutral_indicators": [
+    {
+      "mark": "Maker's mark only",
+      "description": "Could be silver or plated - needs verification",
+      "confidence": "medium"
+    },
+    {
+      "mark": "No marks",
+      "description": "Could be antique pre-marking era or fake - needs testing",
+      "confidence": "medium"
+    },
+    {
+      "mark": "Date mark only",
+      "description": "Check for other hallmarks to verify",
+      "confidence": "medium"
+    }
+  ]
+}
