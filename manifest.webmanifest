@@ -1,0 +1,11 @@
+{
+  "name": "EstateScout — Field Valuation",
+  "short_name": "EstateScout",
+  "description": "Evidence-first estate sale identification and field valuation.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a1628",
+  "theme_color": "#0a1628",
+  "orientation": "portrait-primary",
+  "categories": ["shopping", "productivity", "finance"]
+}
