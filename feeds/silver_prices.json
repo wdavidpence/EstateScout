@@ -1,0 +1,9 @@
+{
+  "western_usd_per_troy_oz": 67.149,
+  "usd_cny": 6.6883,
+  "western_source": "Yahoo Finance SI=F (COMEX futures, delayed)",
+  "shanghai_source": "Shanghai Gold Exchange (unavailable)",
+  "fetched_at": 1789835072,
+  "status": "partial",
+  "deployment": "github-pages"
+}
