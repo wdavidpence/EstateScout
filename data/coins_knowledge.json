@@ -1,0 +1,140 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-09-08",
+  "description": "Comprehensive guide to identifying and valuing silver coins at estate sales",
+
+  "us_silver_coins": {
+    "pre_1965_rule": "All US dimes, quarters, and half dollars minted before 1965 are 90% silver (except 1942-1945 half dollars which are 40% silver for war nickels). Pennies are never silver.",
+    "silver_content": {
+      "dime": {
+        "years": "1796-1964 (most)",
+        "troy_oz": 0.0723,
+        "weight_grams": 2.5,
+        "diameter_mm": 17.91,
+        "description": "Smallest silver coin. Look for Mercury/Denis, Roosevelt, and Barber designs",
+        "value_note": "Even small, a bag of 100 dimes = 7.23 troy oz silver (~$180-200 melt value)"
+      },
+      "quarter": {
+        "years": "1796-1964 (most)",
+        "troy_oz": 0.1600,
+        "weight_grams": 6.25,
+        "diameter_mm": 24.26,
+        "description": "Look for Washington, Barber, and Seated Liberty designs",
+        "value_note": "Bag of 40 quarters = 6.4 troy oz silver"
+      },
+      "half_dollar": {
+        "years": "1794-1964 (90%), 1942-1945 (40% war)",
+        "troy_oz": 0.3616,
+        "weight_grams": 12.5,
+        "diameter_mm": 30.61,
+        "description": "Walking Liberty, Franklin, Kennedy designs",
+        "value_note": "Bag of 20 half dollars = 7.23 troy oz silver"
+      },
+      "dollar": {
+        "types": {
+          "morgan_dollar": {
+            "years": "1878-1904, 1921",
+            "troy_oz": 0.7734,
+            "weight_grams": 26.73,
+            "diameter_mm": 38.1,
+            "description": "Liberty head with eagle. Most collectible US silver dollar",
+            "value_note": "$20-$1,000+ depending on date, mint mark, and condition"
+          },
+          "peace_dollar": {
+            "years": "1921-1935, 1964",
+            "troy_oz": 0.7734,
+            "weight_grams": 26.73,
+            "description": "Liberty head facing forward with eagle on reverse",
+            "value_note": "$15-$200+ depending on date and condition"
+          },
+          "eisenhower_dollar": {
+            "years": "1971-1978",
+            "note": "Cupronickel clad (1971-1978). 1973-S silver proof exists",
+            "description": "Large dollar with Eisenhower portrait"
+          }
+        }
+      }
+    },
+    "identification_tips": [
+      "Check the date — pre-1965 = silver (mostly)",
+      "Look for mint marks (small letters near date): D, S, O, CC, W",
+      "Edge should be reeded (grooved), not smooth",
+      "Weight and diameter should match specifications",
+      "1943 silver pennies exist (extremely rare)",
+      "1942-1945 half dollars are 40% silver (war nickels)"
+    ]
+  },
+
+  "british_silver_coins": {
+    "crown": {
+      "description": "British crown = 5 shillings. Pre-1920 usually 92.5% silver",
+      "years_silver": "1819-1946 (mostly 92.5%)",
+      "weight_grams": 28.28,
+      "diameter_mm": 38.61,
+      "value_note": "$15-$100+ depending on year and condition"
+    },
+    "half_crown": {
+      "description": "British half crown = 2 shillings 6 pence",
+      "years_silver": "1551-1937 (92.5%), 1946-1967 (50%)",
+      "weight_grams": 14.14,
+      "diameter_mm": 30.23,
+      "value_note": "$8-$50 depending on year and condition"
+    },
+    "florin": {
+      "description": "British florin = 2 shillings",
+      "years_silver": "1849-1946 (92.5%), 1947-1968 (50%)",
+      "weight_grams": 11.31,
+      "value_note": "$5-$30 depending on year"
+    },
+    "shilling": {
+      "description": "British shilling = 12 pence",
+      "years_silver": "1816-1946 (92.5%), 1947-1968 (50%)",
+      "weight_grams": 5.66,
+      "value_note": "$3-$20 depending on year"
+    },
+    "sixpence": {
+      "description": "British sixpence",
+      "years_silver": "1551-1967 (varies by period)",
+      "weight_grams": 2.83,
+      "value_note": "$1-$10 depending on year"
+    }
+  },
+
+  "world_silver_coins": {
+    "canadian": {
+      "description": "Canadian silver dollars pre-1967 (80% silver)",
+      "silver_content": "0.675 troy oz (80% purity)"
+    },
+    "mexican": {
+      "description": "Mexican pesos/silver coins (86.8% or 90% silver)",
+      "note": "Common at US estate sales. Look for '868' or '900' marks"
+    },
+    "australian": {
+      "description": "Australian silver crowns and half crowns",
+      "silver_content": "92.5% for pre-1966"
+    },
+    "chinese": {
+      "description": "Chinese silver dollars (dragon dollars)",
+      "note": "Often found in estate sales with Asian heritage"
+    }
+  },
+
+  "coin_value_factors": [
+    "Date (older = generally more valuable)",
+    "Mint mark (S = San Francisco, D = Denver, CC = Carson City, O = New Orleans)",
+    "Condition (uncirculated vs circulated)",
+    "Rarity (low mintage years)",
+    "Eye appeal (luster, toning, surface quality)",
+    "Errors and varieties"
+  ],
+
+  "estate_sale_coin_tips": [
+    "Check any jar of mixed coins for pre-1965 dimes/quarters",
+    "Look for coin albums and collections",
+    "Morgan dollars are the most collectible — check dates",
+    "1943 silver pennies exist (extremely rare, worth $100,000+)",
+    "British crowns and half-crowns often overlooked",
+    "Canadian 80% silver dollars (pre-1967) are easy to miss",
+    "Bag rolls of silver coins are often sold as 'copper' or 'mixed coins'"
+  ]
+}
