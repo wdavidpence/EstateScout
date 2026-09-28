@@ -37,10 +37,10 @@ def build_feed() -> dict:
         western_source = "Yahoo Finance (unavailable)"
 
     shanghai_g = None
-    shanghai_source = "Shanghai Gold Exchange Ag(T+D), delayed quotation"
+    shanghai_source = "Shanghai Gold Exchange (unavailable)"
     if western is not None:
         try:
-            shanghai_g = price_service._sge_ag_td(price_service._get)
+            shanghai_g, shanghai_source = price_service._sge_ag_td(price_service._get)
         except Exception:
             status = "partial"
             shanghai_source = "Shanghai Gold Exchange (unavailable)"
