@@ -72,7 +72,7 @@ def delete_item(item_id):
 
 
 def format_item_for_display(item):
-    """Format an item for Telegram display."""
+    """Format an item for plain-text display."""
     lines = []
     lines.append(f"📦 **{item.get('type', 'Unknown').title()}**")
     lines.append(f"ID: {item.get('id', 'N/A')}")

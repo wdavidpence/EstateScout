@@ -34,12 +34,10 @@ class PriceServiceTests(unittest.TestCase):
             self.fail(f"Unexpected URL: {url}")
 
         def fetch_bytes(_url):
-            return b"<tr><td>Ag(T+D)</td><td>8,500.00</td></tr>"
+            return b"<table><tr><td>Ag(T+D)</td><td>8,500.00</td></tr></table>"
 
         with patch.dict("os.environ", {"ESTATESCOUT_METALS_API_KEY": ""}, clear=False):
             result = price_service._fetch_live(fetch_json, fetch_bytes)
-        self.assertIsNotNone(result)
-        assert result is not None
         self.assertEqual(result["status"], "delayed")
         self.assertEqual(result["western_usd_per_troy_oz"], 35.25)
         self.assertEqual(result["shanghai_cny_per_gram"], 8.5)
@@ -55,10 +53,25 @@ class PriceServiceTests(unittest.TestCase):
             b'  <td align="center" class="colorGreen">15580.0</td>\n'
             b'</tr>'
         )
-        self.assertAlmostEqual(price_service._sge_ag_td(lambda _url: body), 15.748, places=6)
+        price, source = price_service._sge_ag_td(lambda _url: body)
+        self.assertAlmostEqual(price, 15.748, places=6)
+        self.assertIn("delayed quotation", source)
 
-    def test_sge_parser_rejects_zero_quote(self):
-        body = b'<tr><td>Ag(T+D)</td><td>0.0</td></tr>'
+    def test_sge_zero_placeholders_fall_back_to_daily_page(self):
+        # Outside market hours the delayed page renders 0.0 placeholders; the
+        # daily quotation pages must be used instead, latest positive quote wins.
+        delayed = b'<tr><td>Ag(T+D)</td><td><span class="colorGreen">0.0</span></td></tr>'
+        daily = b"<tr><td>Ag(T+D)</td><td>15870.00</td><td>15925.00</td></tr>"
+
+        def fetch_bytes(url):
+            return delayed if "yshqbg" in url else daily
+
+        price, source = price_service._sge_ag_td(fetch_bytes)
+        self.assertAlmostEqual(price, 15.87, places=6)
+        self.assertIn("daily quotation", source)
+
+    def test_sge_parser_raises_when_no_positive_quote(self):
+        body = b"<tr><td>Ag(T+D)</td><td>0.0</td></tr>"
         with self.assertRaises(ValueError):
             price_service._sge_ag_td(lambda _url: body)
 

@@ -1,6 +1,7 @@
 """Verified silver-market feeds, conversion, and five-minute disk caching."""
 from __future__ import annotations
 
+import datetime
 import html
 import json
 import os
@@ -17,6 +18,7 @@ CACHE_TTL_SECONDS = 5 * 60
 DATA_DIR = Path(__file__).parent / "data"
 CACHE_FILE = DATA_DIR / "silver_prices.json"
 SGE_DELAYED_URL = "https://www.sge.com.cn/sjzx/yshqbg"
+SGE_DAILY_URL = "https://www.sge.com.cn/sjzx/quotation_daily_new"
 YAHOO_CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/{}?range=1d&interval=1m"
 
 
@@ -79,39 +81,74 @@ def _yahoo_comex(fetch_json: Callable[[str], Any]) -> tuple[float, float]:
     return _yahoo_chart_price("SI=F", fetch_json), _yahoo_chart_price("CNY=X", fetch_json)
 
 
-def _sge_ag_td(fetch_bytes: Callable[[str], bytes]) -> float:
-    body = html.unescape(fetch_bytes(SGE_DELAYED_URL).decode("utf-8", errors="replace"))
-    # SGE's delayed table lists Ag(T+D) as a CNY/kg quote. The price cell may be
-    # plain text or wrapped in a <span class="colorRed/ColorGreen"> tag, so parse
-    # the whole row and take the first number after the contract name.
-    match = re.search(r"Ag\s*\(T\+D\)(.*?)(?:</tr>|$)", body, re.I | re.S)
-    if not match:
-        raise ValueError("official SGE page did not contain Ag(T+D)")
-    cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", match.group(1), re.I | re.S)
-    if not cells:
-        raise ValueError("official SGE page contained no Ag(T+D) price cell")
-    price_cny_g = _extract_number(cells[0]) / 1000.0
-    if price_cny_g <= 0:
-        raise ValueError("official SGE page returned a non-positive Ag(T+D) quote")
-    return price_cny_g
+def _parse_sge_ag_rows(body: str) -> list[float]:
+    """All positive CNY/kg quotes found on an SGE page for the Ag(T+D) contract.
+
+    Rows list the contract name followed by numeric cells; the first cell after
+    the name is the latest quote. Zero/blank cells mean 'no quote' (market
+    closed or stale static page) and are skipped, never treated as a price.
+    """
+    quotes = []
+    for match in re.finditer(r"Ag\s*\(\s*T\+D\s*\)", body, re.I):
+        row = body[match.end():]
+        row = row.split("</tr>", 1)[0]
+        cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.I | re.S)
+        if not cells:
+            continue
+        try:
+            value = _extract_number(cells[0])
+        except ValueError:
+            continue
+        if value > 0:
+            quotes.append(value / 1000.0)
+    return quotes
 
 
-def _fetch_live(fetch_json: Callable[[str], Any] = _get_json, fetch_bytes: Callable[[str], bytes] = _get) -> dict[str, Any] | None:
+def _sge_ag_td(fetch_bytes: Callable[[str], bytes]) -> tuple[float, str]:
+    """Latest official SGE Ag(T+D) quote as (CNY per gram, source label).
+
+    Tries the delayed intraday page first; its static table renders 0.0 placeholders
+    outside market hours, so we fall back to the daily quotation pages over a recent
+    window and keep the highest positive quote found (latest trading day).
+    """
+    try:
+        delayed = _parse_sge_ag_rows(
+            html.unescape(fetch_bytes(SGE_DELAYED_URL).decode("utf-8", errors="replace"))
+        )
+        if delayed:
+            return max(delayed), "Shanghai Gold Exchange Ag(T+D), delayed quotation"
+    except (URLError, TimeoutError, OSError):
+        pass
+    window = [datetime.date.today() - datetime.timedelta(days=day) for day in range(10)]
+    daily: list[float] = []
+    for day in window:
+        url = f"{SGE_DAILY_URL}?start_date={day.isoformat()}&end_date={day.isoformat()}"
+        try:
+            daily.extend(
+                _parse_sge_ag_rows(html.unescape(fetch_bytes(url).decode("utf-8", errors="replace")))
+            )
+        except (URLError, TimeoutError, OSError):
+            continue
+        if daily:
+            break
+    if not daily:
+        raise ValueError("no positive Ag(T+D) quote on official SGE pages")
+    return max(daily), "Shanghai Gold Exchange Ag(T+D), daily quotation"
+
+
+def _fetch_live(fetch_json: Callable[[str], Any] = _get_json, fetch_bytes: Callable[[str], bytes] = _get) -> dict[str, Any]:
     metals = _metals_api(fetch_json)
     if metals is not None:
         western_usd_oz, usd_cny = metals
         western_source = "Metals-API"
         status = "live"
     else:
-        try:
-            western_usd_oz, usd_cny = _yahoo_comex(fetch_json)
-        except (ValueError, KeyError, TypeError):
-            return None
+        western_usd_oz, usd_cny = _yahoo_comex(fetch_json)
         western_source = "Yahoo Finance SI=F (COMEX futures, delayed)"
         status = "delayed"
     try:
-        shanghai_cny_g = _sge_ag_td(fetch_bytes)
-    except (ValueError, URLError, TimeoutError):
+        shanghai_cny_g, shanghai_source = _sge_ag_td(fetch_bytes)
+    except (ValueError, URLError, TimeoutError, OSError):
         return {
             "western_usd_per_troy_oz": western_usd_oz,
             "usd_cny": usd_cny,
@@ -128,7 +165,7 @@ def _fetch_live(fetch_json: Callable[[str], Any] = _get_json, fetch_bytes: Calla
         "usd_cny": usd_cny,
         "shanghai_usd_per_troy_oz": shanghai_usd_oz,
         "western_source": western_source,
-        "shanghai_source": "Shanghai Gold Exchange Ag(T+D), delayed quotation",
+        "shanghai_source": shanghai_source,
         "fetched_at": now,
         "status": status,
     }
