@@ -27,7 +27,9 @@ jobs:
         run: |
           rm -rf site
           mkdir -p site/feeds
-          cp index.html manifest.webmanifest sw.js site/
+          cp app/index.html site/index.html
+          cp -R app/js site/js
+          cp manifest.webmanifest sw.js site/
           cp -R data site/data
           cp -R training site/training
           cp public/feeds/silver_prices.json site/feeds/silver_prices.json

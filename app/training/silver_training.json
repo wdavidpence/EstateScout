@@ -1,0 +1,282 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-09-05",
+
+  "module_1_basic": {
+    "title": "Module 1: Basic Silver Identification",
+    "level": "Beginner",
+    "description": "Learn to tell solid silver from plated in 60 seconds. Perfect for estate sale floor.",
+    "lessons": [
+      {
+        "lesson_id": "1.1",
+        "title": "The Two Marks That Matter Most",
+        "content": "When you pick up any silver-looking item, look for ONE of these marks:\n\n**SOLID SILVER (WORTH $$$$):**\n- `925` — 92.5% silver (most common)\n- `STERLING` — American sterling\n- `800` or `835` — European silver\n- `Lion Passant` (walking lion) — British sterling\n\n**NOT SOLID SILVER (WORTH $):**\n- `EPNS` — Electroplated Nickel Silver (NOT silver)\n- `SILVER PLATED` or `SP` — Thin coating\n- `EP` — Electroplated\n- `A1` — American plated\n\n**Quick Rule:** If you see EPNS/Plated/EP/A1 — walk away. It's not solid silver.\nIf you see 925/Sterling/800 — it's solid silver. Check weight and condition.\n\n**Pro Tip:** EPNS items were popular 1840-1920. Old EPNS can still be collectible ($5-50), but it's NOT solid silver.",
+        "examples": [
+          {"item": "Teaspoon marked '925'", "verdict": "Solid sterling silver", "value": "$10-30 depending on maker"},
+          {"item": "Fork marked 'EPNS'", "verdict": "NOT solid silver", "value": "$1-5"},
+          {"item": "Bowl marked 'STERLING'", "verdict": "Solid sterling silver", "value": "$20-100+"},
+          {"item": "Tray marked 'SILVER PLATED'", "verdict": "NOT solid silver", "value": "$2-10"}
+        ]
+      },
+      {
+        "lesson_id": "1.2",
+        "title": "The Weight Test (60 Seconds)",
+        "content": "**Why it works:** Solid silver is dense and heavy. Plated items use thin silver over light base metal.\n\n**How to test:**\n1. Pick up the item — does it feel HEAVY for its size?\n2. Compare to a similar known item if possible\n3. Solid silver feels noticeably heavier\n\n**Weight Benchmarks:**\n- Teaspoon: Solid = 15-20g | Plated = 8-12g\n- Dinner fork: Solid = 25-35g | Plated = 15-20g\n- Soup spoon: Solid = 30-40g | Plated = 18-25g\n\n**Rule of thumb:** If it feels LIGHT, it's probably plated.\nIf it feels HEAVY, check for 925 mark — if present, it's solid.\n\n**Pro Tip:** Hold a teaspoon. If you can easily flick your wrist and it bounces, it's too light = plated.",
+        "examples": [
+          {"item": "Teaspoon weighs 18g", "verdict": "Likely solid silver (check for 925)"},
+          {"item": "Teaspoon weighs 10g", "verdict": "Likely plated (even if marked 925, could be fake)"},
+          {"item": "Fork weighs 30g", "verdict": "Likely solid silver"},
+          {"item": "Fork weighs 18g", "verdict": "Likely plated"}
+        ]
+      },
+      {
+        "lesson_id": "1.3",
+        "title": "The Magnet Test (Instant)",
+        "content": "**Why it works:** Silver is NOT magnetic. If a magnet sticks, there's steel inside = plated or fake.\n\n**How to test:**\n1. Bring a magnet close to the item\n2. If it ATTRACTS — NOT silver (steel core)\n3. If NO attraction — could be silver OR non-magnetic base metal\n\n**Important:** This test ONLY rules out steel. It doesn't prove silver.\n- Magnet sticks = NOT silver (plated or fake)\n- No stick = COULD be silver (check weight + marks)\n\n**Pro Tip:** Most estate sale items won't have magnets, but your phone case or keys can work in a pinch. Silver won't stick.\n\n**Common base metals:**\n- Steel — magnetic (sticks to magnet) = NOT silver\n- Nickel silver — non-magnetic (doesn't stick) = could be EPNS or solid\n- Brass — non-magnetic (doesn't stick) = could be plated or solid",
+        "examples": [
+          {"item": "Magnet sticks to item", "verdict": "NOT silver (steel core)"},
+          {"item": "Magnet doesn't stick", "verdict": "Could be silver — check weight + marks"},
+          {"item": "Magnet doesn't stick, feels light", "verdict": "Likely non-magnetic base metal (brass/nickel silver)"},
+          {"item": "Magnet doesn't stick, feels heavy", "verdict": "Likely silver — check for 925 mark"}
+        ]
+      },
+      {
+        "lesson_id": "1.4",
+        "title": "Wear Points (The Telltale Sign)",
+        "content": "**Why it works:** Silver plating wears off at high-contact areas, revealing the base metal underneath.\n\n**Where to look:**\n- Fork tines (tips wear fastest)\n- Back of spoon bowls\n- Knife blade edges\n- Handle ends and tips\n- Spoons where thumb rests\n\n**What you'll see:**\n- **Solid silver:** No color change at wear points. Uniform silver color everywhere\n- **Plated:** Yellow/golden or copper color showing through at wear points\n- **Silver wash:** Barely any silver — shows base metal immediately\n\n**Pro Tip:** Run your fingernail along the wear point. If you feel a ridge where silver ends and base metal begins, it's plated.\n\n**Red Flags:**\n- Yellow/gold color at fork tips = PLATED\n- Copper color showing through = PLATED\n- Bare metal spots = PLATED or silver wash\n- Uniform silver color everywhere = LIKELY SOLID",
+        "examples": [
+          {"item": "Fork tips show yellow color", "verdict": "PLATED (silver worn through)"},
+          {"item": "Spoon back shows copper color", "verdict": "PLATED"},
+          {"item": "Uniform silver, no wear color change", "verdict": "Likely SOLID (check weight)"},
+          {"item": "Bowl shows brass at rim", "verdict": "PLATED or silver wash"}
+        ]
+      },
+      {
+        "lesson_id": "1.5",
+        "title": "The 60-Second Estate Sale Checklist",
+        "content": "**When you pick up an item at an estate sale, do this in 60 seconds:**\n\n**STEP 1: Look for marks (10 sec)**\n- Find 925/Sterling/800 → SOLID SILVER ✓\n- Find EPNS/Plated/EP/A1 → NOT SOLID ✗\n- No marks? Go to Step 2\n\n**STEP 2: Check weight (10 sec)**\n- Feels heavy for size → Could be solid\n- Feels light → Probably plated\n\n**STEP 3: Check wear points (10 sec)**\n- Yellow/copper showing through → PLATED ✗\n- Uniform silver color → Could be solid ✓\n\n**STEP 4: Magnet test (10 sec)**\n- Magnet sticks → NOT silver ✗\n- No stick → Could be silver ✓\n\n**STEP 5: Make decision (20 sec)**\n- Solid silver + good condition → BUY\n- Plated but old/interesting → Maybe buy ($1-5)\n- Fake or modern reproduction → Walk away\n\n**Quick Reference Card:**\n```\n925 + Heavy + No wear color = SOLID SILVER ✓\nEPNS/Plated + Light + Yellow wear = PLATED ✗\nNo marks + Heavy + Uniform color = CHECK CAREFULLY\nMagnet sticks = NOT SILVER ✗\n```\n\n**Pro Tip:** At estate sales, focus on items that are HEAVY and have NO wear color showing. These are most likely solid silver.",
+        "examples": [
+          {"item": "925 + Heavy + No wear", "verdict": "SOLID SILVER — BUY"},
+          {"item": "EPNS + Light + Yellow wear", "verdict": "PLATED — WALK AWAY"},
+          {"item": "No marks + Heavy + Uniform", "verdict": "CHECK CAREFULLY — could be solid"},
+          {"item": "Magnet sticks", "verdict": "NOT SILVER — WALK AWAY"}
+        ]
+      }
+    ],
+    "quiz": {
+      "title": "Module 1 Quiz",
+      "questions": [
+        {"q": "You pick up a teaspoon. It's marked '925' and weighs 18g. What is it?", "a": "Solid sterling silver", "explanation": "925 mark + heavy weight = solid silver"},
+        {"q": "A fork is marked 'EPNS'. Is it solid silver?", "a": "No — EPNS means Electroplated Nickel Silver (NOT solid)", "explanation": "EPNS = plated, not solid silver"},
+        {"q": "You see yellow color showing through at fork tips. What does this mean?", "a": "Silver plating has worn through, revealing base metal", "explanation": "Yellow/gold wear points = plated"},
+        {"q": "A magnet sticks to an item. Is it silver?", "a": "No — silver is non-magnetic", "explanation": "Magnet sticking = steel core, not silver"},
+        {"q": "What's the weight of a solid silver teaspoon?", "a": "15-20 grams", "explanation": "Solid teaspoons weigh 15-20g. Plated weighs 8-12g"}
+      ]
+    }
+  },
+
+  "module_2_intermediate": {
+    "title": "Module 2: Intermediate Silver Identification",
+    "level": "Intermediate",
+    "description": "Learn to identify makers, understand British hallmarks, and spot reproductions.",
+    "lessons": [
+      {
+        "lesson_id": "2.1",
+        "title": "British Hallmarks Decoded",
+        "content": "**British silver has 4+ marks that tell you everything:**\n\n**1. Lion Passant (Walking Lion)** = 925 sterling silver\n- Most recognizable British mark\n- Lion shown walking, head facing left\n- Used since 1300s\n\n**2. Assay Office Mark** = Where it was tested\n- London: Anchor symbol\n- Birmingham: Anchor (different shield shape)\n- Sheffield: Rose symbol\n- Edinburgh: Castle symbol\n- Glasgow: Tree with three fish\n\n**3. Date Letter** = Year made\n- Small letter in shield/oval\n- Font style + shield shape = specific year\n- Each office has its own alphabet cycle\n- Example: Letter 'n' in square shield with pointed corners = Sheffield 1905\n\n**4. Maker's Mark** = Who made it\n- Two initials in shield/escutcheon\n- Example: 'PR' = Paul Revere, 'PS' = Paul Storr\n- Can be very valuable if famous maker\n\n**5. Duty Mark (1784-1890)** = Monarch profile\n- George III, William IV, or Victoria\n- Shows tax paid to Crown\n- Not found on items after 1890\n\n**Valuable Periods:**\n- Pre-1800 (Georgian) with assay marks\n- 1837-1901 (Victorian) with maker marks\n- Pieces with famous silversmith names",
+        "examples": [
+          {"item": "Lion passant + Anchor + Letter 'A' in pointed shield", "verdict": "London sterling, early 1700s"},
+          {"item": "Lion passant + Rose + Letter 'n' in square shield", "verdict": "Sheffield sterling, 1905"},
+          {"item": "PR monogram + Lion passant", "verdict": "Paul Revere piece — extremely valuable"},
+          {"item": "Victoria profile + Lion passant", "verdict": "British silver, 1837-1901 (Victorian era)"}
+        ]
+      },
+      {
+        "lesson_id": "2.2",
+        "title": "Famous American Silver Makers",
+        "content": "**These maker marks add significant value:**\n\n**Tiffany & Co.** (1837-present)\n- Mark: 'TIFFANY & CO.' with pattern number\n- Value: Extremely valuable. Museum quality.\n- Look for: Art Nouveau designs, high craftsmanship\n\n**Reed & Barton** (1824-2015)\n- Mark: 'RB' or 'Reed & Barton' with pattern number\n- Location: Taunton, Massachusetts\n- Value: Quality American silver. Sterling pieces valuable.\n- Note: Bankrupt 2015, but antique pieces still collectible\n\n**Gorham** (1831-2010)\n- Mark: 'GORHAM' with Greek key symbol or pattern number\n- Value: High-quality. Art Nouveau designs very collectible.\n- Note: Known for ornate, decorative pieces\n\n**International Silver Co.** (1870-1960s)\n- Mark: 'IC' or 'International' with crown\n- Value: Common but collectible. Quality silver plate and sterling.\n- Note: Merged several companies\n\n**Wm. Rogers & Co.** (1830-1960s)\n- Mark: 'WR & Co' or 'Rogers' with pattern\n- Value: Common silver plate. Some sterling pieces valuable.\n- Note: Check for 925 mark to confirm sterling\n\n**Towle Silver Co.** (1840-1970s)\n- Mark: 'Towle' with pattern number\n- Value: American silver plate and sterling\n\n**Oneida Silver Co.** (1890s-present)\n- Mark: 'Oneida' with pattern number\n- Value: Common American silver plate\n\n**Quick Rule:** If you see Tiffany, Gorham, or Reed & Barton with 925 mark — it's valuable solid silver. Check condition and pattern rarity.",
+        "examples": [
+          {"item": "925 + TIFFANY & CO. pattern 1890", "verdict": "Extremely valuable solid silver"},
+          {"item": "925 + GORHAM pattern 1920", "verdict": "Valuable solid silver (Art Deco period)"},
+          {"item": "925 + RB pattern 1940", "verdict": "Quality American sterling"},
+          {"item": "EPNS + Rogers pattern", "verdict": "Silver plate (not solid) — lower value"}
+        ]
+      },
+      {
+        "lesson_id": "2.3",
+        "title": "Spotting Reproductions and Fakes",
+        "content": "**Modern reproductions are common. Here's how to spot them:**\n\n**1. Too Perfect Condition**\n- Antique items should show SOME wear\n- Perfect condition + shiny = likely reproduction\n- Exception: Items stored in boxes for decades\n\n**2. Modern Font Styles**\n- Antique items have period-appropriate stamping\n- Clean, machine-made fonts on 'antique' = reproduction\n- Hand-stamped marks have slight variations\n\n**3. Wrong Hallmark Combinations**\n- Lion passant + 925 mark = WRONG (lion is British, 925 is American/European)\n- Check that marks match the period and region\n\n**4. Weight Doesn't Match**\n- Heavy item marked '925' but feels light = fake\n- Solid silver has consistent weight for size\n\n**5. Wear Points Don't Match Age**\n- 'Antique' item with no wear = suspicious\n- Real antique flatware shows wear on fork tines, spoon backs\n\n**6. Machine-Made Uniformity**\n- Real hallmarks have slight variations (hand-stamped)\n- Perfectly identical marks on multiple items = machine-made reproduction\n\n**7. Wrong Materials**\n- Brass stamped with fake 925 marks\n- Nickel silver (non-magnetic) can fool magnet test\n- Always check weight + wear points too\n\n**Red Flags Checklist:**\n- [ ] Perfect condition with no wear?\n- [ ] Modern font styles on 'antique' item?\n- [ ] Hallmark combinations that don't match period?\n- [ ] Weight feels wrong for size?\n- [ ] Marks too perfect/identical?\n\n**If 2+ red flags = likely reproduction. Walk away.**",
+        "examples": [
+          {"item": "Perfect condition, modern font, no wear", "verdict": "LIKELY REPRODUCTION"},
+          {"item": "Lion passant + 925 mark together", "verdict": "WRONG COMBINATION — fake"},
+          {"item": "Heavy item, no marks, uniform silver", "verdict": "CHECK CAREFULLY — could be unmarked solid"},
+          {"item": "Slight variations in hallmarks, some wear", "verdict": "LIKELY AUTHENTIC antique"}
+        ]
+      },
+      {
+        "lesson_id": "2.4",
+        "title": "Old Sheffield Plate vs Electroplate",
+        "content": "**Old Sheffield Plate (OSP) was made 1740s-1840s. It's NOT electroplated.**\n\n**How OSP was made:**\n- Silver and copper sheets fused together under heat/pressure\n- Invented by Thomas Boulsover (1740s)\n- Replaced by electroplating ~1840\n\n**How to identify OSP:**\n\n**1. Copper Bleeding**\n- Silver and copper fused, not plated\n- At wear points, copper 'bleeds' through (reddish color)\n- Different from plated (which shows brass/copper base)\n\n**2. Bluish Cast**\n- OSP has distinctive 'very faintly bluish lustre'\n- Electroplate has brilliant, hard color\n- OSP is harder than electroplated silver\n\n**3. Soldered Joints**\n- OSP made from pre-plated metal sheet/wire\n- Look for soldered joints (hallmark of OSP)\n- Electroplate constructed in base metal then plated\n\n**4. No EP Marks**\n- OSP never marked 'EP' or 'EPNS'\n- If you see EP/EPNS, it's electroplated (post-1840)\n\n**5. Age Indicators**\n- OSP items pre-1840 (check for period-appropriate marks)\n- Electroplate post-1840\n\n**Value:**\n- Genuine OSP pre-1800 can be VERY valuable ($100-500+)\n- Collectors seek genuine OSP\n- Many electroplate reproductions exist — verify carefully\n\n**Quick Test:**\n```\nCopper bleeding + Bluish cast + Soldered joints = OSP ✓\nEP/EPNS marks + Brilliant color + No soldering = Electroplate ✗\n```",
+        "examples": [
+          {"item": "Copper bleeding, bluish cast, pre-1800", "verdict": "Genuine Old Sheffield Plate — valuable"},
+          {"item": "EPNS marks, brilliant color", "verdict": "Electroplate (post-1840) — lower value"},
+          {"item": "Soldered joints, no EP marks", "verdict": "Likely OSP — check for copper bleeding"},
+          {"item": "Perfect condition, no wear, EP marks", "verdict": "Electroplate reproduction"}
+        ]
+      },
+      {
+        "lesson_id": "2.5",
+        "title": "European Silver Marks Quick Guide",
+        "content": "**Different countries have different hallmark systems:**\n\n**French Silver (Post-1838):**\n- Minerva head (goddess in profile) = solid silver\n- Numeral 1 = 950 fineness (95% silver)\n- Numeral 2 = 800 fineness (80% silver)\n- Maker's mark in lozenge shape with initials\n- Export marks: Mercury head with number (920, 840, 750)\n\n**German Silver:**\n- Cross pattee (decorated cross) = silver hallmark\n- 800 or 925 fineness marks common\n- Maker's mark usually initials in shield\n\n**Swiss Silver:**\n- Maiden's head = Swiss assay mark\n- 800 or 925 fineness marks\n\n**Austria-Hungary (1867-1933):**\n- Crowned Diana head within geometric frame\n- Frame shape indicates fineness:\n  - Concave lines = 140 per line\n  - Straight lines = 150 per line\n  - Convex lines = 160 per line\n- Example: 5-petal flower frame = 5×160 = 800 fineness\n- Hexagonal frame = 900 fine silver\n\n**Japanese Silver (Post-1929):**\n- Japan Mint assays and hallmarks\n- Mark: Figure of Japanese flag (rising sun)\n- Fineness marks: 800, 900, 950\n\n**Quick Identification:**\n- Minerva head = French\n- Cross pattee = German\n- Diana head + frame = Austria-Hungary\n- Rising sun = Japanese",
+        "examples": [
+          {"item": "Minerva head + numeral 2", "verdict": "French silver, 800 fineness"},
+          {"item": "Cross pattee + 800", "verdict": "German silver, 80% purity"},
+          {"item": "Diana head in hexagonal frame", "verdict": "Austria-Hungary, 900 fineness"},
+          {"item": "Rising sun symbol", "verdict": "Japanese silver (post-1929)"}
+        ]
+      }
+    ],
+    "quiz": {
+      "title": "Module 2 Quiz",
+      "questions": [
+        {"q": "What does the Lion Passant mark indicate?", "a": "British sterling silver (925 purity)", "explanation": "Lion passant = walking lion = British sterling standard"},
+        {"q": "You see 'TIFFANY & CO.' and '925' on a bowl. What is it?", "a": "Valuable solid sterling silver made by Tiffany", "explanation": "Tiffany is a famous maker, 925 confirms solid silver"},
+        {"q": "An item has perfect condition, modern fonts, and no wear. What might it be?", "a": "Likely a modern reproduction", "explanation": "Antique items should show some wear; perfect condition + modern fonts = suspicious"},
+        {"q": "What's the difference between OSP and electroplate?", "a": "OSP is fused silver/copper (1740s-1840s), electroplate is plated (post-1840)", "explanation": "OSP shows copper bleeding and bluish cast; electroplate has EP marks"},
+        {"q": "What does a Minerva head mark indicate?", "a": "French silver (post-1838)", "explanation": "Minerva head = French assay mark for solid silver"}
+      ]
+    }
+  },
+
+  "module_3_advanced": {
+    "title": "Module 3: Advanced Silver Identification",
+    "level": "Advanced",
+    "description": "Master rare hallmarks, date letter decoding, and high-value identification.",
+    "lessons": [
+      {
+        "lesson_id": "3.1",
+        "title": "British Date Letter System",
+        "content": "**Date letters tell you EXACTLY when a British silver piece was made.**\n\n**How it works:**\n- Each assay office has its own alphabet cycle\n- Letter style (font, case, shield shape) changes each decade\n- Same letter in different shields = different years\n\n**Example: Sheffield Date Letters**\n- Square shield, pointed corners, lowercase 'n' = 1905\n- Oval shield, rounded corners, uppercase 'N' = 1895\n- Each decade has unique shield shape + font combination\n\n**Example: London Date Letters**\n- Different shield shapes for each period\n- Font styles change (serif, sans-serif, italic)\n- Letter case changes (upper/lower) per decade\n\n**How to read:**\n1. Find the date letter (small, separate from other marks)\n2. Note the shield shape around it\n3. Note the font style (serif, italic, block)\n4. Match to assay office calendar\n\n**Valuable Periods:**\n- Pre-1700 (very rare, extremely valuable)\n- 1700-1800 (Georgian era, highly collectible)\n- 1837-1901 (Victorian era, popular with collectors)\n\n**Pro Tips:**\n- Date letters are usually the 3rd or 4th mark\n- They're smaller than other hallmarks\n- Look for them on the back/underside of items\n- Online databases can help identify specific years",
+        "examples": [
+          {"item": "Sheffield: Square shield, lowercase 'n'", "verdict": "Made in 1905"},
+          {"item": "London: Oval shield, uppercase 'A'", "verdict": "Made in early 1700s (specific year depends on shield)"},
+          {"item": "Birmingham: Rounded shield, lowercase 'b'", "verdict": "Made in specific year per Birmingham calendar"},
+          {"item": "Edinburgh: Castle mark + date letter", "verdict": "Scottish silver, date indicates year"}
+        ]
+      },
+      {
+        "lesson_id": "3.2",
+        "title": "Rare and Valuable Hallmarks",
+        "content": "**These rare marks indicate HIGH VALUE:**\n\n**Pre-1700 British Silver:**\n- Very rare, museum quality\n- Often just maker's mark + leopard head (pre-Lion Passant)\n- Values: $1,000-$50,000+ depending on maker and condition\n\n**Paul de Lamerie (1689-1751):**\n- Most famous English silversmith\n- Mark: 'PL' monogram in shield\n- Values: $5,000-$100,000+ for holloware\n- Known for ornate, decorative pieces\n\n**Paul Revere (1732-1808):**\n- American colonial silversmith\n- Mark: 'PR' monogram\n- Values: $10,000-$500,000+ for significant pieces\n- Colonial American silver is extremely collectible\n\n**Paul Storr (1771-1844):**\n- British silversmith, Victorian era\n- Mark: 'PS' or full name\n- Values: $500-$10,000+ depending on piece\n- Known for elegant, refined designs\n\n**Thomas Kirk (1765-1830):**\n- British Georgian silversmith\n- Mark: 'TK' monogram\n- Values: $300-$5,000+ for quality pieces\n\n**Georgian Period (1714-1830):**\n- Highly collectible\n- Look for: Lion passant + date letter + maker mark\n- Values: $200-$5,000+ depending on condition and maker\n\n**Victorian Period (1837-1901):**\n- Popular with collectors\n- Look for: Victoria duty mark (1784-1890)\n- Values: $50-$2,000+ depending on maker and condition\n\n**Britannia Standard (958):**\n- Higher purity than sterling (95.8% vs 92.5%)\n- Obligatory in Britain 1697-1720\n- Optional standard thereafter\n- Values: Premium over sterling due to higher purity and rarity",
+        "examples": [
+          {"item": "PL monogram + Lion passant, pre-1750", "verdict": "Paul de Lamerie piece — extremely valuable"},
+          {"item": "PR monogram, colonial period", "verdict": "Paul Revere — museum quality"},
+          {"item": "PS monogram + Victoria duty mark", "verdict": "Paul Storr, Victorian era — valuable"},
+          {"item": "958 mark + Britannia figure", "verdict": "Britannia standard — rare and valuable"}
+        ]
+      },
+      {
+        "lesson_id": "3.3",
+        "title": "Weighted Silver and Advanced Fakes",
+        "content": "**Advanced fakes require careful inspection:**\n\n**Weighted Silver:**\n- Silver shell filled with lead or other heavy metal\n- Designed to SIMULATE solid silver weight\n- X-ray required for definitive detection\n- Sound test: Hollow sound when tapped = possible weighted silver\n- Temperature test: Lead core may feel different temperature\n\n**Sterling Over Base:**\n- Solid silver top over base metal bottom\n- Common in bowls and large vessels\n- Check INSIDE the bowl — if different mark or no mark, may be silver top only\n- Value: Less than full solid silver\n\n**Silver Wash:**\n- Extremely thin silver coating (much thinner than plate)\n- Wears off quickly with use\n- Shows base metal at ANY wear point\n- Very light weight\n- Low value ($1-5)\n\n**Base Metal with Fake Marks:**\n- Brass or nickel silver stamped with fake 925 marks\n- Magnet test won't catch (nickel silver is non-magnetic)\n- Must check weight + wear points\n- Wear points show brass/copper color\n\n**Reproductions of Famous Patterns:**\n- Modern items made to look like antique Tiffany/Gorham\n- Check: Weight, mark quality, wear patterns, period accuracy\n- Modern reproductions often have cleaner, sharper marks\n- Antique pieces show slight variations (hand-stamped)\n\n**Advanced Detection Checklist:**\n1. Weight matches expected for size?\n2. Wear points show uniform silver (not base metal)?\n3. Marks are period-appropriate (font, style, combination)?\n4. No hollow sound when tapped?\n5. Temperature feels consistent throughout?\n6. Inside shows same silver as outside?\n\n**If 3+ checks fail = likely fake or reproduction.**",
+        "examples": [
+          {"item": "Heavy item, hollow sound when tapped", "verdict": "LIKELY WEIGHTED SILVER"},
+          {"item": "Silver top, base metal bottom (check inside)", "verdict": "STERLING OVER BASE — less valuable"},
+          {"item": "Shows base metal at slightest wear", "verdict": "SILVER WASH — very low value"},
+          {"item": "Perfect marks, no wear, modern feel", "verdict": "LIKELY REPRODUCTION"}
+        ]
+      },
+      {
+        "lesson_id": "3.4",
+        "title": "Coin Silver and US Silver Coins",
+        "content": "**US silver coins are a major source of silver at estate sales:**\n\n**Pre-1965 US Coins (90% Silver):**\n- Dimes (pre-1965): 0.0723 troy oz silver each\n- Quarters (pre-1965): 0.1600 troy oz silver each\n- Half dollars (pre-1965): 0.3616 troy oz silver each\n- Dollars (various): 0.7734 troy oz silver each\n\n**Identification:**\n- Check date — pre-1965 = silver (mostly)\n- Look for mint marks (small letters near date)\n- Edge should be reeded (grooved), not smooth\n- Weight and size match specifications\n\n**Morgan Dollars (1878-1921):**\n- Most collectible US silver dollar\n- 0.7734 troy oz silver\n- Values: $20-$1,000+ depending on condition and date\n- Look for: 'E PLURIBUS UNUM', liberty head design\n\n**Barber Dimes/Quarters (1892-1916):**\n- 90% silver\n- Collectible, especially in good condition\n- Values: $5-$100+ depending on date and condition\n\n**Mercury Dimes (1916-1945):**\n- 90% silver\n- Popular with collectors\n- Values: $3-$50+ depending on date and condition\n\n**Pre-1837 'Coin Silver':**\n- American standard before 1868\n- Made from melted coins (90.3% silver)\n- Marked 'COIN SILVER' or 'PURE COIN'\n- Sometimes just '903'\n- Historically significant\n- Values: $20-$500+ depending on item and condition\n\n**Quick Rule:** Any US coin before 1965 (except pennies) is likely silver. Check date first!",
+        "examples": [
+          {"item": "1943 quarter", "verdict": "90% silver (0.16 troy oz)"},
+          {"item": "1955 dime", "verdict": "90% silver (0.0723 troy oz)"},
+          {"item": "1895 Morgan dollar", "verdict": "90% silver, collectible ($50-$500+)"},
+          {"item": "1970 quarter", "verdict": "NOT silver (clad composition)"},
+          {"item": "Bowl marked 'COIN SILVER'", "verdict": "Pre-1837 American standard (90.3% silver)"}
+        ]
+      },
+      {
+        "lesson_id": "3.5",
+        "title": "Advanced Pattern Identification",
+        "content": "**Pattern numbers help identify value and rarity:**\n\n**How Patterns Work:**\n- Each silver company created multiple patterns (designs)\n- Pattern numbers help identify specific designs\n- Some patterns are rarer/more valuable than others\n\n**Reed & Barton Patterns:**\n- Many sterling and silverplate patterns\n- Pattern numbers on underside or back\n- Pre-1920 patterns generally more valuable\n- Art Nouveau/Arts & Crafts patterns highly collectible\n\n**Tiffany Patterns:**\n- Extremely valuable, especially pre-1920\n- Pattern numbers help identify rarity\n- Art Nouveau designs (Louis Comfort Tiffany era) most valuable\n- Some patterns produced in limited quantities\n\n**Gorham Patterns:**\n- Art Nouveau (Chrysanthemum, Greek Key) highly collectible\n- Arts & Crafts patterns valuable\n- Pattern numbers on underside\n- Pre-1920 pieces generally more valuable\n\n**International Silver Patterns:**\n- Many patterns produced\n- Check for 925 mark to confirm sterling\n- Some patterns rarer than others\n- Pre-1940 patterns generally more collectible\n\n**How to Research Patterns:**\n1. Find pattern number on item\n2. Search online: '[Maker] [Pattern Number]' \n3. Check condition, rarity, recent sales\n4. Note: Pattern alone doesn't indicate silver content — always check for 925 mark\n\n**Value Factors:**\n- Pre-1920 patterns generally more valuable\n- Art Nouveau/Arts & Crafts periods premium\n- Complete services (12+ place settings) worth more than individual pieces\n- Matching sugar/cream sets worth more than single items\n- Rare patterns command premium prices",
+        "examples": [
+          {"item": "Tiffany Art Nouveau pattern, pre-1920", "verdict": "Extremely valuable — museum quality"},
+          {"item": "Gorham Greek Key pattern, 1905", "verdict": "Valuable Art Nouveau piece"},
+          {"item": "Reed & Barton pattern 2890, 1940", "verdict": "Collectible mid-century pattern"},
+          {"item": "International Silver pattern, post-1960", "verdict": "Common pattern — lower collectible value"}
+        ]
+      }
+    ],
+    "quiz": {
+      "title": "Module 3 Quiz",
+      "questions": [
+        {"q": "What does a date letter in a shield indicate on British silver?", "a": "The exact year the piece was made", "explanation": "Date letters indicate specific year, font style + shield shape = unique combination per decade"},
+        {"q": "You find a piece with 'PL' monogram and Lion passant. What is it?", "a": "Paul de Lamerie piece — extremely valuable", "explanation": "PL = Paul de Lamerie, most famous English silversmith"},
+        {"q": "An item feels heavy but makes a hollow sound when tapped. What might it be?", "a": "Likely weighted silver (silver shell filled with lead)", "explanation": "Weighted silver simulates solid weight but has hollow sound"},
+        {"q": "What's the silver content of a pre-1965 US quarter?", "a": "0.1600 troy oz (90% silver)", "explanation": "Pre-1965 US dimes/quarters/half dollars are 90% silver"},
+        {"q": "Why are Art Nouveau patterns valuable?", "a": "They're from early 1900s, highly decorative, often produced in limited quantities", "explanation": "Art Nouveau period (1890-1910) patterns are rare and collectible"}
+      ]
+    }
+  },
+
+  "module_4_practical": {
+    "title": "Module 4: Estate Sale Floor Practice",
+    "level": "Applied",
+    "description": "Real-world scenarios and quick decision-making for estate sales.",
+    "lessons": [
+      {
+        "lesson_id": "4.1",
+        "title": "The 5-Item Estate Sale Drill",
+        "content": "**Practice this drill at every estate sale:**\n\n**Item 1: Teaspoon in drawer**\n- Check for 925 mark\n- Weigh it (15-20g = solid)\n- Check wear points (no yellow/copper = good)\n- Decision: BUY if solid + good condition\n\n**Item 2: Fork in silverware chest**\n- Look for maker marks (Tiffany, Gorham, RB)\n- Check weight (25-35g = solid)\n- Inspect tines for wear color\n- Decision: BUY if famous maker + solid\n\n**Item 3: Bowl on shelf**\n- Check inside AND outside for marks\n- Look for 'STERLING' or '925'\n- Check weight (300g+ = likely solid)\n- Decision: BUY if solid + no damage\n\n**Item 4: Tray in cabinet**\n- Look for assay marks (British) or maker marks\n- Check for copper bleeding (OSP?)\n- Weight test (>500g = likely solid if marked)\n- Decision: BUY if rare mark or OSP\n\n**Item 5: Coin collection**\n- Check dates (pre-1965 = silver)\n- Look for mint marks\n- Count total silver content\n- Decision: BUY if pre-1965 coins in good condition\n\n**Quick Decision Matrix:**\n```\nSOLID SILVER + Good condition = BUY ($$$$\nSOLID SILVER + Damage/repair = CONSIDER ($$\nPLATED + Old/interesting = MAYBE ($)\nPLATED + Modern reproduction = WALK AWAY\nFAKE/FORGERY = WALK AWAY\n```\n\n**Pro Tips:**\n- Focus on HEAVY items with NO wear color showing\n- Check for famous maker marks (Tiffany, Gorham, RB)\n- Look for British assay marks (Lion Passant = valuable)\n- Pre-1965 coins are always silver\n- When in doubt, put it back and come back later",
+        "examples": [
+          {"item": "Heavy teaspoon, 925 mark, no wear", "verdict": "BUY — solid sterling"},
+          {"item": "Fork with Tiffany mark, 925", "verdict": "BUY — valuable maker mark"},
+          {"item": "Bowl with EPNS mark", "verdict": "WALK AWAY — not solid silver"},
+          {"item": "1943 quarter in jar", "verdict": "BUY — 0.16 troy oz silver"},
+          {"item": "Tray with Lion Passant, pre-1900", "verdict": "BUY — British sterling, valuable"}
+        ]
+      },
+      {
+        "lesson_id": "4.2",
+        "title": "Common Estate Sale Silver Scenarios",
+        "content": "**Scenario 1: Drawer full of mixed flatware**\n- Sort by weight (heavy = likely solid)\n- Check each for 925/Sterling mark\n- Separate EPNS/Plated from solid\n- Count how many are solid vs plated\n- Decision: Buy lot if 50%+ solid silver\n\n**Scenario 2: Silverware service for 12**\n- Check if complete (forks, spoons, knives)\n- Look for pattern number\n- Verify all pieces are solid (925 mark on each)\n- Check for missing pieces\n- Decision: Complete service worth 2-3x individual pieces\n\n**Scenario 3: Bowl with no marks**\n- Weight test (heavy = could be solid)\n- Check wear points (uniform silver = good sign)\n- Magnet test (no stick = could be silver)\n- Check inside for different marks\n- Decision: If heavy + uniform + no magnet = likely solid, buy\n\n**Scenario 4: Candlesticks (single vs pair)**\n- PAIRS are essential for value\n- Single candlestick = low value ($5-20)\n- Pair of solid silver = valuable ($100-500+)\n- Check both for matching marks\n- Decision: Only buy pairs of solid silver\n\n**Scenario 5: Jewelry box with mixed items**\n- Check each for 925 mark\n- Weight test (heavy = likely solid)\n- Look for maker marks\n- Separate plated from solid\n- Decision: Buy lot if 30%+ solid silver pieces\n\n**Scenario 6: Coin collection in album**\n- Check dates (pre-1965 = silver)\n- Count total silver content\n- Note rare dates/mint marks\n- Decision: Buy if mostly pre-1965 coins\n\n**Scenario 7: Ornate decorative piece**\n- Check for British assay marks (Lion Passant)\n- Look for maker marks\n- Weight test\n- Check condition (damage reduces value significantly)\n- Decision: British sterling with assay marks = valuable\n\n**Golden Rules:**\n1. Heavy + No wear color + 925 mark = SOLID SILVER\n2. Pairs > Singles (candlesticks, etc.)\n3. Complete services > Individual pieces\n4. Pre-1965 coins = always silver\n5. When in doubt, put it back",
+        "examples": [
+          {"item": "Drawer: 6 pieces, 4 marked 925", "verdict": "BUY — 67% solid silver"},
+          {"item": "Service for 12, all marked 925", "verdict": "BUY — complete service valuable"},
+          {"item": "Single candlestick, 925 mark", "verdict": "CONSIDER — low value alone"},
+          {"item": "Pair candlesticks, 925 mark", "verdict": "BUY — pairs valuable"},
+          {"item": "1940s coin album, mostly pre-1965", "verdict": "BUY — silver content adds up"}
+        ]
+      }
+    ],
+    "quiz": {
+      "title": "Module 4 Quiz",
+      "questions": [
+        {"q": "You find a drawer with 10 pieces of flatware. 6 are marked 925, 4 are EPNS. Should you buy the lot?", "a": "Yes — 60% is solid silver, good value", "explanation": "Majority solid silver makes the lot worthwhile"},
+        {"q": "You see a single candlestick marked 925. Should you buy it?", "a": "Consider it, but pairs are much more valuable", "explanation": "Single candlesticks have low value; pairs command premium"},
+        {"q": "A bowl has no marks but feels very heavy. What should you do?", "a": "Check wear points and magnet test — if uniform silver + no stick, likely solid", "explanation": "Heavy weight + uniform color + non-magnetic = likely solid silver"},
+        {"q": "You find a 1950 quarter. Is it silver?", "a": "Yes — pre-1965 US quarters are 90% silver", "explanation": "Pre-1965 US dimes/quarters/half dollars are 90% silver"},
+        {"q": "What's the golden rule for estate sale silver?", "a": "Heavy + No wear color + 925 mark = Solid silver", "explanation": "These three indicators together strongly suggest solid silver"}
+      ]
+    }
+  },
+
+  "progression_path": {
+    "description": "Recommended learning path through modules",
+    "steps": [
+      {"step": 1, "module": "Module 1: Basic", "time_estimate": "30 minutes", "prerequisite": "None"},
+      {"step": 2, "module": "Module 2: Intermediate", "time_estimate": "45 minutes", "prerequisite": "Complete Module 1 quiz (70%+)"},
+      {"step": 3, "module": "Module 3: Advanced", "time_estimate": "60 minutes", "prerequisite": "Complete Module 2 quiz (70%+)"},
+      {"step": 4, "module": "Module 4: Practical", "time_estimate": "30 minutes", "prerequisite": "Complete Module 3 quiz (70%+)"}
+    ],
+    "completion_criteria": {
+      "module_1": "Score 70%+ on Module 1 quiz",
+      "module_2": "Score 70%+ on Module 2 quiz",
+      "module_3": "Score 70%+ on Module 3 quiz",
+      "module_4": "Score 70%+ on Module 4 quiz"
+    }
+  }
+}

@@ -21,15 +21,9 @@ jobs:
         run: python -m pip install pytest
       - name: Run Python tests
         run: python -m pytest -q
-      - name: Extract and validate inline PWA JavaScript
+      - name: Validate JavaScript
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          import re
-          html = Path('index.html').read_text(encoding='utf-8')
-          Path('/tmp/estatescout-inline.js').write_text('\n'.join(re.findall(r'<script>(.*?)</script>', html, re.S)), encoding='utf-8')
-          PY
-          node --check /tmp/estatescout-inline.js
+          node --check app/js/main.js
           node --check sw.js
       - name: Reject whitespace errors
         run: git diff --check HEAD~1 HEAD

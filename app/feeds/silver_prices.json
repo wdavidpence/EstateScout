@@ -1,0 +1,11 @@
+{
+  "western_usd_per_troy_oz": 61.1,
+  "usd_cny": 6.7098,
+  "western_source": "Yahoo Finance SI=F (COMEX futures, delayed)",
+  "shanghai_source": "Shanghai Gold Exchange Ag(T+D), delayed quotation",
+  "fetched_at": 1790641025,
+  "status": "delayed",
+  "deployment": "github-pages",
+  "shanghai_cny_per_gram": 14.893,
+  "shanghai_usd_per_troy_oz": 69.03694297630331
+}
