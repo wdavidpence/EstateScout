@@ -223,8 +223,8 @@ def analyze_image(data_url: str, note: str = "",
                   request_fn=codex_request) -> dict[str, Any]:
     """Send one image (+optional note) via the Codex backend; return
     the sanitized analysis. Refreshes the OAuth token once on 401."""
+    payload = build_payload(data_url, note)  # validates data URL first
     cfg = load_codex_config()
-    payload = build_payload(data_url, note)
     url = cfg["base_url"] + "/responses"
     try:
         content = request_fn(url, payload, cfg["access_token"])
