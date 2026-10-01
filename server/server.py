@@ -30,7 +30,7 @@ import price_service  # noqa: E402
 import collection  # noqa: E402
 
 APP_DIR = ROOT / "app"
-MODEL = "Qwen3.8-Flash-Next-oQ4e-mtp"
+MODEL = "mtplx-flash-next-bare-speed"
 MIME = {
     ".html": "text/html; charset=utf-8",
     ".js": "text/javascript; charset=utf-8",

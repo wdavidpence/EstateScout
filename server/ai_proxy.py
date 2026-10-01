@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Any
 from urllib.request import Request, urlopen
 
-OMLX_SETTINGS = Path.home() / ".omlx" / "settings.json"
+DEV_CONFIG = Path(__file__).resolve().parent / "dev-config.json"
 MAX_CIRCLES = 8
 
 SYSTEM_PROMPT = """You are EstateScout, an estate-auction assistant for silver, \
@@ -53,16 +53,19 @@ class ProxyError(RuntimeError):
     pass
 
 
-def load_omlx_config(path: Path = OMLX_SETTINGS) -> dict[str, str]:
+def load_dev_config(path: Path = DEV_CONFIG) -> dict[str, str]:
+    """Read the proof-phase local endpoint config (base_url, api_key, model).
+
+    Proof phase: MTPLX local server per user approval (option 1, 2026-09-30).
+    Never commit real paid-API keys here; store builds use a hosted backend.
+    """
     data = json.loads(path.read_text(encoding="utf-8"))
-    host = data.get("server", {}).get("host", "127.0.0.1")
-    port = data.get("server", {}).get("port", 8000)
-    key = data.get("auth", {}).get("api_key", "")
+    base = data["base_url"]
+    key = data["api_key"]
+    model = data.get("model", "Qwen3.8-Flash-Next-MTPLX-Bare-Speed")
     if not key:
-        raise ProxyError("no api key in oMLX settings")
-    base = "http://127.0.0.1:%s" % port if host in ("0.0.0.0", "::", "*") \
-        else "http://%s:%s" % (host, port)
-    return {"base_url": base, "api_key": key}
+        raise ProxyError("no api key in dev config")
+    return {"base_url": base, "api_key": key, "model": model}
 
 
 def _clip(value: Any) -> float | None:
@@ -170,7 +173,7 @@ def analyze_image(data_url: str, note: str = "",
         "response_format": {"type": "json_object"},
     }
 
-    cfg = load_omlx_config()
+    cfg = load_dev_config()
     reply = request_fn(cfg["base_url"] + "/v1/chat/completions", payload, cfg["api_key"])
 
     try:
@@ -183,7 +186,7 @@ def analyze_image(data_url: str, note: str = "",
 def health(model: str = "Qwen3.8-Flash-Next-oQ4e-mtp") -> dict[str, Any]:
     """Report whether the local model endpoint answers and the model is loaded."""
     try:
-        cfg = load_omlx_config()
+        cfg = load_dev_config()
         req = Request(cfg["base_url"] + "/v1/models",
                       headers={"Authorization": "Bearer " + cfg["api_key"]})
         with urlopen(req, timeout=10) as resp:

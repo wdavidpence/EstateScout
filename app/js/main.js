@@ -910,7 +910,7 @@ async function refreshPriceWidget() {
 
 // ── Shared API / Offline Sync ─────────────────────────────────────────
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
-const ESTATESCOUT_API = localStorage.getItem('estatescout_api') || '';
+const ESTATESCOUT_API = localStorage.getItem('estatescout_api') || '/api';
 const OUTBOX_KEY = 'estatescout_outbox';
 function queueApiWrite(path, payload, method = 'POST') {
   const outbox = JSON.parse(localStorage.getItem(OUTBOX_KEY) || '[]');
