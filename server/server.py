@@ -20,7 +20,7 @@ import re
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -52,6 +52,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def _serve_static(self, path: str) -> None:
         rel = "index.html" if path in ("/", "/index.html") else path.lstrip("/")
+        rel = unquote(rel)  # percent-decode so non-ASCII asset names resolve
         target = (APP_DIR / rel).resolve()
         if not str(target).startswith(str(APP_DIR.resolve())) or not target.is_file():
             return self._json(404, {"error": "not found"})

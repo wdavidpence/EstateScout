@@ -751,7 +751,13 @@ const modules = {
     title: 'Module 1: Basic Silver Identification',
     time: '30 min • Beginner',
     content: `
-      <div class="info-box"><h4>Lesson 1.1: The Two Marks That Matter Most</h4><p>SOLID SILVER (WORTH $$$$): <b>925</b>, <b>STERLING</b>, <b>800/835</b>, <b>Lion Passant</b>. NOT SOLID (WORTH $): <b>EPNS</b>, <b>SILVER PLATED</b>, <b>EP</b>, <b>A1</b>.</p></div>
+      <div class="info-box"><h4>Lesson 1.1: The Two Marks That Matter Most</h4><p>SOLID SILVER (WORTH $$$$): <b>925</b>, <b>STERLING</b>, <b>800/835</b>, <b>Lion Passant</b>. NOT SOLID (WORTH $): <b>EPNS</b>, <b>SILVER PLATED</b>, <b>EP</b>, <b>A1</b>.</p>
+      <p><b>REAL:</b> genuine sterling chain stamped <i>Ag 925</i> — sharp, evenly-struck digits:</p>
+      <img src="assets/training/Collier_poincon_argent_925.JPG" alt="Genuine sterling necklace and ring stamped Ag 925" style="width:100%;border-radius:8px">
+      <p class="caption" style="font-size:0.8em;color:var(--text-secondary)">Photo: Wikimedia Commons (CC BY-SA 3.0). Real 'Ag 925' stamps on a sterling chain and ring.</p>
+      <p><b>FAKE / NOT SILVER:</b> this spoon is stamped <i>GBRS ★ 21 / SHEFFIELD PLATE</i> — a trade mark for <u>plated ware</u>, not silver. Deep, crisp lettering does NOT mean silver:</p>
+      <img src="assets/training/Closeup_view_of_the_hallmarks_in_an_antique_silver_spoon_from_Colonial_era,_photographed_in_West_Bengal,_India,_December_7,_2023.jpg" alt="Plated spoon stamped GBRS 21 Sheffield Plate" style="width:100%;border-radius:8px">
+      <p class="caption" style="font-size:0.8em;color:var(--text-secondary)">Photo: Wikimedia Commons (CC0). 'Sheffield Plate' — plated, not solid silver.</p></div>
       
       <div class="info-box"><h4>Lesson 1.2: Weight Test</h4><p>Solid silver is dense and heavy. Teaspoon: Solid = 15-20g | Plated = 8-12g. If it feels LIGHT, it's probably plated.</p></div>
       
@@ -766,9 +772,20 @@ const modules = {
     title: 'Module 2: Intermediate Silver Identification',
     time: '45 min • Intermediate',
     content: `
-      <div class="info-box"><h4>British Hallmarks</h4><p><b>Lion Passant</b> = 925 sterling. <b>Assay offices:</b> London (anchor), Birmingham (anchor), Sheffield (rose), Edinburgh (castle). <b>Date letters</b> = year made. <b>Maker marks</b> = two initials in shield.</p></div>
+      <div class="info-box"><h4>British Hallmarks</h4><p><b>Lion Passant</b> = 925 sterling. <b>Assay offices:</b> London (leopard's head), Birmingham (anchor), Sheffield (crown/rose), Edinburgh (castle). <b>Date letters</b> = year made. <b>Maker marks</b> = two initials in shield.</p>
+      <p><b>REAL — full British set:</b> a genuine hallmark row on a silver tray rim: maker <i>PS</i>, lion passant, leopard's head (London), date letter <i>u</i>, sovereign's head:</p>
+      <img src="assets/training/Paul_Storr_Hallmark.jpg" alt="Complete British hallmark set: PS, lion passant, leopard's head, date letter, head mark" style="width:100%;border-radius:8px">
+      <p class="caption" style="font-size:0.8em;color:var(--text-secondary)">Photo: Wikimedia Commons (CC BY-SA 4.0). Five-mark British hallmarks — standard + town + date + maker.</p>
+      <p><b>REAL — another British set:</b> bust, date letter <i>K</i>, crown, lion passant, maker <i>GS</i>:</p>
+      <img src="assets/training/Engelskkontroll.JPG" alt="British-style hallmark row with lion passant and GS maker mark" style="width:100%;border-radius:8px">
+      <p class="caption" style="font-size:0.8em;color:var(--text-secondary)">Photo: Wikimedia Commons (CC BY-SA 4.0). Note: ALL these stamps struck in one row — genuine flatware hallmarking.</p></div>
       
-      <div class="info-box"><h4>Famous Makers</h4><p><b>Tiffany & Co.</b> - Extremely valuable. <b>Gorham</b> - Art Nouveau collectible. <b>Reed & Barton</b> - Quality American (1824-2015). <b>International Silver</b> - Common but collectible.</p></div>
+      <div class="info-box"><h4>Famous Makers — and why marks ≠ silver</h4><p><b>Tiffany &amp; Co.</b> - Extremely valuable. <b>Gorham</b> - collectible. <b>James Rivière</b> and <b>Desart</b> were <u>electroplated ware</u> makers — their brand stamps alone NEVER certify silver:</p>
+      <img src="assets/training/James_Riviere_-_Desart_Hallmarks.jpg" alt="James Riviere and Desart maker marks — manufacturer trademarks, not hallmarks" style="width:100%;border-radius:8px">
+      <p class="caption" style="font-size:0.8em;color:var(--text-secondary)">Wikimedia Commons (CC BY-SA 4.0). These are trade marks only — no purity mark = no guarantee.</p>
+      <p>Same lesson on the continent: this French/Swiss piece carries a maker's monogram and <i>déposé</i> (registered design) — a trademark, not an assay mark:</p>
+      <img src="assets/training/Falize_Maker_Mark.jpg" alt="Piece with AXA monogram and depose — registered design mark, not a hallmark" style="width:100%;border-radius:8px">
+      <p class="caption" style="font-size:0.8em;color:var(--text-secondary)">Wikimedia Commons (CC BY-SA 4.0). '<i>déposé</i>' = registered design. Check for a purity mark separately.</p></div>
       
       <div class="info-box"><h4>Spotting Reproductions</h4><p>Perfect condition + modern fonts = suspicious. Wrong hallmark combos = fake. 2+ red flags = walk away.</p></div>
       
@@ -779,7 +796,13 @@ const modules = {
     title: 'Module 3: Advanced Silver Identification',
     time: '60 min • Advanced',
     content: `
-      <div class="info-box"><h4>Date Letter System</h4><p>Each assay office has its own alphabet cycle. Font style + shield shape = specific year. Look for small letter on back/underside.</p></div>
+      <div class="info-box"><h4>Date Letter System</h4><p>Each assay office has its own alphabet cycle. Font style + shield shape = specific year. Look for small letter on back/underside.</p>
+      <p><b>REAL — continental (Austrian/Habsburg) mark:</b> quartered circle with <i>13</i> = 13loth ≈ 812/1000 silver (NOT 925 — European lower standards exist), letter <i>H</i> above, year <i>1807</i> in the corners:</p>
+      <img src="assets/training/Lotovy_punc.png" alt="Austrian-Habsburg 13 loth hallmark dated 1807" style="width:100%;border-radius:8px">
+      <p class="caption" style="font-size:0.8em;color:var(--text-secondary)">Wikimedia Commons (CC BY-SA 4.0). 'loth' system: 16 loth = fine silver.</p>
+      <p><b>REAL — Danish control marks:</b> device + crown + letter + town mark ('30' with tower) — Danish pieces carry control/countermarks alongside maker marks:</p>
+      <img src="assets/training/Danskkontroll.JPG" alt="Danish silver control marks — four punches in a row" style="width:100%;border-radius:8px">
+      <p class="caption" style="font-size:0.8em;color:var(--text-secondary)">Wikimedia Commons (CC BY-SA 4.0). Scandinavian control/countermark group.</p></div>
       
       <div class="info-box"><h4>Rare & Valuable Marks</h4><p><b>Paul de Lamerie (PL)</b> - $5k-$100k+. <b>Paul Revere (PR)</b> - $10k-$500k+. <b>Britannia 958</b> - Higher purity, rare.</p></div>
       

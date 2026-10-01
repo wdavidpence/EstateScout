@@ -1,5 +1,15 @@
-const CACHE_NAME = 'estatescout-shell-v5';
-const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './js/main.js'];
+const CACHE_NAME = 'estatescout-shell-v6';
+const TRAINING_IMAGES = [
+  './assets/training/Collier_poincon_argent_925.JPG',
+  './assets/training/Closeup_view_of_the_hallmarks_in_an_antique_silver_spoon_from_Colonial_era,_photographed_in_West_Bengal,_India,_December_7,_2023.jpg',
+  './assets/training/Paul_Storr_Hallmark.jpg',
+  './assets/training/Engelskkontroll.JPG',
+  './assets/training/James_Riviere_-_Desart_Hallmarks.jpg',
+  './assets/training/Falize_Maker_Mark.jpg',
+  './assets/training/Lotovy_punc.png',
+  './assets/training/Danskkontroll.JPG',
+];
+const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './js/main.js', ...TRAINING_IMAGES];
 const OFFLINE_HTML = '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>EstateScout Offline</title><style>body{margin:0;padding:32px;background:#0a1628;color:#f0ece2;font:17px -apple-system,BlinkMacSystemFont,sans-serif}h1{color:#c8a45a}p{line-height:1.55;color:#c6cfdd}</style><h1>EstateScout is offline</h1><p>Your saved collection remains on this device. Reconnect to refresh market prices or sync optional services.</p>';
 
 self.addEventListener('install', event => {
