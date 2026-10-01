@@ -99,7 +99,7 @@ class AnalyzeTests(unittest.TestCase):
                                   "bbox": {"x": 0.4, "y": 0.5, "w": 0.1, "h": 0.1}}],
                 "verdict": "silver plate", "confidence": "high"})
 
-        with patch.object(ai_proxy, "load_omlx_config",
+        with patch.object(ai_proxy, "load_dev_config",
                           return_value={"base_url": "http://127.0.0.1:9",
                                         "api_key": "test-key"}):
             out = ai_proxy.analyze_image(DATA_URL, "spoon", request_fn=fake_request)
@@ -114,7 +114,7 @@ class AnalyzeTests(unittest.TestCase):
         def fake_request(url, body, key):
             return {"choices": []}
 
-        with patch.object(ai_proxy, "load_omlx_config",
+        with patch.object(ai_proxy, "load_dev_config",
                           return_value={"base_url": "http://127.0.0.1:9",
                                         "api_key": "test-key"}):
             with self.assertRaises(ai_proxy.ProxyError):
