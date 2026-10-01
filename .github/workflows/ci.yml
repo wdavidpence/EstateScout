@@ -26,4 +26,11 @@ jobs:
           node --check app/js/main.js
           node --check sw.js
       - name: Reject whitespace errors
-        run: git diff --check HEAD~1 HEAD
+        # Skip generated Capacitor/Gradle/Xcode templates (they ship with
+        # CRLF/whitespace quirks we don't control; see ios/ and android/).
+        run: |
+          FILES=$(git diff --name-only HEAD~1 HEAD \
+            | grep -v -E '^(ios/|android/|node_modules/)' || true)
+          if [ -n "$FILES" ]; then
+            git diff --check HEAD~1 HEAD -- $FILES
+          fi
