@@ -1,6 +1,0 @@
-{
-  "base_url": "http://100.71.141.123:8001",
-  "api_key": "a1b2c3d4",
-  "model": "mtplx-flash-next-bare-speed",
-  "source": "MTPLX local server (user-approved option 1, 2026-09-30); NOTE this is also the agent's own inference backend — fine for proof phase only, never for store builds"
-}

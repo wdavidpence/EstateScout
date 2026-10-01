@@ -13,10 +13,6 @@ if str(_ROOT) not in sys.path:
 from server import ai_proxy
 
 
-def make_reply(payload: dict) -> dict:
-    return {"choices": [{"message": {"content": json.dumps(payload)}}]}
-
-
 class SanitizeTests(unittest.TestCase):
     def test_clamps_out_of_bounds_coords(self):
         raw = [{"label": "X", "reason": "r",
@@ -92,31 +88,37 @@ class AnalyzeTests(unittest.TestCase):
         # Proxy returns whatever the (mocked) model said; drawing is app-side.
         calls = []
 
-        def fake_request(url, body, key):
-            calls.append((url, body, key))
-            return make_reply({
+        def fake_request(url, body, token):
+            calls.append((url, body, token))
+            return json.dumps({
                 "observations": [{"label": "EPNS", "reason": "plated",
                                   "bbox": {"x": 0.4, "y": 0.5, "w": 0.1, "h": 0.1}}],
                 "verdict": "silver plate", "confidence": "high"})
 
-        with patch.object(ai_proxy, "load_dev_config",
-                          return_value={"base_url": "http://127.0.0.1:9",
-                                        "api_key": "test-key"}):
+        with patch.object(ai_proxy, "load_codex_config",
+                          return_value={"access_token": "test-token",
+                                        "refresh_token": "test-refresh",
+                                        "model": "gpt-5.6-luna",
+                                        "base_url": "http://127.0.0.1:9"}):
             out = ai_proxy.analyze_image(DATA_URL, "spoon", request_fn=fake_request)
         self.assertEqual(out["observations"][0]["label"], "EPNS")
         self.assertEqual(out["verdict"], "silver plate")
-        url, body, key = calls[0]
-        self.assertTrue(url.endswith("/v1/chat/completions"))
-        self.assertEqual(key, "test-key")
-        self.assertEqual(body["response_format"], {"type": "json_object"})
+        url, body, token = calls[0]
+        self.assertTrue(url.endswith("/responses"))
+        self.assertEqual(token, "test-token")
+        self.assertIs(body["store"], False)
+        self.assertIs(body["stream"], True)
+        self.assertEqual(body["model"], "gpt-5.6-luna")
 
-    def test_missing_content_fails(self):
-        def fake_request(url, body, key):
-            return {"choices": []}
+    def test_empty_stream_fails(self):
+        def fake_request(url, body, token):
+            raise ai_proxy.ProxyError("no assistant text in codex response stream")
 
-        with patch.object(ai_proxy, "load_dev_config",
-                          return_value={"base_url": "http://127.0.0.1:9",
-                                        "api_key": "test-key"}):
+        with patch.object(ai_proxy, "load_codex_config",
+                          return_value={"access_token": "test-token",
+                                        "refresh_token": "test-refresh",
+                                        "model": "gpt-5.6-luna",
+                                        "base_url": "http://127.0.0.1:9"}):
             with self.assertRaises(ai_proxy.ProxyError):
                 ai_proxy.analyze_image(DATA_URL, request_fn=fake_request)
 

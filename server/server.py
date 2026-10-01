@@ -30,7 +30,7 @@ import price_service  # noqa: E402
 import collection  # noqa: E402
 
 APP_DIR = ROOT / "app"
-MODEL = "mtplx-flash-next-bare-speed"
+MODEL = "gpt-5.6-luna"  # via Codex backend; see server/ai_proxy.py
 MIME = {
     ".html": "text/html; charset=utf-8",
     ".js": "text/javascript; charset=utf-8",
@@ -67,7 +67,7 @@ class Handler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
         sub = path[len("/api"):]
         if method == "GET" and sub == "/health":
-            return self._json(200, ai_proxy.health(MODEL))
+            return self._json(200, ai_proxy.health())
         if method == "POST" and sub == "/analyze":
             try:
                 length = int(self.headers.get("Content-Length", "0"))
@@ -78,7 +78,7 @@ class Handler(BaseHTTPRequestHandler):
                 note = str(body.get("note", ""))[:500]
                 if not image:
                     return self._json(400, {"error": "image required"})
-                return self._json(200, ai_proxy.analyze_image(image, note, MODEL))
+                return self._json(200, ai_proxy.analyze_image(image, note))
             except ai_proxy.ProxyError as exc:
                 return self._json(422, {"error": str(exc)})
             except (OSError, ValueError) as exc:

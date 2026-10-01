@@ -1,13 +1,17 @@
-"""EstateScout local AI proxy — oMLX (or any OpenAI-compatible) endpoint.
+"""EstateScout AI proxy — Codex backend (user's ChatGPT/Codex subscription).
+
+Proof-phase backend chosen by the user (2026-10-01): use Codex auth for
+gpt-5.6-luna now; switch to an official API key at store publication.
 
 Design contract (do not break):
   - The model NEVER draws and NEVER supplies executable behavior. It only
-    returns {observations, circles} with relative coordinates; the app draws
-    red circles with fixed local code from the model-supplied coords.
-  - Coordinates are validated/clamped server-side to [0,1] and bounded to a
-    maximum of 8 circles before the app ever sees them.
-  - The oMLX API key is read from ~/.omlx/settings.json at runtime and is
-    never logged, returned to the client, or committed.
+    returns {observations, verdict, confidence} with relative coordinates;
+    the app draws red circles with fixed local code from model-supplied
+    coords. Coordinates are validated/clamped server-side to [0,1] and
+    capped at MAX_CIRCLES before the client sees them.
+  - Codex OAuth tokens are read from ~/.codex/auth.json at runtime and
+    refreshed when expired; they are never logged, returned to the client,
+    or committed.
 
 Proxy API (served by server.py):
   POST /api/analyze  {image: dataURL, note?: string}  ->  AnalysisResult
@@ -15,14 +19,20 @@ Proxy API (served by server.py):
 """
 from __future__ import annotations
 
-import base64
 import json
 import re
+import time
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any
-from urllib.request import Request, urlopen
 
-DEV_CONFIG = Path(__file__).resolve().parent / "dev-config.json"
+CODEX_AUTH = Path.home() / ".codex" / "auth.json"
+CODEX_TOKEN_URL = "https://auth.openai.com/oauth/token"
+CODEX_CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann"
+CODEX_BASE = "https://chatgpt.com/backend-api/codex"
+CODEX_MODEL = "gpt-5.6-luna"
+CODEX_ACCOUNT_ID = "20050f57-2157-4167-86dd-290da830c817"
 MAX_CIRCLES = 8
 
 SYSTEM_PROMPT = """You are EstateScout, an estate-auction assistant for silver, \
@@ -53,19 +63,64 @@ class ProxyError(RuntimeError):
     pass
 
 
-def load_dev_config(path: Path = DEV_CONFIG) -> dict[str, str]:
-    """Read the proof-phase local endpoint config (base_url, api_key, model).
-
-    Proof phase: MTPLX local server per user approval (option 1, 2026-09-30).
-    Never commit real paid-API keys here; store builds use a hosted backend.
-    """
+def load_codex_config(path: Path = CODEX_AUTH) -> dict[str, str]:
+    """Return {access_token, refresh_token, model, base_url} from Codex auth."""
     data = json.loads(path.read_text(encoding="utf-8"))
-    base = data["base_url"]
-    key = data["api_key"]
-    model = data.get("model", "Qwen3.8-Flash-Next-MTPLX-Bare-Speed")
-    if not key:
-        raise ProxyError("no api key in dev config")
-    return {"base_url": base, "api_key": key, "model": model}
+    tokens = data.get("tokens") or {}
+    if not tokens.get("access_token") or not tokens.get("refresh_token"):
+        raise ProxyError("no codex tokens in auth.json")
+    return {"access_token": tokens["access_token"],
+            "refresh_token": tokens["refresh_token"],
+            "model": CODEX_MODEL, "base_url": CODEX_BASE}
+
+
+def refresh_codex_tokens(refresh_token: str) -> dict[str, str]:
+    """Exchange the refresh token; returns fresh {access_token, refresh_token}."""
+    body = json.dumps({"grant_type": "refresh_token",
+                       "client_id": CODEX_CLIENT_ID,
+                       "refresh_token": refresh_token}).encode()
+    req = urllib.request.Request(
+        CODEX_TOKEN_URL, data=body,
+        headers={"Content-Type": "application/json",
+                 "Originator": "HermesAgent"})
+    with urllib.request.urlopen(req, timeout=30) as resp:  # nosec: fixed endpoint
+        data = json.loads(resp.read())
+    if "access_token" not in data:
+        raise ProxyError("token refresh failed: %s" % data.get("error"))
+    return {"access_token": data["access_token"],
+            "refresh_token": data.get("refresh_token", refresh_token)}
+
+
+def codex_request(url: str, body: dict[str, Any], access_token: str,
+                  account_id: str = CODEX_ACCOUNT_ID) -> str:
+    """POST to the Codex responses endpoint (stream SSE) and return the
+    concatenated assistant text. The backend requires store=false and
+    stream=true."""
+    req = urllib.request.Request(
+        url, data=json.dumps(body).encode(),
+        headers={"Authorization": "Bearer " + access_token,
+                 "Content-Type": "application/json",
+                 "Accept": "text/event-stream",
+                 "chatgpt-account-id": account_id,
+                 "Originator": "HermesAgent"})
+    chunks: list[str] = []
+    with urllib.request.urlopen(req, timeout=300) as resp:  # nosec
+        for raw in resp:
+            line = raw.decode("utf-8", "replace").strip()
+            if not line.startswith("data:"):
+                continue
+            try:
+                event = json.loads(line[5:])
+            except json.JSONDecodeError:
+                continue
+            if event.get("type") == "response.output_text.delta":
+                chunks.append(event.get("delta", ""))
+            elif event.get("type") == "response.error":
+                raise ProxyError("codex error: %s"
+                                 % json.dumps(event.get("error"))[:200])
+    if not chunks:
+        raise ProxyError("no assistant text in codex response stream")
+    return "".join(chunks)
 
 
 def _clip(value: Any) -> float | None:
@@ -137,61 +192,64 @@ def parse_model_json(text: str) -> dict[str, Any]:
     raise ProxyError("model reply was not valid JSON")
 
 
-def default_request(url: str, body: dict[str, Any], api_key: str) -> dict[str, Any]:
-    req = Request(url, data=json.dumps(body).encode(),
-                  headers={"Content-Type": "application/json",
-                           "Authorization": "Bearer " + api_key})
-    with urlopen(req, timeout=120) as resp:  # nosec: configured local endpoint
-        return json.loads(resp.read())
-
-
-def analyze_image(data_url: str, note: str = "",
-                  model: str = "Qwen3.8-Flash-Next-oQ4e-mtp",
-                  request_fn=default_request,
-                  ) -> dict[str, Any]:
-    """Send one image (+optional note) to the local model; return sanitized result."""
-    match = re.match(r"data:(image/[a-z+]+);base64,([A-Za-z0-9+/=]+)$", data_url)
+def build_payload(data_url: str, note: str = "") -> dict[str, Any]:
+    """Build the Codex responses payload for one image + optional note."""
+    match = re.match(r"data:(image/[a-z+]+);base64,([A-Za-z0-9+/=]+)$",
+                    data_url)
     if not match:
         raise ProxyError("image must be a base64 data URL")
     media_type, b64 = match.group(1), match.group(2)
     if len(b64) > 8 * 1024 * 1024:
         raise ProxyError("image too large (max ~6 MB)")
-
-    user_content = [{"type": "image_url",
-                     "image_url": {"url": "data:%s;base64,%s" % (media_type, b64)}}]
-    user_content.append({"type": "text",
-                         "text": ("Owner note: " + note) if note else
-                                 "Identify marks and material in this photo."})
-    payload = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_content},
-        ],
-        "temperature": 0.2,
-        "max_tokens": 1200,
-        "response_format": {"type": "json_object"},
+    user_text = ("Owner note: " + note) if note else \
+        "Identify marks and material in this photo."
+    return {
+        "model": CODEX_MODEL,
+        "store": False,
+        "stream": True,
+        "instructions": SYSTEM_PROMPT,
+        "input": [{
+            "type": "message", "role": "user",
+            "content": [
+                {"type": "input_image",
+                 "image_url": "data:%s;base64,%s" % (media_type, b64)},
+                {"type": "input_text", "text": user_text},
+            ],
+        }],
     }
 
-    cfg = load_dev_config()
-    reply = request_fn(cfg["base_url"] + "/v1/chat/completions", payload, cfg["api_key"])
 
+def analyze_image(data_url: str, note: str = "",
+                  request_fn=codex_request) -> dict[str, Any]:
+    """Send one image (+optional note) via the Codex backend; return
+    the sanitized analysis. Refreshes the OAuth token once on 401."""
+    cfg = load_codex_config()
+    payload = build_payload(data_url, note)
+    url = cfg["base_url"] + "/responses"
     try:
-        content = reply["choices"][0]["message"]["content"]
-    except (KeyError, IndexError, TypeError) as exc:
-        raise ProxyError("chat completion missing content") from exc
+        content = request_fn(url, payload, cfg["access_token"])
+    except urllib.error.HTTPError as err:
+        if err.code in (401, 403):  # expired token: refresh once and retry
+            fresh = refresh_codex_tokens(cfg["refresh_token"])
+            content = request_fn(url, payload, fresh["access_token"])
+        else:
+            raise ProxyError("model unreachable: HTTP %s" % err.code) from err
     return parse_model_json(content)
 
 
-def health(model: str = "Qwen3.8-Flash-Next-oQ4e-mtp") -> dict[str, Any]:
-    """Report whether the local model endpoint answers and the model is loaded."""
+def health(model: str = CODEX_MODEL) -> dict[str, Any]:
+    """Report whether the Codex backend answers and the model id is listed."""
     try:
-        cfg = load_dev_config()
-        req = Request(cfg["base_url"] + "/v1/models",
-                      headers={"Authorization": "Bearer " + cfg["api_key"]})
-        with urlopen(req, timeout=10) as resp:
-            ids = [m.get("id") for m in json.loads(resp.read()).get("data", [])]
-        return {"ok": model in ids, "model": model,
-                "loaded": ids, "base_url": cfg["base_url"]}
+        cfg = load_codex_config()
+        req = urllib.request.Request(
+            cfg["base_url"] + "/models?client_version=0.154.0",
+            headers={"Authorization": "Bearer " + cfg["access_token"],
+                     "chatgpt-account-id": CODEX_ACCOUNT_ID,
+                     "Originator": "HermesAgent"})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            ids = [m.get("slug")
+                   for m in json.loads(resp.read()).get("models", [])]
+        return {"ok": model in ids, "model": model, "loaded": ids,
+                "base_url": cfg["base_url"]}
     except Exception as exc:  # any failure -> report, never crash
         return {"ok": False, "model": model, "error": str(exc)}
