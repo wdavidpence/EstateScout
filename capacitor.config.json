@@ -1,0 +1,7 @@
+{
+  "appId": "com.estatescout.app",
+  "appName": "EstateScout",
+  "webDir": "app",
+  "android": { "allowMixedContent": true },
+  "ios": { "scheme": "EstateScout" }
+}

@@ -54,3 +54,15 @@ Thumbs.db
 # Environment
 .env
 .env.local
+
+# Capacitor: generated / local-only
+node_modules/
+ios/App/build/
+ios/App/Pods/
+ios/App/App/public/
+ios/App/App.xcworkspace/
+android/build/
+android/app/build/
+android/.gradle/
+android/local.properties
+android/app/src/main/assets/public/
