@@ -1087,6 +1087,56 @@ saveTrainingProgress();
 const AI_API = localStorage.getItem('estatescout_api') || '/api';
 let aiPhoto = null; // {dataUrl, name}
 
+// ── Monetization (proof-phase) ──────────────────────────────────────
+// Plan state is local-only until real IAP (RevenueCat or direct
+// StoreKit/Play Billing) is wired — "Restore purchases" and server
+// validation come with the hosted backend. Free tier: AdMob test-unit
+// ad banner + 60 AI scans/day. Pro: no ads, unlimited AI analysis
+// (hosted backend will enforce a hard budget cap as the real guard).
+const FREE_SCAN_CAP = 60;
+
+function getPlan() {
+  // Proof-phase stub: to test Pro behavior on a device, run
+  // localStorage.setItem('estatescout_plan','pro') in the WebView.
+  return localStorage.getItem('estatescout_plan') || 'free';
+}
+
+function scanUsageToday() {
+  const today = new Date().toISOString().slice(0, 10);
+  let usage;
+  try { usage = JSON.parse(localStorage.getItem('estatescout_scan_usage') || 'null'); } catch { usage = null; }
+  if (!usage || usage.date !== today) return { date: today, count: 0 };
+  return usage;
+}
+
+function consumeScan() {
+  const usage = scanUsageToday();
+  usage.count += 1;
+  localStorage.setItem('estatescout_scan_usage', JSON.stringify(usage));
+}
+
+function scansRemaining() {
+  if (getPlan() === 'pro') return Infinity;
+  return FREE_SCAN_CAP - scanUsageToday().count;
+}
+
+function updateMonetizationUI() {
+  const banner = document.getElementById('adBanner');
+  const quota = document.getElementById('scanQuota');
+  if (!banner || !quota) return;
+  if (getPlan() === 'pro') {
+    banner.style.display = 'none';
+    quota.textContent = 'Pro — unlimited AI analysis';
+  } else {
+    // Proof-phase: placeholder creative. Replace with AdMob plugin call
+    // once real ad-unit IDs exist (AdMob account pending). Until then a
+    // static placeholder shows the layout and gating to stakeholders.
+    banner.style.display = 'block';
+    quota.textContent = 'Free plan — ' + Math.max(0, scansRemaining()) +
+      ' AI scans left today';
+  }
+}
+
 function loadAiPhoto(input) {
   const file = input.files && input.files[0];
   if (!file) return;
@@ -1105,11 +1155,19 @@ async function runAiAnalysis() {
   if (!aiPhoto) return;
   const result = document.getElementById('aiResult');
   const btn = document.getElementById('aiRunBtn');
+  if (scansRemaining() <= 0) {
+    result.style.display = 'block';
+    result.textContent = "Today's free AI scans are used up. "
+      + 'Upgrade to EstateScout Pro ($5/mo) for unlimited analysis.';
+    return;
+  }
   result.style.display = 'block';
   result.textContent = 'Analyzing with local model… (vision can take up to a minute)';
   btn.disabled = true;
   try {
     const note = document.getElementById('aiNote').value || '';
+    consumeScan();
+    updateMonetizationUI();
     const res = await fetch(AI_API + '/analyze', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -1155,3 +1213,6 @@ function drawAiMarks(observations) {
   };
   img.src = aiPhoto.dataUrl;
 }
+
+// Show ad banner + quota on load (free plan default until real IAP).
+updateMonetizationUI();

@@ -31,6 +31,26 @@ import collection  # noqa: E402
 
 APP_DIR = ROOT / "app"
 MODEL = "gpt-5.6-luna"  # via Codex backend; see server/ai_proxy.py
+
+# Budget guard: this dev proxy uses a personal Codex subscription, so
+# hard-cap AI analyses per day regardless of what the client thinks.
+# Single global counter is fine for proof phase (one tester on LAN).
+ANALYZE_DAILY_CAP = 200
+_analyze_count_date = ""
+_analyze_count = 0
+
+
+def analyze_budget_ok() -> bool:
+    """True if today's proxy-side analysis budget is not exhausted."""
+    global _analyze_count_date, _analyze_count
+    import datetime
+    today = datetime.date.today().isoformat()
+    if _analyze_count_date != today:
+        _analyze_count_date, _analyze_count = today, 0
+    if _analyze_count >= ANALYZE_DAILY_CAP:
+        return False
+    _analyze_count += 1
+    return True
 MIME = {
     ".html": "text/html; charset=utf-8",
     ".js": "text/javascript; charset=utf-8",
@@ -78,6 +98,10 @@ class Handler(BaseHTTPRequestHandler):
                 note = str(body.get("note", ""))[:500]
                 if not image:
                     return self._json(400, {"error": "image required"})
+                if not analyze_budget_ok():
+                    return self._json(429, {
+                        "error": "daily proxy budget reached (%d/day); "
+                                "try again tomorrow" % ANALYZE_DAILY_CAP})
                 return self._json(200, ai_proxy.analyze_image(image, note))
             except ai_proxy.ProxyError as exc:
                 return self._json(422, {"error": str(exc)})
