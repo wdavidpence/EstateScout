@@ -11,10 +11,7 @@ let package = Package(
             targets: ["CapApp-SPM"])
     ],
     dependencies: [
-        // Proof-phase patch (2026-10-01): vendored copy with LOCAL binary
-        // artifacts — SwiftPM in Xcode 27 hangs forever downloading the
-        // remote binaryTarget zips (see Vendor README note).
-        .package(path: "../Vendor/capacitor-swift-pm")
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", exact: "8.5.2")
     ],
     targets: [
         .target(
