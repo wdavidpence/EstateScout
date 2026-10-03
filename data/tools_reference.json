@@ -1,0 +1,155 @@
+{
+  "tools": {
+    "pocket_scale": {
+      "name": "USB-C Digital Pocket Scale",
+      "description": "Credit-card sized digital scale for estate sales. 0.01g precision, USB-C charging.",
+      "recommended_products": [
+        {
+          "brand": "Etekcity",
+          "model": "ESF-300 or ESF-H451",
+          "precision": "0.01g / 100g max",
+          "price": "$12-15",
+          "features": ["USB-C charging", "Auto-off", "Tare function", "LCD display"],
+          "why_good": "Reliable, compact, widely available on Amazon"
+        },
+        {
+          "brand": "MyWeigh",
+          "model": "MD-500",
+          "precision": "0.01g / 500g max",
+          "price": "$20-25",
+          "features": ["USB-C charging", "Larger capacity", "Jewelry/coin mode"],
+          "why_good": "Higher max weight, good for larger silver pieces"
+        },
+        {
+          "brand": "General",
+          "model": "Generic 0.01g pocket scale",
+          "precision": "0.01g / 100-500g max",
+          "price": "$8-12",
+          "features": ["USB-C or micro-USB", "Basic LCD"],
+          "why_good": "Cheapest option, works fine for basic weight checks"
+        }
+      ],
+      "how_to_use_at_estate_sale": [
+        "Tare (zero) the scale with a small container or piece of paper",
+        "Place item on scale, read weight",
+        "Compare to benchmarks: teaspoon solid = 15-20g, plated = 8-12g",
+        "Record weight in notes for later reference"
+      ],
+      "what_to_look_for": {
+        "precision_needed": "0.01g is ideal for coins/jewelry, 0.1g sufficient for flatware",
+        "capacity_needed": "100-500g covers most estate sale items",
+        "power": "USB-C charging preferred (no extra cables)",
+        "size": "Credit-card size or smaller fits in pocket"
+      }
+    },
+    "magnet_tester": {
+      "name": "Neodymium Magnet",
+      "description": "Small strong magnet for silver testing. Fits in pocket.",
+      "recommended_products": [
+        {
+          "brand": "K&J Magnetics",
+          "model": "N52 Neodymium Magnet",
+          "size": "1/4 inch diameter",
+          "price": "$3-5",
+          "why_good": "Very strong, tiny, fits in pocket"
+        }
+      ],
+      "how_to_use": [
+        "Bring magnet close to item",
+        "If attracts = steel core, NOT silver (plated or fake)",
+        "If no attraction = could be silver OR non-magnetic base metal (brass, nickel silver)",
+        "No attraction doesn't prove silver — must check weight + marks too"
+      ]
+    },
+    "uv_light": {
+      "name": "UV/Blacklight Pen",
+      "description": "Small UV light for checking fluorescence of certain materials.",
+      "use_case": [
+        "Some plastics fluoresce under UV (helps identify modern reproductions)",
+        "Certain gemstones react to UV light",
+        "Not as useful for silver specifically, but good general tool"
+      ]
+    }
+  },
+
+  "image_annotation": {
+    "description": "When you send me a photo, I can annotate it with red circles/boxes to highlight:",
+    "annotation_types": [
+      {
+        "type": "hallmark_circle",
+        "description": "Red circle around hallmarks (925, EPNS, maker marks)",
+        "example": "Circle '925' mark on underside of spoon"
+      },
+      {
+        "type": "wear_point_box",
+        "description": "Red box around wear points showing base metal",
+        "example": "Box yellow discoloration at fork tine tips"
+      },
+      {
+        "type": "mark_label",
+        "description": "Red arrow + label pointing to specific mark with text",
+        "example": "Arrow from 'Lion Passant' label to walking lion symbol"
+      },
+      {
+        "type": "coin_date_highlight",
+        "description": "Red circle around date and mint mark on coins",
+        "example": "Circle '1943' date and 'D' mint mark on quarter"
+      }
+    ],
+    "how_it_works": [
+      "You send me a photo of an item",
+      "I analyze the image and identify hallmarks, marks, wear points",
+      "I return an annotated version with red circles/boxes/arrows",
+      "I also provide text notes about what I found"
+    ],
+    "limitations": [
+      "Image quality matters — good lighting and close-up shots work best",
+      "Hallmarks must be visible in the photo to annotate",
+      "I can't physically touch the item — rely on what's visible"
+    ]
+  },
+
+  "notes_system": {
+    "description": "Save notes about items you show me for future reference",
+    "note_fields": {
+      "item_type": "flatware, holloware, jewelry, coin, decorative",
+      "description": "Brief description of item",
+      "marks_found": "All marks/hallmarks visible on item",
+      "weight_grams": "Weight if measured with scale",
+      "magnet_test": "Attracted / Not attracted",
+      "visual_condition": "excellent, good, fair, poor",
+      "wear_points": "Any wear showing base metal?",
+      "my_verdict": "solid silver, plated, fake, unknown",
+      "confidence": "high, medium, low",
+      "estimated_value_range": "Low estimate - High estimate",
+      "photo_saved": "Yes/No (reference to photo)",
+      "date_seen": "Date item was photographed",
+      "location": "Where you found it (estate sale name, etc.)"
+    },
+    "how_to_use": [
+      "Send me a photo of an item",
+      "Tell me any marks you see (or I'll identify them)",
+      "I'll analyze and return annotated photo + notes",
+      "Notes saved to collection database",
+      "Type +collection to see all saved items"
+    ]
+  },
+
+  "quick_reference": {
+    "essential_tools_for_estate_sale": [
+      "USB-C pocket scale (0.01g) — $10-20",
+      "Small neodymium magnet — $3-5",
+      "Your iPhone with EstateScout skill loaded",
+      "Small cloth to wipe items (dirt hides marks)"
+    ],
+    "total_cost": "$15-25 for all essential tools",
+    "weight_benchmarks": {
+      "teaspoon_solid": "15-20g",
+      "teaspoon_plated": "8-12g",
+      "dinner_fork_solid": "25-35g",
+      "dinner_fork_plated": "15-20g",
+      "soup_spoon_solid": "30-40g",
+      "soup_spoon_plated": "18-25g"
+    }
+  }
+}

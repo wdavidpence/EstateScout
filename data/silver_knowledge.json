@@ -1,0 +1,504 @@
+{
+  "version": "2.0",
+  "last_updated": "2026-09-05",
+  "research_sources": [
+    "Wikipedia: Silver hallmarks, Sterling silver, Silver plating, EPNS, Old Sheffield Plate, Reed & Barton",
+    "British Museum collection data",
+    "ASCAS (Association of Small Collectors of Antique Silver) references"
+  ],
+
+  "hallmarks": {
+    "solid_silver": {
+      "925": {
+        "name": "Sterling Silver",
+        "purity": "92.5%",
+        "regions": ["US", "UK", "EU"],
+        "description": "Most common sterling mark. 925 parts per thousand pure silver, 75 parts copper alloy",
+        "appearance": "Numbers '925' stamped or engraved. Can be shallow on plated items, deeper on solid",
+        "history": "First legal definition appeared in 1275 during Edward I's reign. Approximately millesimal fineness of 926",
+        "value": "Standard for quality silver items. Post-1868 American standard"
+      },
+      "STERLING": {
+        "name": "Sterling",
+        "purity": "92.5%",
+        "regions": ["US"],
+        "description": "American sterling mark. Often found on flatware, holloware",
+        "appearance": "Word 'STERLING' stamped in capital letters. Sometimes '925/1000'",
+        "history": "Adopted as US standard in 1868. Before this, 'coin silver' (90.3%) was common",
+        "value": "Indicates solid sterling silver in American items"
+      },
+      "800": {
+        "name": "Continental Silver",
+        "purity": "80%",
+        "regions": ["Germany", "France", "Switzerland"],
+        "description": "European standard. Common in German and French silver",
+        "appearance": "Numbers '800' stamped. May have additional marks like cross pattee",
+        "value": "Lower purity but still solid silver. Common in continental European items"
+      },
+      "835": {
+        "name": "French Silver",
+        "purity": "83.5%",
+        "regions": ["France"],
+        "description": "French standard for silver. Accompanied by Minerva head mark",
+        "appearance": "Numbers '835' stamped, often with eagle head or Minerva profile symbol",
+        "history": "French 2nd Standard. French also has 1st Standard at 950/1000",
+        "value": "Solid French silver. Minerva head indicates post-1838"
+      },
+      "958": {
+        "name": "Britannia Silver",
+        "purity": "95.8%",
+        "regions": ["UK"],
+        "description": "Higher purity British standard. Rare, valuable",
+        "appearance": "Numbers '958' stamped. Often accompanied by Britannia figure",
+        "history": "Obligatory in Britain 1697-1720 to prevent coin melting. Optional standard thereafter",
+        "value": "Higher purity than sterling. Collectible, especially antique pieces"
+      },
+      "999": {
+        "name": "Fine Silver",
+        "purity": "99.9%",
+        "regions": ["International"],
+        "description": "Pure silver. Rare in antique items, more common in modern bullion",
+        "appearance": "Numbers '999' or 'FINE SILVER' stamped",
+        "value": "Highest purity. Not common in antique flatware or holloware"
+      },
+      "COIN SILVER": {
+        "name": "Coin Silver",
+        "purity": "90.3%",
+        "regions": ["US"],
+        "description": "Pre-1837 American standard. Made from melted coins",
+        "appearance": "Words 'COIN SILVER' or 'PURE COIN' stamped. Sometimes just '903'",
+        "history": "Pre-1868 US standard. Purity varied from 750 to 900 millesimal fineness",
+        "value": "Historically significant. Pre-1837 pieces can be valuable"
+      }
+    },
+
+    "plated_not_solid": {
+      "EPNS": {
+        "name": "Electroplated Nickel Silver",
+        "purity": "0% silver (base metal)",
+        "regions": ["UK", "US"],
+        "description": "NOT solid silver. Thin layer of silver over nickel alloy base (60% copper, 20% nickel, 20% zinc)",
+        "appearance": "Letters 'EPNS' or 'E.P.N.S.' stamped. Can be in decorative shield",
+        "history": "Electroplating process patented 1840 by George and Henry Elkington in Birmingham",
+        "value": "Has collectible value but NOT solid silver. Pre-1900 pieces more valuable",
+        "identification": "Nickel silver base is non-magnetic. Shows brass/copper color at wear points"
+      },
+      "EP": {
+        "name": "Electroplated",
+        "purity": "0% silver (base metal)",
+        "regions": ["UK"],
+        "description": "Electroplated base metal. Not solid silver",
+        "appearance": "Letters 'EP' stamped",
+        "value": "Lower value than EPNS. Common in later items"
+      },
+      "SILVER PLATED": {
+        "name": "Silver Plated",
+        "purity": "0% solid silver",
+        "regions": ["US", "UK"],
+        "description": "Thin layer of silver over base metal. Has value but not solid silver",
+        "appearance": "Words 'SILVER PLATED' or 'SP' stamped. UK law prohibits calling it just 'silver'",
+        "value": "Collectible but lower value than solid silver"
+      },
+      "A1": {
+        "name": "American Silver Plated",
+        "purity": "0% solid silver",
+        "regions": ["US"],
+        "description": "American plated standard. Not solid silver",
+        "appearance": "Letters 'A1' stamped"
+      },
+      "SHEFFIELD PLATE": {
+        "name": "Old Sheffield Plate (OSP)",
+        "purity": "Silver surface over copper",
+        "regions": ["UK"],
+        "description": "Fused silver and copper sheets (1740s-1840s). NOT electroplated",
+        "appearance": "No 'EP' marks. Shows copper bleeding at wear points. Bluish cast vs electroplate",
+        "history": "Invented by Thomas Boulsover 1740s. Replaced by electroplating ~1840",
+        "value": "Can be very valuable (pre-1800 pieces). Collectors seek genuine OSP",
+        "identification": "Look for copper bleeding at wear points. Soldered joints indicate OSP. Distinctive bluish lustre"
+      }
+    },
+
+    "british_hallmarks": {
+      "lion_passant": {
+        "name": "British Sterling Mark",
+        "description": "Walking lion symbol. Indicates 925 sterling silver in British hallmarks",
+        "appearance": "Lion shown walking, head facing left. One of most recognizable hallmarks",
+        "history": "Used since 1300s. Standard for British sterling silver"
+      },
+      "lion_head_crowned": {
+        "name": "Britannia Standard Mark",
+        "description": "Crowned lion head. Indicates Britannia standard (958) silver",
+        "appearance": "Lion's head with crown"
+      },
+      "assay_offices": {
+        "London": {"mark": "Anchor", "description": "Largest assay office. Anchor symbol"},
+        "Birmingham": {"mark": "Anchor", "description": "Second largest. Anchor symbol (same as London but different shield shape)"},
+        "Sheffield": {"mark": "Rose", "description": "Major Sheffield office. Rose symbol"},
+        "Edinburgh": {"mark": "Castle", "description": "Scottish assay office. Castle symbol"},
+        "Glasgow": {"mark": "Tree and Fish", "description": "Scottish assay office. Tree with three fish"}
+      },
+      "date_letters": {
+        "description": "British hallmarks include a letter indicating year of assay. Each office has its own alphabet cycle with different font styles per decade",
+        "how_to_read": "Find the date letter (usually small, separate from other marks). Match font style and shield shape to assay office calendar",
+        "valuable_periods": ["1700-1800 (Queen Anne/Georgian)", "1837-1901 (Victorian)", "Pre-1800 with maker marks"],
+        "note": "Date letters change style each decade. Same letter in different shield shapes = different years"
+      },
+      "maker_marks": {
+        "description": "Two-letter initials or symbols identifying the silversmith. Usually inside an escutcheon (shield shape)",
+        "famous_makers": {
+          "Paul Revere": {"period": "1732-1808", "mark": "PR monogram", "value": "Extremely valuable, museum quality"},
+          "Paul Storr": {"period": "1771-1844", "mark": "PS or full name", "value": "Highly collectible"},
+          "Thomas Kirk": {"period": "1765-1830", "mark": "TK monogram", "value": "Valuable Georgian period"},
+          "Ranulf Johnson": {"period": "1760-1820", "mark": "RJ monogram", "value": "Valuable Georgian period"},
+          "Paul de Lamerie": {"period": "1689-1751", "mark": "PL monogram", "value": "Most famous English silversmith"},
+          "George Adams": {"period": "1800s", "mark": "GA monogram", "value": "Valuable Georgian/Victorian"},
+          "Joseph & Albert Savory": {"period": "1800s", "mark": "J&S or full names", "value": "Reputable Victorian makers"}
+        }
+      },
+      "duty_marks": {
+        "description": "Profile of reigning monarch. Shows tax paid to Crown",
+        "period": "1784-1890 (discontinued)",
+        "note": "Not found on items after 1890. George III, William IV, Victoria profiles"
+      },
+      "tally_marks": {
+        "description": "Unique mark of journeyman finishing apprenticeship. Record for payment",
+        "period": "Discontinued (pre-1800s)",
+        "note": "Rare. Found on very old pieces"
+      }
+    },
+
+    "european_marks": {
+      "french_minerva": {
+        "name": "French Silver Standard",
+        "purity": "800 or 950",
+        "description": "Minerva (goddess) head in profile. French assay mark for silver",
+        "appearance": "Head of Minerva facing right. Sometimes with numeral 1 (950) or 2 (800)",
+        "history": "Used since 1838. Replaced earlier eagle head marks",
+        "value": "Indicates post-1838 French silver"
+      },
+      "french_eagle_head": {
+        "name": "French Export Mark",
+        "description": "Mercury head for export silver. Indicates millesimal fineness number",
+        "purity": "920, 840, or 750",
+        "appearance": "Head of Mercury with number"
+      },
+      "german_cross_pattee": {
+        "name": "German Silver Cross",
+        "description": "Cross with decorated arms. German hallmark for silver",
+        "appearance": "Cross pattée (decorated arms)"
+      },
+      "swiss_maiden_head": {
+        "name": "Swiss Silver Mark",
+        "description": "Maiden's head symbol. Swiss assay office mark"
+      },
+      "hungarian_diana": {
+        "name": "Austria-Hungary Silver Mark",
+        "description": "Crowned head of Diana within frame. Frame shape indicates fineness",
+        "period": "1867-1933",
+        "appearance": "Diana head in geometric frame. Concave lines = 140, straight = 150, convex = 160",
+        "example": "Petal frame (5×160) = 800 fineness. Hexagonal frame = 900 fine"
+      }
+    },
+
+    "american_makers": {
+      "Reed & Barton": {
+        "period": "1824-2015",
+        "mark": "RB or Reed & Barton with pattern number",
+        "location": "Taunton, Massachusetts",
+        "value": "Quality American silver. Sterling pieces valuable. Bankrupt 2015",
+        "notes": "Produced Olympic medals 1996. Merged with Dominick & Haff 1928",
+        "patterns": "Many sterling and silverplate patterns. Pattern numbers help identify value"
+      },
+      "Tiffany & Co.": {
+        "period": "1837-present",
+        "mark": "TIFFANY & CO. with pattern number or year code",
+        "value": "Extremely valuable. Museum quality pieces command high prices",
+        "notes": "Most famous American silversmith. Sterling and silverplate"
+      },
+      "International Silver Co.": {
+        "period": "1870-1960s",
+        "mark": "IC or International with crown",
+        "value": "Common but collectible. Quality silver plate and sterling",
+        "notes": "Merged several companies. Major American producer"
+      },
+      "Wm. Rogers & Co.": {
+        "period": "1830-1960s",
+        "mark": "WR & Co or Rogers with various patterns",
+        "value": "Common silver plate. Some sterling pieces valuable",
+        "notes": "Many patterns produced. Check for 925 mark to confirm sterling"
+      },
+      "Silvertown Silver Co.": {
+        "period": "1890-1920",
+        "mark": "Silvertown with pattern number",
+        "value": "American silver plate. Pattern numbers help identify"
+      },
+      "Towle Silver Co.": {
+        "period": "1840-1970s",
+        "mark": "Towle with pattern number",
+        "value": "American silver plate and sterling"
+      },
+      "Oneida Silver Co.": {
+        "period": "1890s-present",
+        "mark": "Oneida with pattern number",
+        "value": "Common American silver plate"
+      },
+      "Gorham": {
+        "period": "1831-2010",
+        "mark": "GORHAM with pattern number or Greek key mark",
+        "value": "High-quality American silver. Sterling pieces very valuable",
+        "notes": "Known for Art Nouveau and Arts & Crafts designs"
+      },
+      "Kirk Silver": {
+        "period": "1800s",
+        "mark": "Kirk with pattern number",
+        "value": "Quality American silver"
+      }
+    }
+  },
+
+  "fakes_and_reproductions": {
+    "silver_plated_vs_solid": {
+      "wear_points": {
+        "description": "Check edges, tips of forks, backs of spoons. Plated items show brass/copper base metal at high-wear points",
+        "what_to_look_for": "Yellow/golden color showing through silver at edges or tips = plated",
+        "critical_areas": ["Fork tines (tips wear fastest)", "Spoon bowl backs", "Knife blade edges", "Handle ends"]
+      },
+      "weight_test": {
+        "description": "Solid silver is significantly heavier than plated items of same size",
+        "benchmarks": {
+          "teaspoon_solid": "~15-20 grams",
+          "teaspoon_plated": "~8-12 grams",
+          "dinner_fork_solid": "~25-35 grams",
+          "dinner_fork_plated": "~15-20 grams"
+        }
+      },
+      "magnet_test": {
+        "description": "Silver is non-magnetic. If magnet sticks, it's steel core = plated or fake",
+        "note": "Some base metals (brass, copper, nickel silver) also non-magnetic, so no stick doesn't prove solid"
+      },
+      "ice_test": {
+        "description": "Silver conducts heat fastest. Ice cube melts faster on solid silver than plated",
+        "note": "Requires comparison for accuracy. Best done with known items"
+      },
+      "tone_test": {
+        "description": "Tap two silver items together. Solid silver produces clear, long ringing tone. Plated items produce duller sound",
+        "note": "Requires experience. Best learned by comparing known solid vs plated items"
+      }
+    },
+
+    "fake_hallmarks": {
+      "shallow_stamping": {
+        "description": "Fake hallmarks often stamped too shallow or with wrong font",
+        "how_to_check": "Run finger over mark. Real hallmarks are crisp, deep, precise"
+      },
+      "wrong_placement": {
+        "description": "Fake marks often in wrong location or too prominent",
+        "real_pattern": "Real hallmarks are subtle, usually on underside/bottom"
+      },
+      "modern_fonts": {
+        "description": "Antique items should have period-appropriate stamping. Modern fonts on 'antique' = reproduction",
+        "note": "Font styles changed over centuries. Research period-appropriate marks"
+      },
+      "too_perfect": {
+        "description": "Real hallmarks show slight variations. Perfectly identical marks on multiple items may indicate modern reproduction",
+        "note": "Hand-stamped marks have slight variations. Machine-made marks are too uniform"
+      },
+      "wrong_combinations": {
+        "description": "Hallmark combinations that don't match historical periods",
+        "example": "Lion passant with 925 mark = wrong (lion passant is British, 925 is American/European)"
+      }
+    },
+
+    "common_fakes": {
+      "silver_wash": {
+        "description": "Very thin silver coating over base metal. Wears off quickly",
+        "identification": "Shows base metal at any wear point, very light weight"
+      },
+      "sterling_over_base": {
+        "description": "Solid silver top over base metal bottom (common in bowls)",
+        "identification": "Check inside bowl - if different mark or no mark, may be silver top only"
+      },
+      "reproductions": {
+        "description": "Modern items made to look antique",
+        "identification": "Perfect condition, no wear, modern maker marks, shiny without patina",
+        "note": "Many patterns reproduced. Check weight, mark quality, and wear patterns"
+      },
+      "base_metal_with_fake_marks": {
+        "description": "Brass or nickel silver stamped with fake 925 marks",
+        "identification": "Magnet test, weight test, wear points showing base metal"
+      },
+      "weighted_silver": {
+        "description": "Silver shell filled with lead or other heavy metal to simulate solid silver weight",
+        "identification": "X-ray required for definitive test. Sound test may reveal hollow nature"
+      }
+    },
+
+    "identification_flow": {
+      "step_1": {"action": "Check for hallmarks", "look_for": ["925, Sterling, 800, 835 = solid silver", "EPNS, Silver Plated, EP = plated (not solid)", "No marks = could be anything, test further"]},
+      "step_2": {"action": "Weight test", "method": "Compare to similar known items. Solid silver feels heavy for size"},
+      "step_3": {"action": "Magnet test", "method": "Silver doesn't attract magnets. If magnet sticks = base metal core"},
+      "step_4": {"action": "Wear points", "method": "Check edges, tips. Plated items show base metal color at wear points"},
+      "step_5": {"action": "Maker marks", "method": "Look for silversmith initials or company names. Famous makers add value"}
+    }
+  },
+
+  "item_categories": {
+    "flatware": {
+      "forks": {
+        "weight_range": "15-30g per piece",
+        "marks_location": "underside of handle or back of tines",
+        "valuable_features": ["solid sterling mark (925)", "maker marks from famous silversmiths", "early patterns (pre-1900)", "matching service for 12+ people"],
+        "identification_tips": ["Check underside of handle for marks", "Solid silver forks feel heavy", "Look for wear points showing base metal"]
+      },
+      "spoons": {
+        "weight_range": "15-25g per piece",
+        "marks_location": "underside of handle",
+        "valuable_features": ["solid sterling mark", "tea/coffee spoon sets", "early patterns", "maker marks"],
+        "identification_tips": ["Check underside of handle bowl", "Solid silver spoons have deeper feel", "EPNS often lighter"]
+      },
+      "knives": {
+        "weight_range": "20-40g per piece",
+        "marks_location": "underside of handle or blade tang",
+        "valuable_features": ["sterling silver handles", "maker marks", "early patterns"],
+        "identification_tips": ["Check handle underside", "Silver handles on steel blades common in silverplate"]
+      },
+      "serving_pieces": {
+        "weight_range": "200-800g",
+        "marks_location": "underside or back",
+        "valuable_features": ["large serving spoons/forks", "salad servers", "ice tongs", "cake servers"],
+        "identification_tips": ["Check for solid silver marks", "Large pieces more likely to be valuable if sterling"]
+      },
+      "pattern_identification": {
+        "description": "Each pattern has unique design. Pattern numbers help identify value and replacement pieces",
+        "how_to_identify": "Compare with pattern guides online. Note: pattern alone doesn't indicate silver content - check for 925 mark"
+      }
+    },
+
+    "holloware": {
+      "bowls": {
+        "weight_range": "300-1500g",
+        "marks_location": "underside bottom",
+        "valuable_features": ["solid sterling mark", "maker marks", "early periods (Georgian, Victorian)", "decorative engraving"],
+        "identification_tips": ["Check inside for different marks (may be silver top only)", "Heavy weight indicates solid", "Look for copper bleeding if OSP"]
+      },
+      "trays": {
+        "weight_range": "500-2000g",
+        "marks_location": "underside bottom or rim",
+        "valuable_features": ["solid sterling mark", "large size (>18 inches)", "maker marks", "decorative edges"],
+        "identification_tips": ["Large trays more valuable if sterling", "Check for maker marks"]
+      },
+      "teapots": {
+        "weight_range": "400-1200g",
+        "marks_location": "underside bottom",
+        "valuable_features": ["solid sterling mark", "matching sugar/cream sets", "maker marks", "original lid"],
+        "identification_tips": ["Missing lids reduce value significantly", "Matching sets worth much more"]
+      },
+      "creamsugar": {
+        "weight_range": "150-400g",
+        "marks_location": "underside bottom",
+        "valuable_features": ["solid sterling mark", "matching sets", "maker marks", "early patterns"],
+        "identification_tips": ["Check for matching pairs", "Solid sterling more valuable"]
+      },
+      "candlesticks": {
+        "weight_range": "400-1500g per pair",
+        "marks_location": "underside base",
+        "valuable_features": ["solid sterling mark", "pairs (important)", "maker marks", "ornate designs"],
+        "identification_tips": ["Pairs essential for value", "Heavy weight indicates solid"]
+      },
+      "vases": {
+        "weight_range": "300-1000g",
+        "marks_location": "underside bottom",
+        "valuable_features": ["solid sterling mark", "decorative designs", "maker marks"]
+      }
+    },
+
+    "jewelry": {
+      "rings": {
+        "marks_location": "inside band",
+        "valuable_features": ["925 mark inside", "maker marks", "gemstones with silver settings", "antique/vintage designs"],
+        "weight_range": "5-15g"
+      },
+      "bracelets": {
+        "marks_location": "clasp or inside",
+        "valuable_features": ["925 mark", "maker marks", "antique designs", "heavy weight"],
+        "weight_range": "20-60g"
+      },
+      "brooches": {
+        "marks_location": "back or clasp",
+        "valuable_features": ["925 mark", "maker marks", "enamel work", "gemstone settings"],
+        "weight_range": "10-30g"
+      },
+      "necklaces": {
+        "marks_location": "clasp or each link",
+        "valuable_features": ["925 mark on clasp", "maker marks", "heavy chain links"],
+        "weight_range": "20-100g"
+      },
+      "earrings": {
+        "marks_location": "post or back",
+        "valuable_features": ["925 mark", "maker marks", "antique designs"],
+        "weight_range": "3-10g per pair"
+      }
+    },
+
+    "coins": {
+      "us_silver_coins": {
+        "pre_1965": {
+          "description": "US dimes, quarters, half dollars minted before 1965 are 90% silver",
+          "silver_content": {
+            "dime": "0.0723 troy oz",
+            "quarter": "0.1600 troy oz",
+            "half_dollar": "0.3616 troy oz"
+          }
+        },
+        "silver_dollars": {
+          "description": "Various US silver dollars. Morgan dollars (1878-1921) most collectible",
+          "silver_content": "0.7734 troy oz per dollar"
+        }
+      },
+      "british_silver_coins": {
+        "crown": {
+          "description": "British crowns (5 shillings). Various periods",
+          "silver_content": "Varies by period, pre-1920 usually 92.5%"
+        },
+        "half_crown": {
+          "description": "British half crowns (2 shillings 6 pence)",
+          "silver_content": "Varies by period"
+        }
+      },
+      "identification_tips": [
+        "Check date - pre-1965 US coins are silver",
+        "Look for mint marks (small letters near date)",
+        "Weight and size should match specifications",
+        "Edge should be reeded (grooved), not smooth"
+      ]
+    }
+  },
+
+  "patina_and_condition": {
+    "natural_patina": {
+      "description": "Silver naturally tarnishes to dark gray/black. This is normal and can be polished",
+      "note": "Heavy patina doesn't mean low value - many collectors prefer original patina"
+    },
+    "polishing_damage": {
+      "description": "Over-polished silver loses detail and value. Check for smooth, featureless surfaces",
+      "note": "Some wear is normal and expected on antique items"
+    },
+    "dents_and_damage": {
+      "description": "Minor dents may be acceptable on functional items. Cracks, holes significantly reduce value",
+      "note": "Holloware with dents may still have good silver content"
+    },
+    "missing_parts": {
+      "description": "Missing lids, handles, or pieces reduce value significantly",
+      "note": "Matching sets are worth much more than individual pieces"
+    }
+  },
+
+  "quick_reference": {
+    "solid_silver_marks": ["925", "STERLING", "800", "835", "958", "Lion Passant", "Minerva Head"],
+    "plated_marks": ["EPNS", "EP", "SILVER PLATED", "A1"],
+    "red_flags": ["No marks at all", "Shallow/stamp-like marks", "Modern fonts on antique items", "Perfectly identical marks"],
+    "tests": ["Weight test (solid feels heavy)", "Magnet test (silver doesn't attract)", "Wear points (plated shows base metal)", "Tone test (solid rings clear)"],
+    "valuable_periods": ["Pre-1800 British with assay marks", "Colonial American (Paul Revere era)", "Victorian maker marks", "Art Nouveau/Arts & Crafts"],
+    "famous_makers": ["Paul Revere", "Tiffany & Co.", "Reed & Barton", "Gorham", "Paul Storr", "Thomas Kirk"]
+  }
+}
