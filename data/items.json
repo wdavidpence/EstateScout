@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "type": "flatware",
+      "description": "Teaspoon found at estate sale",
+      "marks_found": "925",
+      "weight_grams": 18,
+      "magnet_test": "Not attracted",
+      "visual_condition": "good",
+      "wear_points": "None visible",
+      "verdict": "solid silver",
+      "confidence": "high",
+      "estimated_value_range": "$10-30",
+      "date_seen": "2026-09-05",
+      "location": "Main St Estate Sale",
+      "id": "item_0001",
+      "date_added": "2026-09-06 04:07"
+    }
+  ],
+  "total": 1,
+  "last_updated": "2026-09-05"
+}
